@@ -39,9 +39,10 @@ df_2019.rename(columns={"Score": "Happiness Score", "Country or region": "Countr
 
 # Healthy life expectancy
 df_2020 = pd.read_csv(data_2020).assign(Year='2020')
-df_2020.rename(columns={"Ladder score": "Happiness Score", "Country name": "Country", "Explained by: Log GDP per capita": "Economy (GDP per Capita)",
-                        "Perceptions of corruption": "Trust (Government Corruption)", "Regional indicator": "Region"}, inplace=True)
+df_2020.rename(columns={"Ladder score": "Happiness Score", "Country name": "Country", "Explained by: Log GDP per capita": "Economy (GDP per Capita)", "Regional indicator": "Region", "Explained by: Perceptions of corruption": "Trust (Government Corruption)", "Healthy life expectancy": "Wrong Healthy life expectancy",
+                        "Explained by: Healthy life expectancy": "Healthy life expectancy", "Generosity": "Wrong Generosity", "Explained by: Generosity": "Generosity", "Freedom to make life choices": "Wrong Freedom to make life choices", "Explained by: Freedom to make life choices": "Freedom to make life choices"}, inplace=True)
 df_2020["Happiness Rank"] = np.arange(len(df_2020)) + 1
+
 
 # Add region to data sets 2017, 2018, 2019
 # Set index to country for all dataframes
@@ -59,7 +60,8 @@ df_2019 = df_country_region.join(df_2019.set_index("Country"), on="Country").sor
 df_2020 = df_2020.set_index(["Country", "Year"])
 
 # Merge all datasets into a single dataset
-matching_columns = ["Region", "Happiness Rank", "Happiness Score"]
+matching_columns = ["Region", "Happiness Rank", "Happiness Score",
+                    "Economy (GDP per Capita)", "Freedom to make life choices", "Healthy life expectancy", "Generosity", "Trust (Government Corruption)"]
 
 data = pd.concat([df_2015[matching_columns], df_2016[matching_columns], df_2017[matching_columns],
                   df_2018[matching_columns], df_2019[matching_columns], df_2020[matching_columns]])
