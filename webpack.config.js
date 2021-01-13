@@ -1,16 +1,25 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    mode: "development",
-    entry: './src/main.js',
+    mode: 'development',
+    entry: './src/js/main.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/bundle.js',
-        publicPath:'/assets/'
     },
     module: {
         rules: [
+            {
+                test: /\.html$/,
+                use: [
+                    {
+                        loader: 'html-loader',
+                        options: { minimize: true }
+                    }
+                ]
+            },
             {
                 test: /\.scss$/,
                 use: [
@@ -18,19 +27,14 @@ module.exports = {
                     'css-loader',
                     'sass-loader',
                 ],
-            },
-            {
-                test: /\.csv$/,
-                type: 'asset/resource'
-            },
-        ],
+            }
+        ]
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new HtmlWebPackPlugin({
+            template: './src/index.html',
+            filename: './index.html'
+        }),
     ],
-    devServer: {
-        contentBase: path.join(__dirname, 'public'),
-        port: 5000,
-        hot: true
-    }
 };
