@@ -3,5 +3,5 @@ import * as topojson from 'topojson';
 import * as three from 'three';
 
 // Import stylesheet(s)
-import '../scss/reset.scss';
-import '../scss/style.scss';
+import '../css/reset.css';
+import '../css/style.css';
