@@ -9,10 +9,22 @@
         href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap"
         rel="stylesheet">
 </head>
-<body>
-    <div class="container mx-auto bg-green-400 my-10 p-10 rounded-md">
-        <h1 class="text-lg">Hello World</h1>
-        <p>This is the test app for 2IMV20. To get started, run the command npm run start!</p>
+<body class="bg-gray-900 h-screen">
+    <div class="container mx-auto flex flex-col h-full justify-center align-center">
+        <h1 class="text-5xl tracking-wide mb-2">2IMV20 - Visualization Assignment</h1>
+        <hr>
+        <p>This visualization project is built with Javascript using several packages, among others D3.js, THREE.js, TailwindCSS and Webpack. It was built for the course <span class="italic">2IMV20 - Visualization</span></p>
+        <br>
+        <p>Webpack is used as a bundler, that bundles the assets (such as js and css files). The output of Webpack can be found in the <span class="italic">/dist</span> folder. If you are editing files, make sure you are working within the <span class="italic">/src</span> directory, otherwise Webpack will not see the changes you have made.</p>
+        <br>
+        <p>The project also has live (hot) reloading, to start the live reloading server use the command <span class="italic">npm run start</span>. Make sure all the dependencies are correctly installed! Now open a webbrowser and go to the url <span class="italic">localhost:8080</span>.</p>
+        <br>
+        <p>Ik realiseer me nu dat ik deze tekst in het Nederlands had kunnen typen haha 😂</p>
+    </div>
+    <div id="info-bar" class="fixed bottom-0 w-full bg-black bg-opacity-30 flex flex-row-reverse">
+        <p>January 2021</p>
+        <p class="mx-8">Built using D3.js</p>
+        <p>World Happiness</p>
     </div>
     
 </body>
