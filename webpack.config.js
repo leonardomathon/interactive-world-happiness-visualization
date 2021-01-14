@@ -16,25 +16,21 @@ module.exports = {
                 use: [
                     {
                         loader: 'html-loader',
-                        options: { minimize: true }
-                    }
-                ]
+                        options: { minimize: true },
+                    },
+                ],
             },
             {
-                test: /\.scss$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader',
-                ],
-            }
-        ]
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader', 'postcss-loader'],
+            },
+        ],
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new HtmlWebPackPlugin({
             template: './src/index.html',
-            filename: './index.html'
+            filename: './index.html',
         }),
     ],
 };
