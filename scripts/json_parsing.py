@@ -22,7 +22,7 @@ abs_file_path = os.path.join(script_dir, rel_path)
 with open(abs_file_path) as f:
     data = json.load(f)
 
-rel_path = "../datasets/cleaned-data-formatted.json"
+rel_path = "../datasets/world-happiness.json"
 abs_file_path = os.path.join(script_dir, rel_path)
 
 with open(abs_file_path, 'x') as outfile:
