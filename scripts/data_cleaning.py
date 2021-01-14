@@ -66,4 +66,5 @@ matching_columns = ["Region", "Happiness Rank", "Happiness Score",
 data = pd.concat([df_2015[matching_columns], df_2016[matching_columns], df_2017[matching_columns],
                   df_2018[matching_columns], df_2019[matching_columns], df_2020[matching_columns]])
 
-data.to_csv(os.path.join(script_location, '../datasets/cleaned-data.csv'))
+data.to_csv(os.path.join(script_location,
+                         '../datasets/world-happiness-cleaned.csv'))
