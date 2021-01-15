@@ -10,23 +10,19 @@
         rel="stylesheet">
 </head>
 <body class="bg-gray-900 h-screen">
-    <div class="container mx-auto flex flex-col h-full justify-center align-center">
-        <h1 class="text-5xl tracking-wide mb-2">2IMV20 - Visualization Assignment</h1>
-        <hr>
-        <p>This visualization project is built with Javascript using several packages, among others D3.js, THREE.js, TailwindCSS and Webpack. It was built for the course <span class="italic">2IMV20 - Visualization</span></p>
-        <br>
-        <p>Webpack is used as a bundler, that bundles the assets (such as js and css files). The output of Webpack can be found in the <span class="italic">/dist</span> folder. If you are editing files, make sure you are working within the <span class="italic">/src</span> directory, otherwise Webpack will not see the changes you have made.</p>
-        <br>
-        <p>The project also has live (hot) reloading, to start the live reloading server use the command <span class="italic">npm run start</span>. Make sure all the dependencies are correctly installed! Now open a webbrowser and go to the url <span class="italic">localhost:8080</span>.</p>
-        <br>
-        <p>Ik realiseer me nu dat ik deze tekst in het Nederlands had kunnen typen haha 😂</p>
+    <div id="toolbar" class="flex flex-row justify-center text-center">
+        <div class="w-1/5">
+            <input id="yearSlider" class="bottom-0 w-full bg-black bg-opacity-30 flex flex-row-reverse" type="range" min="2015"
+                max="2020" step="1" />
+            <p>You have selected year <span id="yearText">2018</span></p>
+        </div>
     </div>
     <div id="info-bar" class="fixed bottom-0 w-full bg-black bg-opacity-30 flex flex-row-reverse">
         <p>January 2021</p>
         <p class="mx-8">Built using D3.js</p>
         <p>World Happiness</p>
     </div>
-    <canvas id="cubeCanvas" class="absolute -top-1/3" style="z-index: -1;"></canvas>
+    <canvas id="worldSphere"></canvas>
     
 </body>
 </html>
