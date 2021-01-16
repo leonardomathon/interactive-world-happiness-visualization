@@ -1,11 +1,17 @@
 import * as THREE from 'three';
 import * as topojson from 'topojson-client';
 
+// Import custom js
+import { canvas, camera, renderer, controls } from './scene.js';
+
 // Import stylesheet(s)
 import '../css/style.css';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
+
+// Import world file for topojson
+import world from '../../datasets/world.json';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
