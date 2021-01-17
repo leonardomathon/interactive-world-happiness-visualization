@@ -14,28 +14,37 @@
 <body class="bg-gray-900 h-screen">
 
     <div id="toolbar" class="flex flex-col justify-center text-center">
-        <p class="text-2xl font-normal header-text">Selected year: <span id="yearText"> 2018 </span></p>
+
         <div id="timeline" class="flex justify-center">
             <div class="rangeContainer">
-                <ul class="rangeLabelList">
-                    <li class="rangeLabel">2015</li>
-                    <li class="rangeLabel">2016</li>
-                    <li class="rangeLabel">2017</li>
-                    <li class="rangeLabel">2018</li>
-                    <li class="rangeLabel">2019</li>
-                    <li class="rangeLabel">2020</li>
+                <ul class="range-label-list">
+                    <li class="range-label">2015</li>
+                    <li class="range-label">2016</li>
+                    <li class="range-label">2017</li>
+                    <li class="range-label">2018</li>
+                    <li class="range-label">2019</li>
+                    <li class="range-label">2020</li>
                 </ul>
-                <input id="yearSlider" type="range" min="2015" max="2020" step="1">
+                <div class="rangeSlider">
+                    <input id="yearSlider" type="range" min="2015" max="2020" step="1">
+                </div>
+
 
             </div>
         </div>
 
     </div>
 
-    <div id="info-bar" class="fixed bottom-0 w-full bg-black bg-opacity-30 flex flex-row-reverse">
-        <p>January 2021</p>
-        <p class="mx-8">Built using D3.js</p>
-        <p>World Happiness</p>
+    <div id="info-bar" class="fixed bottom-0 w-full flex flex-col">
+        <div id="data-info" class="float-right flex flex-row justify-end px-1.5">
+            <p>Selected year: <span id="yearText"> 2018 </span></p>
+        </div>
+        <div id="general-info" class="bg-black bg-opacity-30 flex flex-row-reverse items-end  px-1.5">
+            <p>January 2021</p>
+            <p class="mx-8">Built using D3.js</p>
+            <p>World Happiness</p>
+        </div>
+
     </div>
     <div id="worldContainer"></div>
 </body>

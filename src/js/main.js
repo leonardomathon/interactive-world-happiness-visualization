@@ -24,7 +24,7 @@ let yearSlider = document.getElementById('yearSlider');
 let yearSliderValue = 2018;
 
 // Variable that holds all the labels from the yearSlider
-let yearSliderLabels = document.getElementsByClassName('rangeLabelList')[0]
+let yearSliderLabels = document.getElementsByClassName('range-label-list')[0]
     .children;
 
 // Object that holds the world happiness data from the selected year as yearWorldHappiness.data

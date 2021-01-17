@@ -1,36 +1,35 @@
 /* Rangeslider */
 .rangeContainer {
     position: relative;
-    left: 20px;
     margin: 10px 0;
+    width: 30vw;
 }
 
-#yearSlider {
-    margin-top: 10px;
+.rangeSlider {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.rangeLabelList {
+.range-label-list {
     list-style: none;
     display: flex;
+    justify-content: space-between;
     position: relative;
-    left: -20px;
-    padding: 0px;
-
 }
 
-.rangeLabel {
+.range-label {
     position: relative;
-    min-width: 57px;
     margin: 0px;
     cursor: pointer;
     transition: .2s ease-in-out;
 }
 
-.rangeLabelList:hover .rangeLabel {
+.range-label-list:hover .range-label {
     opacity: .5;
 }
 
-.rangeLabelList .rangeLabel:hover {
+.range-label-list .range-label:hover {
     transform: translate(0, -2px);
     opacity: 1;
 }
@@ -38,7 +37,8 @@
 input[type=range] {
     -webkit-appearance: none;
     display: block;
-    width: 300px;
+    width: 95%;
+    margin-top: 10px;
     border-radius: 100%;
 }
 
