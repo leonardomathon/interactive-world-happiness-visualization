@@ -25,7 +25,7 @@ export var camera = new THREE.PerspectiveCamera(
     0.5,
     5000
 );
-camera.position.z = 1000;
+camera.position.z = 10;
 
 // Create THREE.js renderer
 export var renderer = new THREE.WebGLRenderer({
@@ -55,3 +55,17 @@ window.addEventListener(
     },
     false
 );
+
+// Create sample object
+let geometry, material, mesh;
+geometry = new THREE.SphereGeometry(3, 8, 6, 0, 6.3, 0, 3.1);
+material = new THREE.MeshNormalMaterial();
+
+mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+renderer.setAnimationLoop((time) => {
+    mesh.rotation.x = time / 2000;
+    mesh.rotation.y = time / 1000;
+
+    renderer.render(scene, camera);
+});

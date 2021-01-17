@@ -2,10 +2,12 @@ import * as THREE from 'three';
 import * as topojson from 'topojson-client';
 
 // Import custom js
+import './ui.js';
 import { canvas, camera, renderer, controls } from './scene.js';
 
 // Import stylesheet(s)
 import '../css/style.css';
+import '../css/ui.css';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';

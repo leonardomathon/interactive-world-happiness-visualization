@@ -26,7 +26,6 @@
     "node-sass": "^5.0.0",
     "postcss": "^8.2.4",
     "postcss-loader": "^4.1.0",
-    "rangeslide.js": "^0.13.0",
     "tailwindcss": "^2.0.2",
     "three": "^0.124.0",
     "topojson-client": "^3.1.0"
