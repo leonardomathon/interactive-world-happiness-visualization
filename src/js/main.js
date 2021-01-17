@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 import * as topojson from 'topojson-client';
+import { jsPanel } from 'jspanel4';
 
 // Import custom js
 import { canvas, camera, renderer, controls } from './scene.js';
 
 // Import stylesheet(s)
+import 'jspanel4/es6module/jspanel.min.css';
 import '../css/style.css';
 import '../css/ui.css';
 
@@ -16,6 +18,9 @@ import world from '../../datasets/world.json';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
+
+// <span> tag for opening dataset
+let showDataset = document.getElementById('showDataset');
 
 // <input> tag used for year selection
 let yearSlider = document.getElementById('yearSlider');
@@ -70,4 +75,31 @@ yearWorldHappiness.registerListener(function (val) {
         '%c Data has changed: year = ' + yearSliderValue,
         'color:green; font-weight: 900;'
     );
+});
+
+// Even listener that listens to click to open current dataset
+showDataset.addEventListener('click', function (e) {
+    jsPanel.create({
+        theme: {
+            bgPanel: '#000',
+            bgContent: '#0f0f0f',
+            colorHeader: '#fff',
+            colorContent: `#fff`,
+        },
+        panelSize: {
+            width: () => window.innerWidth * 0.3,
+            height: '50vh',
+        },
+        headerTitle:
+            'World Happiness report ' + yearSliderValue + ' - JSON Dataset',
+        dragit: {
+            cursor: 'default',
+        },
+        maximizedMargin: [25, 25, 25, 25],
+        closeOnEscape: true,
+        data: JSON.stringify(yearWorldHappiness, null, '\t'),
+        callback: function () {
+            this.content.innerHTML = `<pre><code>${this.options.data}</code></pre>`;
+        },
+    });
 });
