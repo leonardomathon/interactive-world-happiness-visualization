@@ -2,11 +2,14 @@ import * as d3 from 'd3';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
+// Get the div that is going to hold the canvas object
+let worldContainer = document.getElementById('worldContainer');
+
 // Canvas variable
 export var canvas = d3
-    .select('body')
+    .select(worldContainer)
     .append('canvas')
-    .attr('id', 'worldSphere')
+    .attr('id', 'worldCanvas')
     .attr('class', 'absolute top-0')
     .attr('style', 'z-index: -1;')
     .attr('width', window.innerWidth)
@@ -26,11 +29,11 @@ camera.position.z = 1000;
 
 // Create THREE.js renderer
 export var renderer = new THREE.WebGLRenderer({
-    canvas: canvas.node(),
+    canvas: worldCanvas,
     antialias: true,
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+worldContainer.appendChild(renderer.domElement);
 
 export let controls = new OrbitControls(camera, renderer.domElement);
 // // controls.autoRotate = true;

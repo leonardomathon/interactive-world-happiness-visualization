@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +10,12 @@
         href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap"
         rel="stylesheet">
 </head>
+
 <body class="bg-gray-900 h-screen">
     <div id="toolbar" class="flex flex-row justify-center text-center">
         <div class="w-1/5">
-            <input id="yearSlider" class="bottom-0 w-full bg-black bg-opacity-30 flex flex-row-reverse" type="range" min="2015"
-                max="2020" step="1" />
+            <input id="yearSlider" class="bottom-0 w-full bg-black bg-opacity-30 flex flex-row-reverse" type="range"
+                min="2015" max="2020" step="1" />
             <p>You have selected year <span id="yearText">2018</span></p>
         </div>
     </div>
@@ -22,5 +24,7 @@
         <p class="mx-8">Built using D3.js</p>
         <p>World Happiness</p>
     </div>
+    <div id="worldContainer"></div>
 </body>
+
 </html>
