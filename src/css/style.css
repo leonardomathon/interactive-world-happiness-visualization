@@ -18,6 +18,10 @@ h6 {
     font-weight: 800;
 }
 
+p.header-text {
+    font-family: 'Manrope', sans-serif;
+}
+
 canvas {
     display: block;
     max-width: 100%;

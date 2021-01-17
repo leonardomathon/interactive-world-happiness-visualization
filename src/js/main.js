@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import * as topojson from 'topojson-client';
 
 // Import custom js
-import './ui.js';
 import { canvas, camera, renderer, controls } from './scene.js';
 
 // Import stylesheet(s)
@@ -24,6 +23,10 @@ let yearSlider = document.getElementById('yearSlider');
 // Variable that holds the current selected year (default is 2018)
 let yearSliderValue = 2018;
 
+// Variable that holds all the labels from the yearSlider
+let yearSliderLabels = document.getElementsByClassName('rangeLabelList')[0]
+    .children;
+
 // Object that holds the world happiness data from the selected year as yearWorldHappiness.data
 let yearWorldHappiness = {
     dataInteral: worldHappiness[yearSliderValue],
@@ -40,9 +43,22 @@ let yearWorldHappiness = {
     },
 };
 
+// Event listeners that listen to click events on the labels
+for (let i = 0; i < yearSliderLabels.length; i++) {
+    // If a range slider label is clicked, update yearSlider value
+    yearSliderLabels[i].addEventListener('click', function (e) {
+        // Update the slider
+        yearSlider.value = 2015 + i;
+        // Notify the event listener
+        yearSlider.dispatchEvent(new Event('change'));
+        // Update UI
+        yearText.innerHTML = yearSliderValue;
+    });
+}
+
 // Event listener that listens to the range slider
-yearSlider.addEventListener('input', function (e) {
-    // Get slider value, update data and <span>
+yearSlider.addEventListener('change', function (e) {
+    // Get slider value, update data and UI
     yearSliderValue = yearSlider.value;
     yearWorldHappiness.data = worldHappiness[yearSliderValue];
     yearText.innerHTML = yearSliderValue;
