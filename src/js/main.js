@@ -3,7 +3,7 @@ import * as topojson from 'topojson-client';
 import { jsPanel } from 'jspanel4';
 
 // Import custom js
-import { canvas, camera, renderer, controls } from './chart.js';
+import { svg } from './chart.js';
 
 // Import stylesheet(s)
 import 'jspanel4/es6module/jspanel.min.css';
