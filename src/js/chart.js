@@ -87,16 +87,14 @@ export function initChart(completeData, country) {
     x.domain(barsKeys);
 
     // Tie data to the rects available
-    const rects = graph.selectAll('rect').data(bars);
-    rects.exit().remove();
-
-    rects
-        .attr('width', 5)
-        .attr('fill', 'white')
-        .attr('x', d => x(d.name))
+    const rects = graph
+        .selectAll('rect')
+        .data(bars)
 
     rects.enter()
         .append("rect")
+        .on("mouseover", handleMouseOver)
+        .on("mouseout", handleMouseOut)
         .attr("width", x.bandwidth)
         .attr("height", 0)
         .attr("fill", "white")
@@ -131,4 +129,39 @@ export function initChart(completeData, country) {
     //     .attr('fill', 'white')
     //     .style('font-size', '17px')
     //     .style('font-family', 'sans-serif')
+
+    function handleMouseOver(d, i) {  // Add interactivity
+        // Use D3 to select element, change color and size
+        // d3.select(this).attr({
+        //     fill: "orange"
+        // });
+
+        console.log('in');
+        // Specify where to put label of text
+        const hover = graph.append("text")
+            .attr('id', 't' + d.x + "-" + d.y)
+            .attr('x', d.x - 30)
+            .attr('y', d.y - 15)
+            // .attr({
+            //     id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
+            //     x: (d.x) - 30,
+            //     y: (d.y) - 15
+            // })
+            .attr('fill', 'white')
+            .text('test');
+    }
+
+    function handleMouseOut(d, i) {
+        // Use D3 to select element, change color back to normal
+        // d3.select(this).attr({
+        //     fill: "black",
+        //     r: radius
+        // });
+
+        console.log('out');
+        // Select text by id and then remove
+        console.log(d3.select('t' + d.x + '-' + d.y));
+        d3.select('t' + d.x + "-" + d.y).remove();  // Remove text location
+    }
 }
+
