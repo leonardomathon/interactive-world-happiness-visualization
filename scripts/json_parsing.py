@@ -8,7 +8,7 @@ def by_year(data):
     from operator import itemgetter
 
     retain_keys = ("Region", "Happiness Rank", "Happiness Score",
-                   "Economy (GDP per Capita)", "Freedom to make life choices", "Healthy life expectancy", "Generosity", "Trust (Government Corruption)")
+                   "Economy (GDP per Capita)", "Freedom to make life choices", "Healthy life expectancy", "Generosity", "Trust (Government Corruption)", "ISO")
 
     for year, group in groupby(data, key=itemgetter("Year")):
         as_tpl = tuple(group)
@@ -16,7 +16,7 @@ def by_year(data):
 
 
 script_dir = os.path.dirname(__file__)
-rel_path = "../datasets/cleaned-data.json"
+rel_path = "../datasets/world-happiness-cleaned-default.json"
 abs_file_path = os.path.join(script_dir, rel_path)
 
 with open(abs_file_path) as f:
