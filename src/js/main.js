@@ -3,7 +3,7 @@ import * as topojson from 'topojson-client';
 import { jsPanel } from 'jspanel4';
 
 // Import custom js
-import { svg } from './chart.js';
+import { initChart } from './chart.js';
 
 // Import stylesheet(s)
 import 'jspanel4/es6module/jspanel.min.css';
@@ -75,6 +75,7 @@ yearWorldHappiness.registerListener(function (val) {
         '%c Data has changed: year = ' + yearSliderValue,
         'color:green; font-weight: 900;'
     );
+    initChart(yearWorldHappiness.data, 'Netherlands');
 });
 
 // Even listener that listens to click to open current dataset

@@ -27,3 +27,14 @@ canvas {
     max-width: 100%;
     /* fix necessary to remove space at bottom of canvas */
 }
+
+.line {
+    fill: none;
+    stroke: #ffab00;
+    stroke-width: 3;
+}
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}
