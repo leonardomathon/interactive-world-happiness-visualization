@@ -10,8 +10,6 @@ export var canvas = d3
     .select(worldContainer)
     .append('canvas')
     .attr('id', 'worldCanvas')
-    .attr('class', 'absolute top-0')
-    .attr('style', 'z-index: -1;')
     .attr('width', window.innerWidth)
     .attr('height', window.innerHeight);
 
@@ -25,7 +23,7 @@ export var camera = new THREE.PerspectiveCamera(
     0.5,
     5000
 );
-camera.position.z = 10;
+camera.position.z = 1000;
 
 // Create THREE.js renderer
 export var renderer = new THREE.WebGLRenderer({
@@ -36,12 +34,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 worldContainer.appendChild(renderer.domElement);
 
 export let controls = new OrbitControls(camera, renderer.domElement);
-// // controls.autoRotate = true;
+controls.autoRotate = true;
 
 export var scene = new THREE.Scene();
 
 // Create light
-export var light = new THREE.HemisphereLight('#ffffff', '#666666', 1.5);
+export var light = new THREE.HemisphereLight('#ffffff', '#ffffff', 1);
 light.position.set(0, 1000, 0);
 scene.add(light);
 
@@ -55,17 +53,3 @@ window.addEventListener(
     },
     false
 );
-
-// Create sample object
-let geometry, material, mesh;
-geometry = new THREE.SphereGeometry(3, 8, 6, 0, 6.3, 0, 3.1);
-material = new THREE.MeshNormalMaterial();
-
-mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
-renderer.setAnimationLoop((time) => {
-    mesh.rotation.x = time / 2000;
-    mesh.rotation.y = time / 1000;
-
-    renderer.render(scene, camera);
-});
