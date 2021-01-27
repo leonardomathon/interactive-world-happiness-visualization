@@ -3,7 +3,7 @@ import * as topojson from 'topojson-client';
 import { jsPanel } from 'jspanel4';
 
 // Import custom js
-import { canvas, camera, renderer, controls } from './scene.js';
+import { initGlobe, updateGlobe } from './globe.js';
 
 // Import stylesheet(s)
 import 'jspanel4/es6module/jspanel.min.css';
@@ -14,7 +14,7 @@ import '../css/ui.css';
 import worldHappiness from '../../datasets/world-happiness.json';
 
 // Import world file for topojson
-import world from '../../datasets/world.json';
+import world from '../../datasets/geoworld.json';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -75,6 +75,7 @@ yearWorldHappiness.registerListener(function (val) {
         '%c Data has changed: year = ' + yearSliderValue,
         'color:green; font-weight: 900;'
     );
+    updateGlobe(yearWorldHappiness);
 });
 
 // Even listener that listens to click to open current dataset
@@ -103,3 +104,5 @@ showDataset.addEventListener('click', function (e) {
         },
     });
 });
+
+initGlobe(yearWorldHappiness);

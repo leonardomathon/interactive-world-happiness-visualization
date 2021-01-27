@@ -34,7 +34,6 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 worldContainer.appendChild(renderer.domElement);
 
 export let controls = new OrbitControls(camera, renderer.domElement);
-controls.autoRotate = true;
 
 export var scene = new THREE.Scene();
 
