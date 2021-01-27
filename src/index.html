@@ -13,7 +13,7 @@
 
 <body class="bg-gray-900 h-screen">
 
-    <div id="toolbar" class="flex flex-col justify-center text-center">
+    <div id="toolbar" class="fixed w-full top-0 flex flex-col justify-center text-center z-10">
         <div id="timeline" class="flex justify-center">
             <div class="rangeContainer w-1/4">
                 <ul class="range-label-list">
@@ -34,7 +34,7 @@
 
     </div>
 
-    <div id="info-bar" class="fixed bottom-0 w-full flex flex-col">
+    <div id="info-bar" class="fixed bottom-0 w-full flex flex-col z-10">
         <div id="data-info" class="float-right flex flex-row justify-end px-1.5">
             <p>Selected year: <span id="yearText">2018</span> </span> - <span id="showDataset"
                     class="cursor-pointer">Open
