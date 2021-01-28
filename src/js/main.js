@@ -38,6 +38,12 @@ let outlineCheckbox = document.getElementById('clusteringToggle');
 // <input> tag used to toggle outline mode
 let filmCheckbox = document.getElementById('filmToggle');
 
+// <input> tag used to search countries
+let searchInput = document.getElementById('searchCountry');
+
+// Country that is searched
+let searchedCountry;
+
 // Config object that holds value of preprocessing effects
 let preprocessingEffects = {
     outlineMode: false,
@@ -117,6 +123,14 @@ hotkeys('ctrl+k', function (event, handler) {
     preprocessingEffects.filmMode = !preprocessingEffects.filmMode;
     toggleFilmPass(preprocessingEffects);
 });
+
+hotkeys('ctrl+f', function (event, handler) {
+    event.preventDefault();
+    searchInput.focus();
+});
+
+// Event listener that listens to searching
+searchInput.addEventListener('keydown', function (e) {});
 
 // Even listener that listens to click to open current dataset
 showDataset.addEventListener('click', function (e) {

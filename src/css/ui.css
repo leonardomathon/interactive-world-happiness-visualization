@@ -111,3 +111,13 @@ input[type=range]:focus::-moz-range-track {
     transform: translate(0, -20px);
     opacity: .5;
 }
+
+/* Search bar */
+#searchCountry {
+    background-color: #ffffff32;
+    transition: .2s ease-in-out;
+}
+
+#searchCountry:focus {
+    background-color: #ffffff;
+}

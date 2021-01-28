@@ -1,14 +1,25 @@
-import { renderer, scene, camera } from './scene.js';
+import { Vector2 } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 import { LuminosityShader } from 'three/examples/jsm/shaders/LuminosityShader.js';
 import { SobelOperatorShader } from 'three/examples/jsm/shaders/SobelOperatorShader.js';
 
+import { renderer, scene, camera } from './scene.js';
+
 export const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
+
+const unrealBloomPass = new UnrealBloomPass(
+    new Vector2(window.innerWidth, window.innerHeight),
+    0.05,
+    0,
+    0.7
+);
+composer.addPass(unrealBloomPass);
 
 const filmPass = new FilmPass(0.1, 0.5, 1648, false);
 filmPass.renderToScreen = true;
