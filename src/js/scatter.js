@@ -1,171 +1,359 @@
 import * as d3 from 'd3';
 
-export function initScatter(completeData, country) {
-    console.log('data: ', completeData);
-    console.log('country: ', country);
-    console.log('data[country]', completeData[country]);
+export function initScatter(data, year) {
+    console.log('data: ', data);
+
+    const numberOfCountries = year === '2015' ?
+        158 : (year === '2016' ? 157 :
+            (year === '2017' ? 155 :
+                (year === '2018' ? 153 :
+                    (year === '2019' ? 155 :
+                        (year === '2020' ? 153 : 0)))));
+
+    // Animations
+    const animation_duration = 1000;
+    const animation_delay = 0;
+    const animation_easing = d3.easePoly;
 
     // Height and Width of the graph
-    const totalGraphWidth = 800;
-    const totalGraphHeight = 400;
+    const graphWidth = window.innerWidth - 250;
+    const graphHeight = window.innerHeight - 300;
 
     // create margins and dimensions
-    const margin = { top: 50, right: 20, bottom: 100, left: 50 };
-    const graphWidth = totalGraphWidth - margin.left - margin.right;
-    const graphHeight = totalGraphHeight - margin.top - margin.bottom;
+    const margin = 100;
+
+    // Formatting of rank in tooltip
+    function formatOrdinal(num) {
+        const int = parseInt(num),
+            digits = [int % 10, int % 100],
+            ordinals = ['st', 'nd', 'rd', 'th'],
+            oPattern = [1, 2, 3, 4],
+            tPattern = [11, 12, 13, 14, 15, 16, 17, 18, 19];
+
+        return oPattern.includes(digits[0]) && !tPattern.includes(digits[1])
+            ? int + ordinals[digits[0] - 1]
+            : int + ordinals[3];
+    };
 
     // Add the svg frame
     const svg = d3.select('#scatter')
         .append('svg')
-        .attr('width', totalGraphWidth)
-        .attr('height', totalGraphHeight)
-    //.attr('viewBox', '0 0 size size');
+        .attr('width', graphWidth + margin * 2)
+        .attr('height', graphHeight + margin * 2);
 
     // Append the graph
     const graph = svg.append('g')
-        .attr('width', graphWidth)
-        .attr('height', graphHeight)
-        .attr('transform', `translate(${margin.left}, ${margin.top})`)
+        .attr('position', 'relative')
+        .attr('class', 'main__svg')
+        .attr('transform', `translate(${margin}, ${margin})`)
+
+    // Scale the x - axis, select space between bars using padding
+    const x = d3
+        .scaleLinear()
+        .domain([0, 1])
+        .range([0, graphWidth]);
+
+    // Load x axis
+    const xAxis = d3
+        .axisBottom(x)
+        .ticks(20);
+    //.tickFormat(d3.format('.00'));
 
     // Append the x - axis, set the position of the axis at 0
     const xAxisGroup = graph.append('g')
         .attr('transform', `translate(0, ${graphHeight})`)
-    // Append the y - axis
-    const yAxisGroup = graph.append('g');
+        .call(xAxis);
 
-    // Scale the y - axis
-    const y = d3.scaleLinear()
-        .range([graphHeight, 0])
+    // Scale the y - axis, select space between bars using padding
+    const y = d3
+        .scaleLinear()
+        .domain([1, 0])
+        .range([0, graphHeight]);
 
-    // Scale the x - axis, select space between bars using padding
-    const x = d3.scaleBand()
-        .range([0, graphWidth])
-        .paddingInner(0.2)
-        .paddingOuter(0.2);
+    // Load y axis
+    const yAxis = d3
+        .axisLeft(y)
+        .ticks(20)
+        .tickFormat(d3.format('.0%'))
 
-    // Add a title to the graph
-    const xTitle = graph.append('text')
-        .attr('text-anchor', 'end')
-        .attr('x', graphWidth + 10)
+    // Append the y - axis, set the position of the axis at 0
+    const yAxisGroup = graph.append('g')
+        .call(yAxis);
+
+    // Labels
+    var xLabel = graph
+        .append('g')
+        .append('text')
+        .attr('class', 'x-axis-label')
         .attr('y', graphHeight + 50)
-        .attr('fill', 'white')
-        .text('Category');
+        .attr('x', graphWidth / 2)
+        .attr('font-size', '18px')
+        .attr('font-weight', '600')
+        .attr('text-anchor', 'middle')
+        .style('fill', '#FFFFFF')
+        .text('GDP Per Capita ($)');
 
-    // Add a title to the graph
-    const yTitle = graph.append('text')
-        .attr('text-anchor', 'end')
-        .attr('x', margin.right)
-        .attr('y', - 20)
-        .attr('fill', 'white')
-        .text('Value');
+    var yLabel = graph
+        .append('g')
+        .append('text')
+        .attr('class', 'yAxisGroup')
+        .attr('transform', 'rotate(-90)')
+        // .attr('position', 'relative')
+        .attr('x', -(graphHeight / 2))
+        .attr('y', -50)
+        .attr('font-size', '18px')
+        .attr('font-weight', '600')
+        .attr('text-anchor', 'middle')
+        .style('fill', '#FFFFFF')
+        .text('Happiness Index (%)');
 
-    // Load both axis
-    const xAxis = d3.axisBottom(x);
-    const yAxis = d3.axisLeft(y);
+    // Render tooltip
+    const tooltip = d3
+        .select('body')
+        .append('div')
+        .style('visibility', 'hidden')
+        .attr('class', 'tooltip')
+        .style('background-color', 'black')
+        .style('border-radius', '5px')
+        .style('padding', '10px')
+        .style('color', 'white')
+        .style('z-index', '999999999')
+        .style('position', 'absolute')
+        .style('display', 'block');
 
-    // Set the data to the country data
-    const data = completeData[country];
-    const graphData = data;
-    delete graphData['Region'];
-    delete graphData['Happiness Rank'];
-    delete graphData['Happiness Score'];
+    // Render initial tooltip
+    const showTooltip = function (d, i) {
+        let happinessRankTooltip = i['Happiness Rank']
 
-    // Name on the x-axis
-    const barsKeys = Object.keys(graphData);
-    // Value on the x-axis
-    const barsValues = Object.values(graphData);
+        tooltip.transition().duration(200);
+        tooltip
+            .style('visibility', 'visible')
+            .html(
+                `
+            <strong>Country:</strong> ${i.Country} (${i.Region})<br/>
+            <strong>Happiness Ranking:</strong> ${formatOrdinal(happinessRankTooltip)}
+                `
+            )
+            .style('top', d.y - 100 + 'px')
+            .style('left', d.x - 160 + 'px');
+    };
 
-    // Create bar charts
-    const bars = []
-    barsKeys.forEach((key, idx) => {
-        bars[idx] = { name: barsKeys[idx], value: barsValues[idx] }
-    });
+    // Rendering tooltip on hovering
+    const moveTooltip = function (d, i) {
+        showTooltip(d, i);
+        tooltip
+            .style('top', d.y - 100 + 'px')
+            .style('left', d.x - 160 + 'px');
+    };
 
-    // Range of values
-    y.domain([0, Math.ceil(d3.max(barsValues))])
+    // Hide tooltip
+    const hideTooltip = function (d, i) {
+        tooltip
+            .transition()
+            .duration(200)
+            .style('visibility', 'hidden');
+    };
 
-    // Number of categories
-    x.domain(barsKeys);
-
-    // Tie data to the rects available
-    const rects = graph
-        .selectAll('rect')
-        .data(bars)
-
-    rects.enter()
-        .append('rect')
-        .on('mouseover', handleMouseOver)
-        .on('mouseout', handleMouseOut)
-        .attr('width', x.bandwidth)
-        .attr('height', 0)
-        .attr('fill', 'white')
-        .attr('x', d => x(d.name))
-        .attr('y', graphHeight)
-        .merge(rects) // Everything called below merge affects both entered and currently existing elements
-        .transition().duration(1500)
-        .attr('y', d => {
-            if (typeof d.value === 'string') {
-                const newValue = d.value.replace(/,/g, '.')
-                console.log('new', newValue);
-                return y(newValue);
+    // Render circles
+    const circles = graph
+        .selectAll('circle')
+        .data(Object.values(data))
+        .enter()
+        .append('circle')
+        .attr(
+            'class',
+            d =>
+                `country ${d.Country} continent-${d.Region
+                    .split(' ')
+                    .join('-')} country-bubble`
+        )
+        .attr('fill', d => {
+            if (d.Region === 'Central and Eastern Europe') {
+                return '#7cbd1e';
+            } else if (d.Region === 'Western Europe') {
+                return '#ff1f5a';
+            } else if (d.Region === 'Southern Asia') {
+                return '#303481';
+            } else if (d.Region === 'Southeastern Asia') {
+                return '#ff5b44';
+            } else if (d.Region === 'Eastern Asia') {
+                return '#2fc5cc';
+            } else if (d.Region === 'Middle East and Nothern Africa') {
+                return '#F7DC6F';
+            } else if (d.Region === 'Sub-Saharan Africa') {
+                return '#BB8FCE';
+            } else if (d.Region === 'Latin America and Caribbean') {
+                return '#E74C3C';
+            } else if (d.Region === 'North America') {
+                return '#3498DB';
+            } else {
+                return 'red';
             }
-            return y(d.value);
         })
-        .attr('height', d => {
-            if (typeof d.value === 'string') {
-                const newValue = d.value.replace(/,/g, '.')
-                return graphHeight - y(newValue);
-            }
-            return graphHeight - y(d.value);
+        .attr('opacity', '.7')
+        .attr('stroke', '#CDCDCD')
+        .attr('stroke-width', '2px')
+        .attr('cx', d => {
+            return x(d['Generosity']);
+        })
+        .on('mouseover', showTooltip)
+        .on('mousemove', moveTooltip)
+        .on('mouseleave', hideTooltip)
+        .transition()
+        .delay((d, i) => i * animation_delay)
+        .duration(animation_duration)
+        .ease(animation_easing)
+        .attr('r', d => {
+            return 5;
+            // if (d.population > 800000000) {
+            //     return d.population / 25000000;
+            // } else if (d.population > 50000000) {
+            //     return d.population / 10000000;
+            // } else if (d.population > 1000000) {
+            //     return d.population / 1500000;
+            // } else {
+            //     return d.population / 100000;
+            // }
+        })
+        .attr('cy', d => {
+            let happinessRankCircle = d['Happiness Rank']
+            return y(((numberOfCountries + 1) - happinessRankCircle) / numberOfCountries);
         });
 
-    // Call both axis
-    xAxisGroup.call(xAxis);
-    yAxisGroup.call(yAxis);
+    // Legenda
+    const continents = {
+        CEE: { Region: 'Central and Eastern Europe' },
+        WE: { Region: 'Western Europe' },
+        SA: { Region: 'Southern Asia' },
+        SEA: { Region: 'Southeastern Asia' },
+        EA: { Region: 'Eastern Asia' },
+        MENA: { Region: 'Middle East and Nothern Africa' },
+        SSA: { Region: 'Sub-Saharan Africa' },
+        LAC: { Region: 'Latin America and Caribbean' },
+        NA: { Region: 'North America' }
+    };
 
-    // Lay-out text below graph
-    xAxisGroup.selectAll('text')
-        .attr('transform', `rotate(-40)`)
-        .attr('text-anchor', 'end')
-    // .attr('fill', 'white')
-    // .style('font-size', '17px')
-    // .style('font-family', 'sans-serif')
+    const continentFocusOn = continentName => {
+        graph
+            .selectAll(
+                `circle:not(.Region-${continentName.split(' ').join('-')})`
+            )
+            .attr('opacity', '0.05');
+    };
 
-    function handleMouseOver(d, i) {  // Add interactivity
-        // Use D3 to select element, change color and size
-        d3.select(this)
-            .style('fill', '#B3B6B7');
+    let continentFocusOff = continentName => {
+        graph
+            .selectAll(
+                `circle:not(.Region-${continentName.split(' ').join('-')})`
+            )
+            .attr('opacity', '0.7');
+    };
 
-        let valueCharacter = i.value.toString();
+    // Position of legenda
+    const legend = graph
+        .selectAll('.legend')
+        .data(Object.values(continents))
+        .enter()
+        .append('g')
+        .attr('class', 'legend')
+        .attr('position', 'absolute')
+        .attr('transform', `translate(${graphWidth - margin * 2}, ${0})`);
 
-        // Specify where to put label of text
-        const hover = graph.append('text')
-            .transition()
-            .duration(1000)
-            .attr('id', 't' + d.x + '-' + d.y)
-            .attr('y', graphHeight - (parseInt(d3.select(this).attr('height')) / 2))
-            .attr('x', parseInt(d3.select(this).attr('x')) + (parseInt(d3.select(this).attr('width')) / 2 - 12))
-            .attr('pointer-events', 'none')
-            .attr('class', 'hover')
-            .style('fill', '#FFFFFF')
-            .text(valueCharacter.substring(0, 4));
-    }
+    // Add colored squared to legenda
+    legend
+        .append('rect')
+        .attr('x', 0)
+        .attr('y', function (d, i) {
+            return 25 * i;
+        })
+        .attr('width', 20)
+        .attr('height', 20)
+        .style('fill', function (d) {
+            if (d.Region === 'Central and Eastern Europe') {
+                return '#7cbd1e';
+            } else if (d.Region === 'Western Europe') {
+                return '#ff1f5a';
+            } else if (d.Region === 'Southern Asia') {
+                return '#303481';
+            } else if (d.Region === 'Southeastern Asia') {
+                return '#ff5b44';
+            } else if (d.Region === 'Eastern Asia') {
+                return '#2fc5cc';
+            } else if (d.Region === 'Middle East and Nothern Africa') {
+                return '#F7DC6F';
+            } else if (d.Region === 'Sub-Saharan Africa') {
+                return '#BB8FCE';
+            } else if (d.Region === 'Latin America and Caribbean') {
+                return '#E74C3C';
+            } else if (d.Region === 'North America') {
+                return '#3498DB';
+            } else {
+                return 'red';
+            }
+        })
+        .on('mouseover', d => continentFocusOn(d.Region))
+        .on('mouseleave', d => continentFocusOff(d.Region));
 
-    function handleMouseOut(d, i) {
-        d3.select(this).attr('style', '#FFFFFF')
-        d3.selectAll('.hover').remove();  // Remove text location
-    }
+    // Add regions to legenda
+    legend
+        .append('text')
+        .attr('x', 25)
+        .attr('text-anchor', 'start')
+        .attr('class', d => `legend-${d.Region.split(' ').join('-')}`)
+        .attr('y', function (d, i) {
+            return 25 * i;
+        })
+        .attr('dy', '1.15em')
+        .text(function (d) {
+            return d.Region;
+        })
+        .attr('font-size', '12px')
+        .style('fill', '#FFFFFF')
+        .on('mouseover', d => continentFocusOn(d.Region))
+        .on('mouseleave', d => continentFocusOff(d.Region));
 
-    function tweenText(newValue) {
-        return function () {
-            var currentValue = +this.textContent;
+    // Add legenda title
+    legend
+        .append('text')
+        .attr('x', 25)
+        //.attr('dy', '-.2em')
+        .attr('y', -25)
+        .text('Continent')
+        .attr('font-size', '17px')
+        .style('text-align', 'left')
+        .style('fill', '#FFFFFF');
 
-            var i = d3.interpolateRound(currentValue, newValue);
 
-            return function (t) {
-                this.textContent = i(t);
-            };
-        }
-    }
+    // updateData(dataType) {
+    //     d3.json('dist/data/countries.json').then(data => {
+    //         this.chart
+    //             .selectAll('.country-bubble')
+    //             .transition()
+    //             .duration(500)
+    //             .ease(ANIMATION_EASING)
+    //             .attr('cx', d => {
+    //                 return this.xScale(d[dataType] / 156) + 25;
+    //             });
+
+    //         this.updateAxisLabel(dataType);
+    //     });
+    // }
+
+    // updateAxisLabel(type) {
+    //     // xLabel
+    //     let label;
+    //     if (type === 'graphSocialSupport') {
+    //         label = 'Social Support';
+    //     } else if (type === 'graphFreedom') {
+    //         label = 'Freedom';
+    //     } else if (type === 'graphGenerosity') {
+    //         label = 'Generosity';
+    //     } else if (type === 'graphLifeExpectancy') {
+    //         label = 'Life Expectancy';
+    //     } else if (type === 'graphGdp') {
+    //         label = 'GDP Per Capita ($)';
+    //     }
+    //     this.chart.select('.x-axis-label').text(`${label}`);
+    // }
 }
 

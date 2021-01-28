@@ -155,17 +155,5 @@ export function initChart(completeData, country) {
         d3.select(this).attr('style', '#FFFFFF')
         d3.selectAll('.hover').remove();  // Remove text location
     }
-
-    function tweenText(newValue) {
-        return function () {
-            var currentValue = +this.textContent;
-
-            var i = d3.interpolateRound(currentValue, newValue);
-
-            return function (t) {
-                this.textContent = i(t);
-            };
-        }
-    }
 }
 

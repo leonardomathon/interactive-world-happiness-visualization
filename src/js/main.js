@@ -76,7 +76,7 @@ yearWorldHappiness.registerListener(function (val) {
         '%c Data has changed: year = ' + yearSliderValue,
         'color:green; font-weight: 900;'
     );
-    initScatter(yearWorldHappiness.data, 'Netherlands');
+    initScatter(yearWorldHappiness.data, yearSliderValue);
 });
 
 // Even listener that listens to click to open current dataset
