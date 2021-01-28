@@ -204,7 +204,7 @@ export function initScatter(data, year) {
         .duration(animation_duration)
         .ease(animation_easing)
         .attr('r', d => {
-            return 5;
+            return 10;
             // if (d.population > 800000000) {
             //     return d.population / 25000000;
             // } else if (d.population > 50000000) {
@@ -216,7 +216,6 @@ export function initScatter(data, year) {
             // }
         })
         .attr('cy', d => {
-            console.log(d)
             let happinessRankCircle = d['Happiness Rank']
             return y(((numberOfCountries + 1) - happinessRankCircle) / numberOfCountries);
         });
@@ -237,17 +236,17 @@ export function initScatter(data, year) {
     function regionFocusOn(i, d) {
         graph
             .selectAll(
-                `circle:not(.continent-${d.Region.split(" ").join("-")})`
+                `circle:not(.continent-${d.Region.split(' ').join('-')})`
             )
-            .attr("opacity", "0.05");
+            .attr('opacity', '0.05');
     };
 
     function regionFocusOff(i, d) {
         graph
             .selectAll(
-                `circle:not(.continent-${d.Region.split(" ").join("-")})`
+                `circle:not(.continent-${d.Region.split(' ').join('-')})`
             )
-            .attr("opacity", "0.7");
+            .attr('opacity', '0.7');
     };
 
     // Position of legenda
