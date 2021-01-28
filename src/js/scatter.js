@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-export function initChart(completeData, country) {
+export function initScatter(completeData, country) {
     console.log('data: ', completeData);
     console.log('country: ', country);
     console.log('data[country]', completeData[country]);
@@ -15,7 +15,7 @@ export function initChart(completeData, country) {
     const graphHeight = totalGraphHeight - margin.top - margin.bottom;
 
     // Add the svg frame
-    const svg = d3.select('#chart')
+    const svg = d3.select('#scatter')
         .append('svg')
         .attr('width', totalGraphWidth)
         .attr('height', totalGraphHeight)
