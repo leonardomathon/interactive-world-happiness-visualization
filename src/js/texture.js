@@ -31,7 +31,7 @@ export function createWorldTexture(world, yearWorldHappinessData) {
     const path = d3.geoPath().projection(projection).context(context);
 
     // Draw background
-    context.fillStyle = '#fff';
+    context.fillStyle = '#0e1931';
     context.fillRect(0, 0, canvasWidth, canvasHeight);
 
     // Draw features from geojson
@@ -41,7 +41,7 @@ export function createWorldTexture(world, yearWorldHappinessData) {
     world.features.forEach(function (d) {
         context.fillStyle = yearWorldHappinessData[d.id]
             ? colorScale(yearWorldHappinessData[d.id]['Happiness Rank'])
-            : '#0e1931';
+            : '#262626';
         context.beginPath();
         path(d);
         context.fill();

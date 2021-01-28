@@ -42,10 +42,15 @@ controls.enablePan = false;
 
 export var scene = new THREE.Scene();
 
-// Create light
+// Create lights
 export var light = new THREE.HemisphereLight('#ffffff', '#e3e3e3', 1);
+export var ambientLight = new THREE.AmbientLight('#0A68CE', 0.5);
+
 light.position.set(1000, 0, 0);
+ambientLight.position.set(1000, 0, 0);
+
 scene.add(light);
+scene.add(ambientLight);
 
 // Event listeren that checks if windows is resized
 window.addEventListener(

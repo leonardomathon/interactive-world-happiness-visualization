@@ -51,7 +51,7 @@ export function updateGlobe(yearWorldHappiness) {
     // Update world globe with new texture and add it to scene
     worldGlobe = new THREE.Mesh(
         worldSphere,
-        new THREE.MeshBasicMaterial({
+        new THREE.MeshPhongMaterial({
             map: createWorldTexture(world, yearWorldHappiness.data),
         })
     );
