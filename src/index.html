@@ -12,8 +12,20 @@
 </head>
 
 <body class="bg-gray-900 h-screen">
+    <div id="options-block" class="relative float-right m-5 p-5 flex flex-col justify-end bg-black bg-opacity-30 z-10">
+        <p>Options</p>
+        <hr class="my-1 opacity-25">
+        <div id="outlineMode">
+            <input type="checkbox" id="clusteringToggle" name="clusteringToggle">
+            <label for="clusteringToggle"> Enable outline mode <span class="font-light">(ctrl o)</span></label><br>
+        </div>
+        <div id="filmMode">
+            <input type="checkbox" id="filmToggle" name="filmToggle" checked>
+            <label for="filmToggle"> Enable film processing <span class="font-light">(ctrl k)</span></label><br>
+        </div>
 
-    <div id="toolbar" class="fixed w-full bottom-10 flex flex-col justify-center text-center z-10">
+    </div>
+    <div id="timeline-bar" class="fixed w-full bottom-10 flex flex-col justify-center text-center z-10">
         <div id="timeline" class="flex justify-start mx-5 w-1/4 ">
             <div class="rangeContainer w-full ">
                 <ul class="range-label-list">

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 
 // Import scene file
 import { scene, canvas, camera, renderer, controls } from './scene.js';
+import { composer } from './postprocessing.js';
 
 // Import texture file
 import { createWorldTexture } from './texture.js';
@@ -39,7 +40,7 @@ export function initGlobe(yearWorldHappiness) {
 
         // Render frame
         requestAnimationFrame(render);
-        renderer.render(scene, camera);
+        composer.render(scene, camera);
     }
 }
 

@@ -1,6 +1,5 @@
 import * as d3 from 'd3';
 import * as THREE from 'three';
-import { renderer } from './scene';
 
 const canvasWidth = 2048 * 4;
 
@@ -9,7 +8,7 @@ const canvasHeight = 1024 * 4;
 const projection = d3
     .geoEquirectangular()
     .translate([canvasWidth / 2, canvasHeight / 2])
-    .scale(Math.min(canvasWidth / Math.PI, canvasHeight / Math.PI)); // D3 geo projection for canvas
+    .scale(Math.min(canvasWidth / Math.PI / 0.5, canvasHeight / Math.PI)); // D3 geo projection for canvas
 
 const colorScale = d3
     .scaleThreshold()
