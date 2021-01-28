@@ -19,7 +19,7 @@ export function initChart(completeData, country) {
         .append('svg')
         .attr('width', totalGraphWidth)
         .attr('height', totalGraphHeight)
-        //.attr('viewBox', '0 0 size size');
+    //.attr('viewBox', '0 0 size size');
 
     // Append the graph
     const graph = svg.append('g')
@@ -54,8 +54,8 @@ export function initChart(completeData, country) {
     // Add a title to the graph
     const yTitle = graph.append('text')
         .attr('text-anchor', 'end')
-        .attr('x', margin.right + 50)
-        .attr('y', 0)
+        .attr('x', margin.right)
+        .attr('y', - 20)
         .attr('fill', 'white')
         .text('Value');
 
@@ -134,15 +134,17 @@ export function initChart(completeData, country) {
     function handleMouseOver(d, i) {  // Add interactivity
         // Use D3 to select element, change color and size
         d3.select(this)
-        .style('fill', '#B3B6B7');
+            .style('fill', '#B3B6B7');
 
         let valueCharacter = i.value.toString();
 
         // Specify where to put label of text
         const hover = graph.append('text')
+            .transition()
+            .duration(500)
             .attr('id', 't' + d.x + '-' + d.y)
             .attr('y', graphHeight - (parseInt(d3.select(this).attr('height')) / 2))
-            .attr('x', parseInt(d3.select(this).attr('x')) + (parseInt(d3.select(this).attr('width')) / 2 - 12) )
+            .attr('x', parseInt(d3.select(this).attr('x')) + (parseInt(d3.select(this).attr('width')) / 2 - 12))
             .attr('pointer-events', 'none')
             .attr('class', 'hover')
             .style('fill', '#FFFFFF')
