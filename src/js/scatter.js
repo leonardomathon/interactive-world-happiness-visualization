@@ -178,7 +178,7 @@ export function initScatter(data, year) {
                 return '#ff5b44';
             } else if (d.Region === 'Eastern Asia') {
                 return '#2fc5cc';
-            } else if (d.Region === 'Middle East and Nothern Africa') {
+            } else if (d.Region === 'Middle East and Northern Africa') {
                 return '#F7DC6F';
             } else if (d.Region === 'Sub-Saharan Africa') {
                 return '#BB8FCE';
@@ -216,6 +216,7 @@ export function initScatter(data, year) {
             // }
         })
         .attr('cy', d => {
+            console.log(d)
             let happinessRankCircle = d['Happiness Rank']
             return y(((numberOfCountries + 1) - happinessRankCircle) / numberOfCountries);
         });
@@ -227,26 +228,26 @@ export function initScatter(data, year) {
         SA: { Region: 'Southern Asia' },
         SEA: { Region: 'Southeastern Asia' },
         EA: { Region: 'Eastern Asia' },
-        MENA: { Region: 'Middle East and Nothern Africa' },
+        MENA: { Region: 'Middle East and Northern Africa' },
         SSA: { Region: 'Sub-Saharan Africa' },
         LAC: { Region: 'Latin America and Caribbean' },
         NA: { Region: 'North America' }
     };
 
-    const continentFocusOn = continentName => {
+    function regionFocusOn(i, d) {
         graph
             .selectAll(
-                `circle:not(.Region-${continentName.split(' ').join('-')})`
+                `circle:not(.continent-${d.Region.split(" ").join("-")})`
             )
-            .attr('opacity', '0.05');
+            .attr("opacity", "0.05");
     };
 
-    let continentFocusOff = continentName => {
+    function regionFocusOff(i, d) {
         graph
             .selectAll(
-                `circle:not(.Region-${continentName.split(' ').join('-')})`
+                `circle:not(.continent-${d.Region.split(" ").join("-")})`
             )
-            .attr('opacity', '0.7');
+            .attr("opacity", "0.7");
     };
 
     // Position of legenda
@@ -279,7 +280,7 @@ export function initScatter(data, year) {
                 return '#ff5b44';
             } else if (d.Region === 'Eastern Asia') {
                 return '#2fc5cc';
-            } else if (d.Region === 'Middle East and Nothern Africa') {
+            } else if (d.Region === 'Middle East and Northern Africa') {
                 return '#F7DC6F';
             } else if (d.Region === 'Sub-Saharan Africa') {
                 return '#BB8FCE';
@@ -291,8 +292,8 @@ export function initScatter(data, year) {
                 return 'red';
             }
         })
-        .on('mouseover', d => continentFocusOn(d.Region))
-        .on('mouseleave', d => continentFocusOff(d.Region));
+        .on('mouseover', regionFocusOn)
+        .on('mouseleave', regionFocusOff);
 
     // Add regions to legenda
     legend
@@ -309,8 +310,8 @@ export function initScatter(data, year) {
         })
         .attr('font-size', '12px')
         .style('fill', '#FFFFFF')
-        .on('mouseover', d => continentFocusOn(d.Region))
-        .on('mouseleave', d => continentFocusOff(d.Region));
+        .on('mouseover', regionFocusOn)
+        .on('mouseleave', regionFocusOff);
 
     // Add legenda title
     legend
