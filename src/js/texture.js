@@ -2,9 +2,9 @@ import * as d3 from 'd3';
 import * as THREE from 'three';
 import { renderer } from './scene';
 
-const canvasWidth = 2048 * 2;
+const canvasWidth = 2048 * 4;
 
-const canvasHeight = 1024 * 2;
+const canvasHeight = 1024 * 4;
 
 const projection = d3
     .geoEquirectangular()
@@ -13,16 +13,16 @@ const projection = d3
 
 const colorScale = d3
     .scaleThreshold()
-    .domain([5, 10, 20, 50, 100, 200, 500])
-    .range(d3.schemeBlues[7]);
+    .domain([5, 10, 25, 50, 75, 100, 125, 150, 200, 500])
+    .range(d3.schemeBlues[9]);
 
 export function createWorldTexture(world, yearWorldHappinessData) {
     // Append canvas and save reference
     const canvas = d3
         .select('body')
         .append('canvas')
-        .attr('width', '4096px')
-        .attr('height', '2048px');
+        .attr('width', '8192px')
+        .attr('height', '4096px');
 
     // Get 2d context of canvas
     const context = canvas.node().getContext('2d');
@@ -41,7 +41,7 @@ export function createWorldTexture(world, yearWorldHappinessData) {
     world.features.forEach(function (d) {
         context.fillStyle = yearWorldHappinessData[d.id]
             ? colorScale(yearWorldHappinessData[d.id]['Happiness Rank'])
-            : '#000';
+            : '#0e1931';
         context.beginPath();
         path(d);
         context.fill();

@@ -38,8 +38,9 @@ input[type=range] {
     -webkit-appearance: none;
     display: block;
     width: 95%;
+    height: 5px;
     margin-top: 10px;
-    border-radius: 100%;
+    border-radius: 25px;
 }
 
 input[type=range]:focus {
@@ -51,7 +52,7 @@ input[type=range]::-webkit-slider-runnable-track {
     height: 5px;
     background: #ddd;
     border: none;
-    border-radius: 3px;
+    border-radius: 0px;
 }
 
 input[type=range]::-webkit-slider-thumb {

@@ -38,6 +38,7 @@ export let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.minDistance = 700;
 controls.maxDistance = 1500;
+controls.enablePan = false;
 
 export var scene = new THREE.Scene();
 
