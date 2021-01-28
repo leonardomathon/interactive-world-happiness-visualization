@@ -19,6 +19,7 @@ export function initChart(completeData, country) {
         .append('svg')
         .attr('width', totalGraphWidth)
         .attr('height', totalGraphHeight)
+        //.attr('viewBox', '0 0 size size');
 
     // Append the graph
     const graph = svg.append('g')
@@ -43,20 +44,20 @@ export function initChart(completeData, country) {
         .paddingOuter(0.2);
 
     // Add a title to the graph
-    const xTitle = graph.append("text")
-        .attr("text-anchor", "end")
-        .attr("x", graphWidth + 10)
-        .attr("y", graphHeight + 50)
+    const xTitle = graph.append('text')
+        .attr('text-anchor', 'end')
+        .attr('x', graphWidth + 10)
+        .attr('y', graphHeight + 50)
         .attr('fill', 'white')
-        .text("Category");
+        .text('Category');
 
     // Add a title to the graph
-    const yTitle = graph.append("text")
-        .attr("text-anchor", "end")
-        .attr("x", margin.right + 50)
-        .attr("y", 0)
+    const yTitle = graph.append('text')
+        .attr('text-anchor', 'end')
+        .attr('x', margin.right + 50)
+        .attr('y', 0)
         .attr('fill', 'white')
-        .text("Value");
+        .text('Value');
 
     // Load both axis
     const xAxis = d3.axisBottom(x);
@@ -92,19 +93,19 @@ export function initChart(completeData, country) {
         .data(bars)
 
     rects.enter()
-        .append("rect")
-        .on("mouseover", handleMouseOver)
-        .on("mouseout", handleMouseOut)
-        .attr("width", x.bandwidth)
-        .attr("height", 0)
-        .attr("fill", "white")
+        .append('rect')
+        .on('mouseover', handleMouseOver)
+        .on('mouseout', handleMouseOut)
+        .attr('width', x.bandwidth)
+        .attr('height', 0)
+        .attr('fill', 'white')
         .attr('x', d => x(d.name))
         .attr('y', graphHeight)
         .merge(rects) // Everything called below merge affects both entered and currently existing elements
         .transition().duration(1500)
         .attr('y', d => {
             if (typeof d.value === 'string') {
-                const newValue = d.value.replace(/,/g, ".")
+                const newValue = d.value.replace(/,/g, '.')
                 console.log('new', newValue);
                 return y(newValue);
             }
@@ -112,7 +113,7 @@ export function initChart(completeData, country) {
         })
         .attr('height', d => {
             if (typeof d.value === 'string') {
-                const newValue = d.value.replace(/,/g, ".")
+                const newValue = d.value.replace(/,/g, '.')
                 return graphHeight - y(newValue);
             }
             return graphHeight - y(d.value);
@@ -132,36 +133,25 @@ export function initChart(completeData, country) {
 
     function handleMouseOver(d, i) {  // Add interactivity
         // Use D3 to select element, change color and size
-        // d3.select(this).attr({
-        //     fill: "orange"
-        // });
+        d3.select(this)
+        .style('fill', '#B3B6B7');
 
-        console.log('in');
+        let valueCharacter = i.value.toString();
+
         // Specify where to put label of text
-        const hover = graph.append("text")
-            .attr('id', 't' + d.x + "-" + d.y)
-            .attr('x', d.x - 30)
-            .attr('y', d.y - 15)
-            // .attr({
-            //     id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
-            //     x: (d.x) - 30,
-            //     y: (d.y) - 15
-            // })
-            .attr('fill', 'white')
-            .text('test');
+        const hover = graph.append('text')
+            .attr('id', 't' + d.x + '-' + d.y)
+            .attr('y', graphHeight - (parseInt(d3.select(this).attr('height')) / 2))
+            .attr('x', parseInt(d3.select(this).attr('x')) + (parseInt(d3.select(this).attr('width')) / 2 - 12) )
+            .attr('pointer-events', 'none')
+            .attr('class', 'hover')
+            .style('fill', '#FFFFFF')
+            .text(valueCharacter.substring(0, 4));
     }
 
     function handleMouseOut(d, i) {
-        // Use D3 to select element, change color back to normal
-        // d3.select(this).attr({
-        //     fill: "black",
-        //     r: radius
-        // });
-
-        console.log('out');
-        // Select text by id and then remove
-        console.log(d3.select('t' + d.x + '-' + d.y));
-        d3.select('t' + d.x + "-" + d.y).remove();  // Remove text location
+        d3.select(this).attr('style', '#FFFFFF')
+        d3.selectAll('.hover').remove();  // Remove text location
     }
 }
 
