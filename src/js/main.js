@@ -5,11 +5,6 @@ import { jsPanel } from 'jspanel4';
 import { initGlobe, updateGlobe } from './globe.js';
 import { composer, toggleSoblePass, toggleFilmPass } from './postprocessing.js';
 
-// Import stylesheet(s)
-import 'jspanel4/es6module/jspanel.min.css';
-import '../css/style.css';
-import '../css/ui.css';
-
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
 
@@ -160,3 +155,8 @@ showDataset.addEventListener('click', function (e) {
 });
 
 initGlobe(yearWorldHappiness);
+
+// Remove the loading screen once the whole page is loaded
+document.addEventListener('DOMContentLoaded', function (event) {
+    document.getElementById('loader').remove();
+});
