@@ -1,0 +1,123 @@
+/* Rangeslider */
+.rangeContainer {
+    position: relative;
+    min-width: 300px;
+    margin: 10px 0;
+}
+
+.rangeSlider {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.range-label-list {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.range-label {
+    position: relative;
+    margin: 0px;
+    cursor: pointer;
+    transition: .2s ease-in-out;
+}
+
+.range-label-list:hover .range-label {
+    opacity: .5;
+}
+
+.range-label-list .range-label:hover {
+    transform: translate(0, -2px);
+    opacity: 1;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    display: block;
+    width: 95%;
+    height: 5px;
+    margin-top: 10px;
+    border-radius: 25px;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 0px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 8px;
+    height: 16px;
+    margin-top: -4px;
+    background: #ffffff;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+input[type=range]::-moz-range-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-moz-range-thumb {
+    height: 16px;
+    width: 8px;
+    background: #ccc;
+    border: none;
+    border-radius: 0%;
+}
+
+input[type=range]:-moz-focusring {
+    outline: 1px solid white;
+    outline-offset: -1px;
+}
+
+input[type=range]:focus::-moz-range-track {
+    background: #ccc;
+}
+
+/* Panel */
+.jsPanel-titlebar .jsPanel-title {
+    font-family: 'Manrope', sans-serif;
+    font-variant: normal;
+}
+
+/* Info bar */
+#showDataset {
+    position: relative;
+    font-weight: 600;
+    transition: .2s ease-in-out;
+}
+
+#showDataset:hover {
+    transform: translate(0, -20px);
+    opacity: .5;
+}
+
+/* Search bar */
+#searchCountry {
+    background-color: #ffffff32;
+    transition: .2s ease-in-out;
+}
+
+#searchCountry:focus {
+    background-color: #ffffff;
+}
