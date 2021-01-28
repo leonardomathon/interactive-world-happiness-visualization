@@ -1,9 +1,10 @@
 import * as d3 from 'd3';
 import * as THREE from 'three';
+import { renderer } from './scene';
 
-const canvasWidth = 2048;
+const canvasWidth = 2048 * 2;
 
-const canvasHeight = 1024;
+const canvasHeight = 1024 * 2;
 
 const projection = d3
     .geoEquirectangular()
@@ -20,8 +21,8 @@ export function createWorldTexture(world, yearWorldHappinessData) {
     const canvas = d3
         .select('body')
         .append('canvas')
-        .attr('width', '2048px')
-        .attr('height', '1024px');
+        .attr('width', '4096px')
+        .attr('height', '2048px');
 
     // Get 2d context of canvas
     const context = canvas.node().getContext('2d');
@@ -50,6 +51,8 @@ export function createWorldTexture(world, yearWorldHappinessData) {
     // Generate texture from canvas
     const texture = new THREE.Texture(canvas.node());
     texture.needsUpdate = true;
+    texture.minFilter = THREE.LinearMipMapLinearFilter;
+    texture.magFilter = THREE.LinearFilter;
 
     // Remove canvas
     canvas.remove();

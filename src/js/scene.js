@@ -30,16 +30,20 @@ export var renderer = new THREE.WebGLRenderer({
     canvas: worldCanvas,
     antialias: true,
 });
+renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 worldContainer.appendChild(renderer.domElement);
 
 export let controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.minDistance = 700;
+controls.maxDistance = 1500;
 
 export var scene = new THREE.Scene();
 
 // Create light
-export var light = new THREE.HemisphereLight('#ffffff', '#ffffff', 1);
-light.position.set(0, 1000, 0);
+export var light = new THREE.HemisphereLight('#ffffff', '#e3e3e3', 1);
+light.position.set(1000, 0, 0);
 scene.add(light);
 
 // Event listeren that checks if windows is resized

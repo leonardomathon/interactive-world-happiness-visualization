@@ -11,20 +11,20 @@ import { createWorldTexture } from './texture.js';
 import world from '../../datasets/geoworld.json';
 
 // Globe geometry and globe object
-let worldSphere, worldGlobe;
+let worldMaterial, worldSphere, worldGlobe;
 
 // Handles creation of the globe
 export function initGlobe(yearWorldHappiness) {
     // Create sphere (size, veritcal segments, horizontal segments)
     worldSphere = new THREE.SphereGeometry(500, 50, 50);
 
+    // Generate the world map texture in texture.js
+    worldMaterial = new THREE.MeshPhongMaterial({
+        map: createWorldTexture(world, yearWorldHappiness.data),
+    });
+
     // Create world globe
-    worldGlobe = new THREE.Mesh(
-        worldSphere,
-        new THREE.MeshBasicMaterial({
-            map: createWorldTexture(world, yearWorldHappiness.data),
-        })
-    );
+    worldGlobe = new THREE.Mesh(worldSphere, worldMaterial);
 
     // Add to scene
     scene.add(worldGlobe);
