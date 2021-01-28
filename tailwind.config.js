@@ -8,6 +8,7 @@ module.exports = {
             // Build your palette here
             gray: colors.blueGray,
             black: colors.black,
+            white: colors.white,
         },
         extend: {},
     },

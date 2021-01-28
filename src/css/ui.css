@@ -1,3 +1,7 @@
+/* Loader */
+#loader i {
+    font-size: 100px;
+}
 /* Rangeslider */
 .rangeContainer {
     position: relative;

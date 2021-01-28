@@ -155,3 +155,8 @@ showDataset.addEventListener('click', function (e) {
 });
 
 initGlobe(yearWorldHappiness);
+
+// Remove the loading screen once the whole page is loaded
+document.addEventListener('DOMContentLoaded', function (event) {
+    document.getElementById('loader').remove();
+});
