@@ -26,6 +26,9 @@ let showDataset = document.getElementById('showDataset');
 // <input> tag used for year selection
 let yearSlider = document.getElementById('yearSlider');
 
+// buttons for category selection
+let buttons = document.getElementById('scatterButtons');
+
 // Variable that holds the current selected year (default is 2018)
 let yearSliderValue = 2018;
 
@@ -36,7 +39,7 @@ let yearSliderLabels = document.getElementsByClassName('range-label-list')[0]
 // Object that holds the world happiness data from the selected year as yearWorldHappiness.data
 let yearWorldHappiness = {
     dataInteral: worldHappiness[yearSliderValue],
-    dataListener: function (val) {},
+    dataListener: function (val) { },
     set data(val) {
         this.dataInteral = val;
         this.dataListener(val);
@@ -76,7 +79,6 @@ yearWorldHappiness.registerListener(function (val) {
         '%c Data has changed: year = ' + yearSliderValue,
         'color:green; font-weight: 900;'
     );
-    initScatter(yearWorldHappiness.data, yearSliderValue);
 });
 
 // Even listener that listens to click to open current dataset
@@ -105,3 +107,5 @@ showDataset.addEventListener('click', function (e) {
         },
     });
 });
+
+initScatter(yearWorldHappiness.data, yearSliderValue);

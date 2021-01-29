@@ -3,12 +3,12 @@ import * as d3 from 'd3';
 export function initScatter(data, year) {
     console.log('data: ', data);
 
-    const numberOfCountries = year === '2015' ?
-        158 : (year === '2016' ? 157 :
-            (year === '2017' ? 155 :
-                (year === '2018' ? 153 :
-                    (year === '2019' ? 155 :
-                        (year === '2020' ? 153 : 0)))));
+    const numberOfCountries = year === 2015 ?
+        158 : (year === 2016 ? 157 :
+            (year === 2017 ? 155 :
+                (year === 2018 ? 156 :
+                    (year === 2019 ? 155 :
+                        (year === 2020 ? 153 : 0)))));
 
     // Animations
     const animation_duration = 1000;
@@ -194,7 +194,7 @@ export function initScatter(data, year) {
         .attr('stroke', '#CDCDCD')
         .attr('stroke-width', '2px')
         .attr('cx', d => {
-            return x(d['Generosity']);
+            return x(d['Economy (GDP per Capita)']);
         })
         .on('mouseover', showTooltip)
         .on('mousemove', moveTooltip)
@@ -324,36 +324,74 @@ export function initScatter(data, year) {
         .style('fill', '#FFFFFF');
 
 
-    // updateData(dataType) {
-    //     d3.json('dist/data/countries.json').then(data => {
-    //         this.chart
-    //             .selectAll('.country-bubble')
-    //             .transition()
-    //             .duration(500)
-    //             .ease(ANIMATION_EASING)
-    //             .attr('cx', d => {
-    //                 return this.xScale(d[dataType] / 156) + 25;
-    //             });
+    function updateData(category) {
+        console.log('datatype: ', category);
 
-    //         this.updateAxisLabel(dataType);
-    //     });
-    // }
+        let label;
+        if (category === 'graphSocialSupport') {
+            label = 'Trust (Government Corruption)';
+        } else if (category === 'graphFreedom') {
+            label = 'Freedom to make life choices';
+        } else if (category === 'graphGenerosity') {
+            label = 'Generosity';
+        } else if (category === 'graphLifeExpectancy') {
+            label = 'Healthy life expectancy';
+        } else if (category === 'graphGdp') {
+            label = 'Economy (GDP per Capita)';
+        }
 
-    // updateAxisLabel(type) {
-    //     // xLabel
-    //     let label;
-    //     if (type === 'graphSocialSupport') {
-    //         label = 'Social Support';
-    //     } else if (type === 'graphFreedom') {
-    //         label = 'Freedom';
-    //     } else if (type === 'graphGenerosity') {
-    //         label = 'Generosity';
-    //     } else if (type === 'graphLifeExpectancy') {
-    //         label = 'Life Expectancy';
-    //     } else if (type === 'graphGdp') {
-    //         label = 'GDP Per Capita ($)';
-    //     }
-    //     this.chart.select('.x-axis-label').text(`${label}`);
-    // }
+        graph
+            .selectAll('.country-bubble')
+            .transition()
+            .duration(500)
+            .ease(animation_easing)
+            .attr('cx', d => {
+                return x(d[label]);
+            })
+
+        updateAxisLabel(category);
+    }
+
+    // button group event listener
+    let btnGroup = document.querySelector(".btn-group");
+    btnGroup.addEventListener("mousedown", e => {
+        e.preventDefault();
+        let currentBtn = e.target;
+        let currentBtnType = currentBtn.classList[1];
+        let currentBtnClass;
+
+        if (currentBtnType === "header-graph__btn") {
+            currentBtnClass = currentBtn.classList[0].split("-")[1];
+        }
+
+        if (currentBtnType === "header-graph__btn") {
+            updateData(currentBtnClass);
+            let allBtns = btnGroup.querySelectorAll("a");
+            allBtns.forEach(btn => {
+                btn.classList.remove("active");
+            });
+            currentBtn.classList.add("active");
+        }
+    });
+
+    function updateAxisLabel(category) {
+
+        // Update the category displayed on the x-axis
+        let label;
+        if (category === 'graphSocialSupport') {
+            label = 'Trust (Government Corruption)';
+        } else if (category === 'graphFreedom') {
+            label = 'Freedom to make life choices';
+        } else if (category === 'graphGenerosity') {
+            label = 'Generosity';
+        } else if (category === 'graphLifeExpectancy') {
+            label = 'Healthy life expectancy';
+        } else if (category === 'graphGdp') {
+            label = 'Economy (GDP per Capita)';
+        }
+
+        // Update the category displayed on the x-axis
+        graph.select('.x-axis-label').text(`${label}`);
+    }
 }
 
