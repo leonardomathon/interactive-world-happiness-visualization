@@ -1,6 +1,9 @@
 import * as d3 from 'd3';
 import * as THREE from 'three';
 
+import { memoize } from './utils/memoize.js';
+import { findCountry } from './utils/geo.js';
+
 // Import scene file
 import {
     scene,
@@ -11,13 +14,11 @@ import {
     controls,
     raycaster,
 } from './scene.js';
-import { composer } from './postprocessing.js';
+
+import { composer } from './fx/postprocessing.js';
 
 // Import texture file
 import { createWorldTexture, createCountryTexture } from './texture.js';
-
-// Import world file for topojson
-import world from '../../datasets/geoworld.json';
 
 // Texture and country caches by memoization
 const textureCache = memoize(createCountryTexture);
@@ -98,7 +99,8 @@ export function initGlobe(yearWorldHappiness) {
             countryIntersect = countryCache(
                 worldSphere.vertices[intersect.face.a],
                 worldSphere.vertices[intersect.face.b],
-                worldSphere.vertices[intersect.face.c]
+                worldSphere.vertices[intersect.face.c],
+                worldSize
             );
         } else {
             countryIntersect = null;
@@ -131,97 +133,4 @@ export function updateGlobe(yearWorldHappiness) {
         })
     );
     scene.add(worldGlobe);
-}
-
-// Input are 3 sides of a face. Returns the country hovered over
-function findCountry(a, b, c) {
-    let latRads, lngRads;
-    // Compute the center of the face (average)
-    const centerPoint = {
-        x: (a.x + b.x + c.x) / 3,
-        y: (a.y + b.y + c.y) / 3,
-        z: (a.z + b.z + c.z) / 3,
-    };
-
-    // Fancy function that convers center to lat and lng
-    latRads = Math.acos(centerPoint.y / worldSize);
-    lngRads = Math.atan2(centerPoint.z, centerPoint.x);
-
-    // lng needs to be rotated 180 degrees
-    const coords = {
-        lat: (Math.PI / 2 - latRads) * (180 / Math.PI),
-        lng: (Math.PI - lngRads) * (180 / Math.PI) - 180,
-    };
-
-    // Loop over all countries in geoworld.json
-    for (let i = 0; i < world.features.length; i++) {
-        // Check if center point is in polygon(s) of feature
-        if (world.features[i].geometry.type == 'Polygon') {
-            if (
-                pointInPolygon(world.features[i].geometry.coordinates[0], [
-                    coords.lng,
-                    coords.lat,
-                ])
-            ) {
-                return {
-                    id: world.features[i].id,
-                    name: world.features[i].properties.name,
-                };
-            }
-        } else {
-            for (
-                let j = 0;
-                j < world.features[i].geometry.coordinates.length;
-                j++
-            ) {
-                if (
-                    pointInPolygon(
-                        world.features[i].geometry.coordinates[j][0],
-                        [coords.lng, coords.lat]
-                    )
-                ) {
-                    return {
-                        id: world.features[i].id,
-                        name: world.features[i].properties.name,
-                    };
-                }
-            }
-        }
-    }
-
-    return null;
-}
-
-// Standard algorithm to determine if a point lies inside a polygon
-function pointInPolygon(polygon, point) {
-    let inside = false;
-    let x = point[0];
-    let y = point[1];
-
-    // Loop over
-    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-        let xi = polygon[i][0];
-        let yi = polygon[i][1];
-        let xj = polygon[j][0];
-        let yj = polygon[j][1];
-        let intersect =
-            yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
-        if (intersect) inside = !inside;
-    }
-    return inside;
-}
-
-// Cache function
-function memoize(fn) {
-    const cache = {};
-    return function () {
-        const args = JSON.stringify(arguments);
-        if (cache[args] === undefined) {
-            const val = fn.apply(null, arguments);
-            cache[args] = val;
-            return val;
-        } else {
-            return cache[args];
-        }
-    };
 }

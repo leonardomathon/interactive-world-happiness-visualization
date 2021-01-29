@@ -3,7 +3,11 @@ import { jsPanel } from 'jspanel4';
 
 // Import custom js
 import { initGlobe, updateGlobe } from './globe.js';
-import { composer, toggleSoblePass, toggleFilmPass } from './postprocessing.js';
+import {
+    composer,
+    toggleSoblePass,
+    toggleFilmPass,
+} from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
