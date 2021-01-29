@@ -27,7 +27,8 @@ const worldYSegments = 500;
 // Globe geometry and globe object
 let worldMaterial, worldSphere, worldGlobe;
 
-export var selectedCountry;
+// Geometry and material for country overlay
+let countryMaterial, countrySphere, countryGlobe;
 
 // Handles creation of the globe
 export function initGlobe(yearWorldHappiness) {
@@ -49,6 +50,25 @@ export function initGlobe(yearWorldHappiness) {
     // Add to scene
     scene.add(worldGlobe);
 
+    // Create sphere for country overlay (size, veritcal segments, horizontal segments)
+    countrySphere = new THREE.SphereGeometry(
+        worldSize + 10,
+        worldXSegments,
+        worldYSegments
+    );
+
+    // Generate the country texture in texture.js
+    countryMaterial = new THREE.MeshPhongMaterial({
+        map: new THREE.Texture(),
+        transparent: true,
+    });
+
+    // Create country overlay globe
+    countryGlobe = new THREE.Mesh(countrySphere, countryMaterial);
+
+    // Add to scene
+    scene.add(countryGlobe);
+
     // Start render loop
     render();
 
@@ -62,6 +82,9 @@ export function initGlobe(yearWorldHappiness) {
 
         // Get intersection point
         const intersect = raycaster.intersectObjects([worldGlobe])[0];
+
+        // Variable that contains the hovered over country
+        let selectedCountry;
 
         // Find the country
         if (intersect) {
@@ -100,7 +123,7 @@ export function updateGlobe(yearWorldHappiness) {
 
 // Input are 3 sides of a face. Returns the country hovered over
 function findCountry(a, b, c) {
-    let latRads, lngRads, feature;
+    let latRads, lngRads;
     // Compute the center of the face (average)
     const centerPoint = {
         x: (a.x + b.x + c.x) / 3,
