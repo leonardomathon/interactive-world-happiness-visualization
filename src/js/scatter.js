@@ -3,6 +3,9 @@ import * as d3 from 'd3';
 export function initScatter(data, year) {
     console.log('data: ', data);
 
+    // <input> tag used for year selection
+    let yearSlider = document.getElementById('yearSlider');
+
     const numberOfCountries = year === 2015 ?
         158 : (year === 2016 ? 157 :
             (year === 2017 ? 155 :
@@ -194,6 +197,7 @@ export function initScatter(data, year) {
         .attr('stroke', '#CDCDCD')
         .attr('stroke-width', '2px')
         .attr('cx', d => {
+            console.log('dataform: ', d['Economy (GDP per Capita)'])
             return x(d['Economy (GDP per Capita)']);
         })
         .on('mouseover', showTooltip)
@@ -325,7 +329,6 @@ export function initScatter(data, year) {
 
 
     function updateData(category) {
-        console.log('datatype: ', category);
 
         let label;
         if (category === 'graphSocialSupport') {
@@ -352,6 +355,26 @@ export function initScatter(data, year) {
         updateAxisLabel(category);
     }
 
+    function updateAxisLabel(category) {
+
+        // Update the category displayed on the x-axis
+        let label;
+        if (category === 'graphSocialSupport') {
+            label = 'Trust (Government Corruption)';
+        } else if (category === 'graphFreedom') {
+            label = 'Freedom to make life choices';
+        } else if (category === 'graphGenerosity') {
+            label = 'Generosity';
+        } else if (category === 'graphLifeExpectancy') {
+            label = 'Healthy life expectancy';
+        } else if (category === 'graphGdp') {
+            label = 'Economy (GDP per Capita)';
+        }
+
+        // Update the category displayed on the x-axis
+        graph.select('.x-axis-label').text(`${label}`);
+    }
+
     // button group event listener
     let btnGroup = document.querySelector(".btn-group");
     btnGroup.addEventListener("mousedown", e => {
@@ -374,24 +397,12 @@ export function initScatter(data, year) {
         }
     });
 
-    function updateAxisLabel(category) {
 
-        // Update the category displayed on the x-axis
-        let label;
-        if (category === 'graphSocialSupport') {
-            label = 'Trust (Government Corruption)';
-        } else if (category === 'graphFreedom') {
-            label = 'Freedom to make life choices';
-        } else if (category === 'graphGenerosity') {
-            label = 'Generosity';
-        } else if (category === 'graphLifeExpectancy') {
-            label = 'Healthy life expectancy';
-        } else if (category === 'graphGdp') {
-            label = 'Economy (GDP per Capita)';
-        }
-
-        // Update the category displayed on the x-axis
-        graph.select('.x-axis-label').text(`${label}`);
-    }
+    // Event listener that listens to the range slider
+    yearSlider.addEventListener('change', function (e) {
+        // Get slider value, update data and UI
+        // yearSliderValue = yearSlider.value;
+        console.log('Yearslidesvalue: ', yearSlider.value);
+    });
 }
 
