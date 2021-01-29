@@ -14,10 +14,14 @@ import {
 import { composer } from './postprocessing.js';
 
 // Import texture file
-import { createWorldTexture } from './texture.js';
+import { createWorldTexture, createCountryTexture } from './texture.js';
 
 // Import world file for topojson
 import world from '../../datasets/geoworld.json';
+
+// Texture and country caches by memoization
+const textureCache = memoize(createCountryTexture);
+const countryCache = memoize(findCountry);
 
 // Globe geometry size and segments
 const worldSize = 500;
@@ -43,7 +47,7 @@ export function initGlobe(yearWorldHappiness) {
 
     // Generate the world map texture in texture.js
     worldMaterial = new THREE.MeshPhongMaterial({
-        map: createWorldTexture(world, yearWorldHappiness.data),
+        map: createWorldTexture(yearWorldHappiness.data),
     });
 
     // Create world globe
@@ -61,7 +65,7 @@ export function initGlobe(yearWorldHappiness) {
 
     // Generate the country texture in texture.js
     countryMaterial = new THREE.MeshPhongMaterial({
-        map: createWorldTexture(world, yearWorldHappiness.data, 'blank'),
+        map: textureCache('blank'),
         transparent: true,
     });
 
@@ -86,33 +90,25 @@ export function initGlobe(yearWorldHappiness) {
         const intersect = raycaster.intersectObjects([worldGlobe])[0];
 
         // Variable that contains the hovered over country
-        let country;
+        let countryIntersect;
 
         // Find the country
         if (intersect) {
             // Find the country using the ray intersect
-            country = findCountry(
+            countryIntersect = countryCache(
                 worldSphere.vertices[intersect.face.a],
                 worldSphere.vertices[intersect.face.b],
                 worldSphere.vertices[intersect.face.c]
             );
         } else {
-            country = null;
+            countryIntersect = null;
         }
 
-        if (country && selectedCountry != country.id) {
-            selectedCountry = country.id;
-            countryGlobe.material.map = createWorldTexture(
-                world,
-                yearWorldHappiness.data,
-                country.id
-            );
-        } else if (!country && selectedCountry) {
-            countryGlobe.material.map = createWorldTexture(
-                world,
-                yearWorldHappiness.data,
-                'blank'
-            );
+        if (countryIntersect && selectedCountry != countryIntersect.id) {
+            selectedCountry = countryIntersect.id;
+            countryGlobe.material.map = textureCache(countryIntersect.id);
+        } else if (!countryIntersect && selectedCountry) {
+            countryGlobe.material.map = textureCache('blank');
             selectedCountry = null;
         }
 
@@ -131,7 +127,7 @@ export function updateGlobe(yearWorldHappiness) {
     worldGlobe = new THREE.Mesh(
         worldSphere,
         new THREE.MeshPhongMaterial({
-            map: createWorldTexture(world, yearWorldHappiness.data),
+            map: createWorldTexture(yearWorldHappiness.data),
         })
     );
     scene.add(worldGlobe);
@@ -213,4 +209,19 @@ function pointInPolygon(polygon, point) {
         if (intersect) inside = !inside;
     }
     return inside;
+}
+
+// Cache function
+function memoize(fn) {
+    const cache = {};
+    return function () {
+        const args = JSON.stringify(arguments);
+        if (cache[args] === undefined) {
+            const val = fn.apply(null, arguments);
+            cache[args] = val;
+            return val;
+        } else {
+            return cache[args];
+        }
+    };
 }
