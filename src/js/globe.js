@@ -30,6 +30,8 @@ let worldMaterial, worldSphere, worldGlobe;
 // Geometry and material for country overlay
 let countryMaterial, countrySphere, countryGlobe;
 
+export var selectedCountry = null;
+
 // Handles creation of the globe
 export function initGlobe(yearWorldHappiness) {
     // Create sphere (size, veritcal segments, horizontal segments)
@@ -52,14 +54,14 @@ export function initGlobe(yearWorldHappiness) {
 
     // Create sphere for country overlay (size, veritcal segments, horizontal segments)
     countrySphere = new THREE.SphereGeometry(
-        worldSize + 10,
+        worldSize,
         worldXSegments,
         worldYSegments
     );
 
     // Generate the country texture in texture.js
     countryMaterial = new THREE.MeshPhongMaterial({
-        map: new THREE.Texture(),
+        map: createWorldTexture(world, yearWorldHappiness.data, 'blank'),
         transparent: true,
     });
 
@@ -84,21 +86,35 @@ export function initGlobe(yearWorldHappiness) {
         const intersect = raycaster.intersectObjects([worldGlobe])[0];
 
         // Variable that contains the hovered over country
-        let selectedCountry;
+        let country;
 
         // Find the country
         if (intersect) {
             // Find the country using the ray intersect
-            selectedCountry = findCountry(
+            country = findCountry(
                 worldSphere.vertices[intersect.face.a],
                 worldSphere.vertices[intersect.face.b],
                 worldSphere.vertices[intersect.face.c]
             );
         } else {
-            selectedCountry = null;
+            country = null;
         }
 
-        selectedCountry ? console.log(selectedCountry) : null;
+        if (country && selectedCountry != country.id) {
+            selectedCountry = country.id;
+            countryGlobe.material.map = createWorldTexture(
+                world,
+                yearWorldHappiness.data,
+                country.id
+            );
+        } else if (!country && selectedCountry) {
+            countryGlobe.material.map = createWorldTexture(
+                world,
+                yearWorldHappiness.data,
+                'blank'
+            );
+            selectedCountry = null;
+        }
 
         // Render frame
         requestAnimationFrame(render);

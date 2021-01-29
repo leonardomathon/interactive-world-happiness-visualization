@@ -8,14 +8,14 @@ const canvasHeight = 1024 * 4;
 const projection = d3
     .geoEquirectangular()
     .translate([canvasWidth / 2, canvasHeight / 2])
-    .scale(Math.min(canvasWidth / Math.PI / 0.5, canvasHeight / Math.PI)); // D3 geo projection for canvas
+    .scale(Math.min(canvasWidth / Math.PI / 2, canvasHeight / Math.PI)); // D3 geo projection for canvas
 
 const colorScale = d3
     .scaleThreshold()
     .domain([5, 10, 25, 50, 75, 100, 125, 150, 200, 500])
     .range(d3.schemeBlues[9]);
 
-export function createWorldTexture(world, yearWorldHappinessData) {
+export function createWorldTexture(world, yearWorldHappinessData, countryId) {
     // Append canvas and save reference
     const canvas = d3
         .select('body')
@@ -30,7 +30,7 @@ export function createWorldTexture(world, yearWorldHappinessData) {
     const path = d3.geoPath().projection(projection).context(context);
 
     // Draw background
-    context.fillStyle = '#0e1931';
+    context.fillStyle = countryId ? 'rgba(0,0,0,0)' : '#0e1931';
     context.fillRect(0, 0, canvasWidth, canvasHeight);
 
     // Draw features from geojson
@@ -38,13 +38,21 @@ export function createWorldTexture(world, yearWorldHappinessData) {
     context.lineWidth = 0.25;
 
     world.features.forEach(function (d) {
-        context.fillStyle = yearWorldHappinessData[d.id]
-            ? colorScale(yearWorldHappinessData[d.id]['Happiness Rank'])
-            : '#262626';
-        context.beginPath();
-        path(d);
-        context.fill();
-        context.stroke();
+        if (!countryId) {
+            context.fillStyle = yearWorldHappinessData[d.id]
+                ? colorScale(yearWorldHappinessData[d.id]['Happiness Rank'])
+                : '#262626';
+            context.beginPath();
+            path(d);
+            context.fill();
+            context.stroke();
+        } else if (d.id === countryId) {
+            context.fillStyle = '#000';
+            context.beginPath();
+            path(d);
+            context.fill();
+            context.stroke();
+        }
     });
 
     // Generate texture from canvas
