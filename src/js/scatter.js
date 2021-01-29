@@ -327,7 +327,7 @@ export function initScatter(data, year) {
         .style('text-align', 'left')
         .style('fill', '#FFFFFF');
 
-
+    // Update the data according to the new category
     function updateData(category) {
 
         let label;
@@ -375,7 +375,7 @@ export function initScatter(data, year) {
         graph.select('.x-axis-label').text(`${label}`);
     }
 
-    // button group event listener
+    // Button group event listener, checks button group and updates if button is not currently selected
     let btnGroup = document.querySelector(".btn-group");
     btnGroup.addEventListener("mousedown", e => {
         e.preventDefault();
@@ -396,7 +396,6 @@ export function initScatter(data, year) {
             currentBtn.classList.add("active");
         }
     });
-
 
     // Event listener that listens to the range slider
     yearSlider.addEventListener('change', function (e) {
