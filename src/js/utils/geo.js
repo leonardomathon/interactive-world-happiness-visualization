@@ -36,6 +36,7 @@ export function findCountry(a, b, c, worldSize) {
                 return {
                     id: world.features[i].id,
                     name: world.features[i].properties.name,
+                    index: i,
                 };
             }
         } else {
@@ -53,6 +54,7 @@ export function findCountry(a, b, c, worldSize) {
                     return {
                         id: world.features[i].id,
                         name: world.features[i].properties.name,
+                        index: i,
                     };
                 }
             }

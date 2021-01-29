@@ -4,14 +4,28 @@ import * as THREE from 'three';
 // Import world file for topojson
 import world from '../../datasets/geoworld.json';
 
-const canvasWidth = 2048 * 4;
-const canvasHeight = 1024 * 4;
+const worldCanvasWidth = 8192;
+const worldCanvasHeight = 4096;
+const countryCanvasWidth = 2048;
+const countryCanvasHeight = 1024;
 
 // D3 geo projection for canvas
-const projection = d3
+const worldProjection = d3
     .geoEquirectangular()
-    .translate([canvasWidth / 2, canvasHeight / 2])
-    .scale(Math.min(canvasWidth / Math.PI / 2, canvasHeight / Math.PI));
+    .translate([worldCanvasWidth / 2, worldCanvasHeight / 2])
+    .scale(
+        Math.min(worldCanvasWidth / Math.PI / 2, worldCanvasHeight / Math.PI)
+    );
+
+const countryProjection = d3
+    .geoEquirectangular()
+    .translate([countryCanvasWidth / 2, countryCanvasHeight / 2])
+    .scale(
+        Math.min(
+            countryCanvasWidth / Math.PI / 2,
+            countryCanvasHeight / Math.PI
+        )
+    );
 
 const colorScale = d3
     .scaleThreshold()
@@ -30,11 +44,11 @@ export function createWorldTexture(yearWorldHappinessData) {
     const context = canvas.node().getContext('2d');
 
     // Create geo path generator
-    const path = d3.geoPath().projection(projection).context(context);
+    const path = d3.geoPath().projection(worldProjection).context(context);
 
     // Draw background
     context.fillStyle = '#0e1931';
-    context.fillRect(0, 0, canvasWidth, canvasHeight);
+    context.fillRect(0, 0, worldCanvasWidth, worldCanvasHeight);
 
     // Draw features from geojson
     context.strokeStyle = '#0e1931';
@@ -63,37 +77,35 @@ export function createWorldTexture(yearWorldHappinessData) {
     return texture;
 }
 
-export function createCountryTexture(countryId) {
+export function createCountryTexture(index, countryId) {
     // Append canvas and save reference
     const canvas = d3
         .select('body')
         .append('canvas')
-        .attr('width', '8192px')
-        .attr('height', '4096px');
+        .attr('width', '2048px')
+        .attr('height', '1024px');
 
     // Get 2d context of canvas
     const context = canvas.node().getContext('2d');
 
     // Create geo path generator
-    const path = d3.geoPath().projection(projection).context(context);
+    const path = d3.geoPath().projection(countryProjection).context(context);
 
     // Draw background
     context.fillStyle = 'rgba(0,0,0,0)';
-    context.fillRect(0, 0, canvasWidth, canvasHeight);
+    context.fillRect(0, 0, worldCanvasWidth, worldCanvasHeight);
 
     // Draw features from geojson
     context.strokeStyle = '#0e1931';
     context.lineWidth = 0.25;
 
-    world.features.forEach(function (d) {
-        if (d.id === countryId) {
-            context.fillStyle = '#000';
-            context.beginPath();
-            path(d);
-            context.fill();
-            context.stroke();
-        }
-    });
+    if (index >= 0) {
+        context.fillStyle = '#000';
+        context.beginPath();
+        path(world.features[index]);
+        context.fill();
+        context.stroke();
+    }
 
     // Generate texture from canvas
     const texture = new THREE.Texture(canvas.node());

@@ -21,7 +21,8 @@ import { composer } from './fx/postprocessing.js';
 import { createWorldTexture, createCountryTexture } from './texture.js';
 
 // Texture and country caches by memoization
-const textureCache = memoize(createCountryTexture);
+const worldTextureCach = memoize(createWorldTexture);
+const countryTextureCach = memoize(createCountryTexture);
 const countryCache = memoize(findCountry);
 
 // Globe geometry size and segments
@@ -48,7 +49,7 @@ export function initGlobe(yearWorldHappiness) {
 
     // Generate the world map texture in texture.js
     worldMaterial = new THREE.MeshPhongMaterial({
-        map: createWorldTexture(yearWorldHappiness.data),
+        map: worldTextureCach(yearWorldHappiness.data),
     });
 
     // Create world globe
@@ -66,7 +67,7 @@ export function initGlobe(yearWorldHappiness) {
 
     // Generate the country texture in texture.js
     countryMaterial = new THREE.MeshPhongMaterial({
-        map: textureCache('blank'),
+        map: countryTextureCach(-1, 'blank'),
         transparent: true,
     });
 
@@ -108,9 +109,12 @@ export function initGlobe(yearWorldHappiness) {
 
         if (countryIntersect && selectedCountry != countryIntersect.id) {
             selectedCountry = countryIntersect.id;
-            countryGlobe.material.map = textureCache(countryIntersect.id);
+            countryGlobe.material.map = countryTextureCach(
+                countryIntersect.index,
+                countryIntersect.id
+            );
         } else if (!countryIntersect && selectedCountry) {
-            countryGlobe.material.map = textureCache('blank');
+            countryGlobe.material.map = countryTextureCach(-1, 'blank');
             selectedCountry = null;
         }
 
@@ -129,7 +133,7 @@ export function updateGlobe(yearWorldHappiness) {
     worldGlobe = new THREE.Mesh(
         worldSphere,
         new THREE.MeshPhongMaterial({
-            map: createWorldTexture(yearWorldHappiness.data),
+            map: worldTextureCach(yearWorldHappiness.data),
         })
     );
     scene.add(worldGlobe);
