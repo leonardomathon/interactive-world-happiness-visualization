@@ -23,8 +23,17 @@
     </div>
     <div id="toolbar" class="relative float-right flex flex-col z-10">
         <div id="options-block" class="m-5 p-5 flex flex-col justify-end bg-black bg-opacity-30 rounded-lg ">
-            <p>Options</p>
+            <p class="font-bold">Options</p>
             <hr class="my-1 opacity-25">
+            <p class="text-xs font-normal">Rendering options</p>
+            <div id="countryHover">
+                <input type="checkbox" id="countryHoverToggle" class="cursor-pointer" name="countryHoverToggle">
+                <label for="countryHoverToggle" class="cursor-pointer"> Enable country hover
+                    <span class="font-light">(ctrl
+                        h)</span></label><br>
+            </div>
+            <hr class="my-1 opacity-25">
+            <p class="text-xs font-normal">Postprocessing options</p>
             <div id="outlineMode">
                 <input type="checkbox" id="clusteringToggle" class="cursor-pointer" name="clusteringToggle">
                 <label for="clusteringToggle" class="cursor-pointer"> Enable outline mode <span class="font-light">(ctrl
@@ -35,6 +44,8 @@
                 <label for="filmToggle" class="cursor-pointer"> Enable film processing <span class="font-light">(ctrl
                         k)</span></label><br>
             </div>
+            <hr class="my-1 opacity-25">
+            <p class="text-xs font-normal">General options</p>
             <div id="search">
                 <p class="ml-4"> Search <span class="font-light">(ctrl
                         f)</span></p>

@@ -20,6 +20,9 @@ import { composer } from './fx/postprocessing.js';
 // Import texture file
 import { createWorldTexture, createCountryTexture } from './texture.js';
 
+// Variable that is true when country hover is enabled from options
+let countryHoverEnabled = false;
+
 // Texture and country caches by memoization
 const worldTextureCach = memoize(createWorldTexture);
 const countryTextureCach = memoize(createCountryTexture);
@@ -109,10 +112,12 @@ export function initGlobe(yearWorldHappiness) {
 
         if (countryIntersect && selectedCountry != countryIntersect.id) {
             selectedCountry = countryIntersect.id;
-            countryGlobe.material.map = countryTextureCach(
-                countryIntersect.index,
-                countryIntersect.id
-            );
+            if (countryHoverEnabled) {
+                countryGlobe.material.map = countryTextureCach(
+                    countryIntersect.index,
+                    countryIntersect.id
+                );
+            }
         } else if (!countryIntersect && selectedCountry) {
             countryGlobe.material.map = countryTextureCach(-1, 'blank');
             selectedCountry = null;
@@ -137,4 +142,9 @@ export function updateGlobe(yearWorldHappiness) {
         })
     );
     scene.add(worldGlobe);
+}
+
+export function toggleHover() {
+    countryGlobe.material.map = countryTextureCach(-1, 'blank');
+    countryHoverEnabled = !countryHoverEnabled;
 }

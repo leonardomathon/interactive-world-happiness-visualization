@@ -2,7 +2,7 @@ import hotkeys from 'hotkeys-js';
 import { jsPanel } from 'jspanel4';
 
 // Import custom js
-import { initGlobe, updateGlobe } from './globe.js';
+import { initGlobe, updateGlobe, toggleHover } from './globe.js';
 import {
     composer,
     toggleSoblePass,
@@ -37,6 +37,9 @@ let outlineCheckbox = document.getElementById('clusteringToggle');
 // <input> tag used to toggle outline mode
 let filmCheckbox = document.getElementById('filmToggle');
 
+// <input> tag used to toggle outline mode
+let countryHoverCheckbox = document.getElementById('countryHoverToggle');
+
 // <input> tag used to search countries
 let searchInput = document.getElementById('searchCountry');
 
@@ -44,9 +47,13 @@ let searchInput = document.getElementById('searchCountry');
 let searchedCountry;
 
 // Config object that holds value of preprocessing effects
-let preprocessingEffects = {
+let preprocessingOptions = {
     outlineMode: false,
     filmMode: true,
+};
+
+let renderingOptions = {
+    countryHover: false,
 };
 
 // Object that holds the world happiness data from the selected year as yearWorldHappiness.data
@@ -97,35 +104,47 @@ yearWorldHappiness.registerListener(function (val) {
 
 // Event listener that listent to the outline mode enable checkbox
 outlineCheckbox.addEventListener('change', function (e) {
-    preprocessingEffects.outlineMode = !preprocessingEffects.outlineMode;
-    toggleSoblePass(preprocessingEffects);
+    preprocessingOptions.outlineMode = !preprocessingOptions.outlineMode;
+    toggleSoblePass(preprocessingOptions);
 });
 
 // Event listener that listent to the film mode enable checkbox
 filmCheckbox.addEventListener('change', function (e) {
-    preprocessingEffects.filmMode = !preprocessingEffects.filmMode;
-    toggleFilmPass(preprocessingEffects);
+    preprocessingOptions.filmMode = !preprocessingOptions.filmMode;
+    toggleFilmPass(preprocessingOptions);
+});
+
+countryHoverCheckbox.addEventListener('change', function (e) {
+    renderingOptions.countryHover = !renderingOptions.countryHover;
+    toggleHover();
 });
 
 // Event listener (from hotkeys-js) that listens to the combination ctrl+o or com+o
 hotkeys('ctrl+o', function (event, handler) {
     event.preventDefault();
     outlineCheckbox.checked = !outlineCheckbox.checked;
-    preprocessingEffects.outlineMode = !preprocessingEffects.outlineMode;
-    toggleSoblePass(preprocessingEffects);
+    preprocessingOptions.outlineMode = !preprocessingOptions.outlineMode;
+    toggleSoblePass(preprocessingOptions);
 });
 
-// Event listener (from hotkeys-js) that listens to the combination ctrl+k or com+k
+// Event listener (from hotkeys-js) that listens to the keyboard combinations
 hotkeys('ctrl+k', function (event, handler) {
     event.preventDefault();
     filmCheckbox.checked = !filmCheckbox.checked;
-    preprocessingEffects.filmMode = !preprocessingEffects.filmMode;
-    toggleFilmPass(preprocessingEffects);
+    preprocessingOptions.filmMode = !preprocessingOptions.filmMode;
+    toggleFilmPass(preprocessingOptions);
 });
 
 hotkeys('ctrl+f', function (event, handler) {
     event.preventDefault();
     searchInput.focus();
+});
+
+hotkeys('ctrl+h', function (event, handler) {
+    event.preventDefault();
+    countryHoverCheckbox.checked = !countryHoverCheckbox.checked;
+    renderingOptions.countryHover = !renderingOptions.countryHover;
+    toggleHover();
 });
 
 // Event listener that listens to searching
