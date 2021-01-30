@@ -9,11 +9,9 @@ export function createGPUHintPanel() {
         contentSize: '330 auto',
         content:
             '<p class="p-2 text-sm">The hover function is very GPU intensive. The application might become less responsive.</p>',
-        theme: '#10204D filled',
+        theme: '#b12424 filled',
         headerTitle:
             '<i class="ri-error-warning-line mr-2"></i> Performance warning',
-        animateIn: 'jsPanelFadeIn',
-        animateOut: 'jsPanelFadeOut',
         closeOnEscape: true,
         autoclose: {
             time: '4s',
