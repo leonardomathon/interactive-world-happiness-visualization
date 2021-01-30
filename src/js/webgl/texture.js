@@ -100,7 +100,7 @@ export function createCountryTexture(index, countryId) {
     context.lineWidth = 0.25;
 
     if (index >= 0) {
-        context.fillStyle = '#000';
+        context.fillStyle = '#FF7E3B';
         context.beginPath();
         path(world.features[index]);
         context.fill();

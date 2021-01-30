@@ -4,9 +4,10 @@ import hotkeys from 'hotkeys-js';
 import { createDatasetPanel, createGPUHintPanel } from './ui/panels.js';
 import {
     initGlobe,
-    updateGlobe,
+    updateGlobeTexture,
     toggleHover,
     selectedCountry,
+    resetClickedCountry,
 } from './webgl/globe/globe.js';
 import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
@@ -73,6 +74,19 @@ let yearWorldHappiness = {
     },
 };
 
+// Make checkboxes unfocusable
+outlineCheckbox.onfocus = function () {
+    this.blur();
+};
+
+filmCheckbox.onfocus = function () {
+    this.blur();
+};
+
+countryHoverCheckbox.onfocus = function () {
+    this.blur();
+};
+
 // Event listeners that listen to click events on the labels
 for (let i = 0; i < yearSliderLabels.length; i++) {
     // If a range slider label is clicked, update yearSlider value
@@ -100,7 +114,7 @@ yearWorldHappiness.registerListener(function (val) {
         '%c Data has changed: year = ' + yearSliderValue,
         'color:green; font-weight: 900;'
     );
-    updateGlobe(yearWorldHappiness);
+    updateGlobeTexture(yearWorldHappiness);
 });
 
 // Event listener that listent to the outline mode enable checkbox
@@ -152,6 +166,11 @@ hotkeys('ctrl+h', function (event, handler) {
     countryHoverCheckbox.checked = !countryHoverCheckbox.checked;
     renderingOptions.countryHover = !renderingOptions.countryHover;
     toggleHover();
+});
+
+hotkeys('esc', function (event, handler) {
+    event.preventDefault();
+    resetClickedCountry();
 });
 
 // Event listener that listens to searching
