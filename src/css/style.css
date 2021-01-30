@@ -41,6 +41,8 @@ canvas {
 
   /* Location of categories */
   .header {
+    margin-top: 50px;
+    margin-left: 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -103,6 +105,7 @@ canvas {
     /* font-size: .8rem; */
   }
 
+  /* Outer traingle of pointer */
   .nav__dropdown:before {
     content: '';
     width: 0;
@@ -115,6 +118,7 @@ canvas {
     top: -13px;
   }
 
+  /* Inner traingle of pointer */
   .nav__dropdown:after {
     content: '';
     width: 0;
@@ -126,6 +130,11 @@ canvas {
     left: 2%;
     top: -12px;
   }
+  
+  .country-bubble:hover {
+    stroke: #000000;
+  }
+
 
 
   
