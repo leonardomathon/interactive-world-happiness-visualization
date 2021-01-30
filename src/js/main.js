@@ -2,12 +2,13 @@ import hotkeys from 'hotkeys-js';
 
 // Import custom js
 import { createDatasetPanel, createGPUHintPanel } from './ui/panels.js';
-import { initGlobe, updateGlobe, toggleHover } from './webgl/globe/globe.js';
 import {
-    composer,
-    toggleSoblePass,
-    toggleFilmPass,
-} from './fx/postprocessing.js';
+    initGlobe,
+    updateGlobe,
+    toggleHover,
+    selectedCountry,
+} from './webgl/globe/globe.js';
+import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
@@ -39,6 +40,9 @@ let countryHoverCheckbox = document.getElementById('countryHoverToggle');
 
 // <input> tag used to search countries
 let searchInput = document.getElementById('searchCountry');
+
+// Country that the user selected
+let selectedCountryTag = document.getElementById('selectedCountry');
 
 // Country that is searched
 let searchedCountry;
@@ -163,4 +167,12 @@ initGlobe(yearWorldHappiness);
 // Remove the loading screen once the whole page is loaded
 document.addEventListener('DOMContentLoaded', function (event) {
     document.getElementById('loader').remove();
+});
+
+selectedCountry.registerListener(function (val) {
+    if (selectedCountry.data.name != '') {
+        selectedCountryTag.innerHTML = `${selectedCountry.data.id} - ${selectedCountry.data.name}`;
+    } else {
+        selectedCountryTag.innerHTML = `${selectedCountry.data.id}`;
+    }
 });

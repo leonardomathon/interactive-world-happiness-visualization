@@ -39,7 +39,25 @@ let worldMaterial, worldSphere, worldGlobe;
 // Geometry and material for country overlay
 let countryMaterial, countrySphere, countryGlobe;
 
-export var selectedCountry = null;
+export var selectedCountry = {
+    dataInteral: {
+        id: 'No country selected',
+        name: '',
+    },
+    dataListener: function (val) {},
+    set data(val) {
+        if (this.dataInteral != val) {
+            this.dataInteral = val;
+            this.dataListener(val);
+        }
+    },
+    get data() {
+        return this.dataInteral;
+    },
+    registerListener: function (listener) {
+        this.dataListener = listener;
+    },
+};
 
 // Handles creation of the globe
 export function initGlobe(yearWorldHappiness) {
@@ -110,17 +128,26 @@ export function initGlobe(yearWorldHappiness) {
             countryIntersect = null;
         }
 
-        if (countryIntersect && selectedCountry != countryIntersect.id) {
-            selectedCountry = countryIntersect.id;
+        if (
+            countryIntersect &&
+            selectedCountry.data.id != countryIntersect.id
+        ) {
+            selectedCountry.data = {
+                id: countryIntersect.id,
+                name: countryIntersect.name,
+            };
             if (countryHoverEnabled) {
                 countryGlobe.material.map = countryTextureCach(
                     countryIntersect.index,
                     countryIntersect.id
                 );
             }
-        } else if (!countryIntersect && selectedCountry) {
+        } else if (!countryIntersect && selectedCountry.data.id) {
             countryGlobe.material.map = countryTextureCach(-1, 'blank');
-            selectedCountry = null;
+            selectedCountry.data = {
+                id: 'No country selected',
+                name: '',
+            };
         }
 
         // Render frame
