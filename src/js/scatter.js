@@ -403,5 +403,8 @@ export function initScatter(data, year) {
         // yearSliderValue = yearSlider.value;
         console.log('Yearslidesvalue: ', yearSlider.value);
     });
+
+
+
 }
 
