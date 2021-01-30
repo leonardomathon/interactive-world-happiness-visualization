@@ -1,8 +1,8 @@
 import hotkeys from 'hotkeys-js';
-import { jsPanel } from 'jspanel4';
 
 // Import custom js
-import { initGlobe, updateGlobe, toggleHover } from './globe.js';
+import { createDatasetPanel, createGPUHintPanel } from './ui/panels.js';
+import { initGlobe, updateGlobe, toggleHover } from './webgl/globe/globe.js';
 import {
     composer,
     toggleSoblePass,
@@ -11,9 +11,6 @@ import {
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
-
-// Import world file for topojson
-import world from '../../datasets/geoworld.json';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -115,6 +112,9 @@ filmCheckbox.addEventListener('change', function (e) {
 });
 
 countryHoverCheckbox.addEventListener('change', function (e) {
+    if (!renderingOptions.countryHover) {
+        createGPUHintPanel();
+    }
     renderingOptions.countryHover = !renderingOptions.countryHover;
     toggleHover();
 });
@@ -142,6 +142,9 @@ hotkeys('ctrl+f', function (event, handler) {
 
 hotkeys('ctrl+h', function (event, handler) {
     event.preventDefault();
+    if (!renderingOptions.countryHover) {
+        createGPUHintPanel();
+    }
     countryHoverCheckbox.checked = !countryHoverCheckbox.checked;
     renderingOptions.countryHover = !renderingOptions.countryHover;
     toggleHover();
@@ -152,29 +155,7 @@ searchInput.addEventListener('keydown', function (e) {});
 
 // Even listener that listens to click to open current dataset
 showDataset.addEventListener('click', function (e) {
-    jsPanel.create({
-        theme: {
-            bgPanel: '#000',
-            bgContent: '#0f0f0f',
-            colorHeader: '#fff',
-            colorContent: `#fff`,
-        },
-        panelSize: {
-            width: () => window.innerWidth * 0.3,
-            height: '50vh',
-        },
-        headerTitle:
-            'World Happiness report ' + yearSliderValue + ' - JSON Dataset',
-        dragit: {
-            cursor: 'default',
-        },
-        maximizedMargin: [25, 25, 25, 25],
-        closeOnEscape: true,
-        data: JSON.stringify(yearWorldHappiness, null, '\t'),
-        callback: function () {
-            this.content.innerHTML = `<pre><code>${this.options.data}</code></pre>`;
-        },
-    });
+    createDatasetPanel(yearSliderValue, yearWorldHappiness);
 });
 
 initGlobe(yearWorldHappiness);

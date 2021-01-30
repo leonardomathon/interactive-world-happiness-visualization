@@ -1,8 +1,8 @@
 import * as d3 from 'd3';
 import * as THREE from 'three';
 
-import { memoize } from './utils/memoize.js';
-import { findCountry } from './utils/geo.js';
+import { memoize } from '../../utils/memoize.js';
+import { findCountry } from '../../utils/geo.js';
 
 // Import scene file
 import {
@@ -13,12 +13,12 @@ import {
     renderer,
     controls,
     raycaster,
-} from './scene.js';
+} from '../scene.js';
 
-import { composer } from './fx/postprocessing.js';
+import { composer } from '../../fx/postprocessing.js';
 
 // Import texture file
-import { createWorldTexture, createCountryTexture } from './texture.js';
+import { createWorldTexture, createCountryTexture } from '../texture.js';
 
 // Variable that is true when country hover is enabled from options
 let countryHoverEnabled = false;

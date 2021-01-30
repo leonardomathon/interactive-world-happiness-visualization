@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import * as THREE from 'three';
 
 // Import world file for topojson
-import world from '../../datasets/geoworld.json';
+import world from '../../../datasets/geoworld.json';
 
 const worldCanvasWidth = 8192;
 const worldCanvasHeight = 4096;
