@@ -99,12 +99,24 @@ export function createCountryTexture(index, countryId) {
     context.strokeStyle = '#0e1931';
     context.lineWidth = 0.25;
 
-    if (index >= 0) {
+    // If index is set, perform a lookup and draw the country corresponding to the index
+    if (index && index >= 0) {
         context.fillStyle = '#FF7E3B';
         context.beginPath();
         path(world.features[index]);
         context.fill();
         context.stroke();
+    } else if (!index && countryId) {
+        // Only the ID is known, loop over all features in the geoworld file
+        world.features.forEach(function (d) {
+            if (countryId == d.id) {
+                context.fillStyle = '#FF7E3B';
+                context.beginPath();
+                path(d);
+                context.fill();
+                context.stroke();
+            }
+        });
     }
 
     // Generate texture from canvas

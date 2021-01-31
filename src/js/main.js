@@ -6,8 +6,10 @@ import {
     initGlobe,
     updateGlobeTexture,
     toggleHover,
-    selectedCountry,
+    hoveredCountry,
+    setClickedCountry,
     resetClickedCountry,
+    searchedCountry,
 } from './webgl/globe/globe.js';
 import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
@@ -43,10 +45,7 @@ let countryHoverCheckbox = document.getElementById('countryHoverToggle');
 let searchInput = document.getElementById('searchCountry');
 
 // Country that the user selected
-let selectedCountryTag = document.getElementById('selectedCountry');
-
-// Country that is searched
-let searchedCountry;
+let hoveredCountryTag = document.getElementById('hoveredCountry');
 
 // Config object that holds value of preprocessing effects
 let preprocessingOptions = {
@@ -86,6 +85,8 @@ filmCheckbox.onfocus = function () {
 countryHoverCheckbox.onfocus = function () {
     this.blur();
 };
+
+initGlobe(yearWorldHappiness);
 
 // Event listeners that listen to click events on the labels
 for (let i = 0; i < yearSliderLabels.length; i++) {
@@ -137,7 +138,39 @@ countryHoverCheckbox.addEventListener('change', function (e) {
     toggleHover();
 });
 
-// Event listener (from hotkeys-js) that listens to the combination ctrl+o or com+o
+// Event listener that listens to searching
+searchInput.addEventListener('keydown', function (e) {});
+
+// Even listener that listens to click to open current dataset
+showDataset.addEventListener('click', function (e) {
+    createDatasetPanel(yearSliderValue, yearWorldHappiness);
+});
+
+// Remove the loading screen once the whole page is loaded
+document.addEventListener('DOMContentLoaded', function (event) {
+    document.getElementById('loader').remove();
+});
+
+// Event listener that listens to hoveredCountry change and updates UI
+hoveredCountry.registerListener(function (val) {
+    console.log('Value of hovered country has changed!');
+    if (hoveredCountry.data.name != '') {
+        hoveredCountryTag.innerHTML = `${hoveredCountry.data.id} - ${hoveredCountry.data.name}`;
+    } else {
+        hoveredCountryTag.innerHTML = `${hoveredCountry.data.id}`;
+    }
+});
+
+searchedCountry.registerListener(function (val) {
+    setClickedCountry(searchedCountry.data);
+    // Update hovered country
+    hoveredCountry.data = {
+        id: searchedCountry.data.id,
+        name: searchedCountry.data.name,
+    };
+});
+
+// Event listeners (from hotkeys-js) that listen to keyboard combinations
 hotkeys('ctrl+o', function (event, handler) {
     event.preventDefault();
     outlineCheckbox.checked = !outlineCheckbox.checked;
@@ -145,7 +178,6 @@ hotkeys('ctrl+o', function (event, handler) {
     toggleSoblePass(preprocessingOptions);
 });
 
-// Event listener (from hotkeys-js) that listens to the keyboard combinations
 hotkeys('ctrl+k', function (event, handler) {
     event.preventDefault();
     filmCheckbox.checked = !filmCheckbox.checked;
@@ -173,26 +205,10 @@ hotkeys('esc', function (event, handler) {
     resetClickedCountry();
 });
 
-// Event listener that listens to searching
-searchInput.addEventListener('keydown', function (e) {});
-
-// Even listener that listens to click to open current dataset
-showDataset.addEventListener('click', function (e) {
-    createDatasetPanel(yearSliderValue, yearWorldHappiness);
-});
-
-initGlobe(yearWorldHappiness);
-
-// Remove the loading screen once the whole page is loaded
-document.addEventListener('DOMContentLoaded', function (event) {
-    document.getElementById('loader').remove();
-});
-
-selectedCountry.registerListener(function (val) {
-    if (selectedCountry.data.name != '') {
-        selectedCountryTag.innerHTML = `${selectedCountry.data.id} - ${selectedCountry.data.name}`;
-    } else {
-        selectedCountryTag.innerHTML = `${selectedCountry.data.id}`;
-    }
-    console.log(selectedCountry);
+hotkeys('enter', function (event, handler) {
+    searchedCountry.data = {
+        id: 'BRA',
+        name: 'Netherlands',
+        index: null,
+    };
 });
