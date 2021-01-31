@@ -25,6 +25,9 @@ export var camera = new THREE.PerspectiveCamera(
 );
 camera.position.z = 1000;
 
+// Create mouse with even listener
+export var mouse = new THREE.Vector2();
+
 // Create THREE.js renderer
 export var renderer = new THREE.WebGLRenderer({
     canvas: worldCanvas,
@@ -52,6 +55,8 @@ ambientLight.position.set(1000, 0, 0);
 scene.add(light);
 scene.add(ambientLight);
 
+export var raycaster = new THREE.Raycaster();
+
 // Event listeren that checks if windows is resized
 window.addEventListener(
     'resize',
@@ -62,3 +67,9 @@ window.addEventListener(
     },
     false
 );
+
+// Mouse event listeners
+document.addEventListener('mousemove', function (e) {
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+});

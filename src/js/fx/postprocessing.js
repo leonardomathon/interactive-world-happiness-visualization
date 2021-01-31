@@ -8,7 +8,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { LuminosityShader } from 'three/examples/jsm/shaders/LuminosityShader.js';
 import { SobelOperatorShader } from 'three/examples/jsm/shaders/SobelOperatorShader.js';
 
-import { renderer, scene, camera } from './scene.js';
+import { renderer, scene, camera } from '../webgl/scene.js';
 
 export const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));

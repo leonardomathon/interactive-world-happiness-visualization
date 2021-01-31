@@ -5,7 +5,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
     entry: {
-        styles: './src/js/styles.js',
+        styles: './src/js/ui/styles.js',
         main: './src/js/main.js',
     },
     output: {

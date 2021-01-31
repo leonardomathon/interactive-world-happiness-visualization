@@ -1,15 +1,18 @@
 import hotkeys from 'hotkeys-js';
-import { jsPanel } from 'jspanel4';
 
 // Import custom js
-import { initGlobe, updateGlobe } from './globe.js';
-import { composer, toggleSoblePass, toggleFilmPass } from './postprocessing.js';
+import { createDatasetPanel, createGPUHintPanel } from './ui/panels.js';
+import {
+    initGlobe,
+    updateGlobeTexture,
+    toggleHover,
+    selectedCountry,
+    resetClickedCountry,
+} from './webgl/globe/globe.js';
+import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
-
-// Import world file for topojson
-import world from '../../datasets/geoworld.json';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -33,16 +36,26 @@ let outlineCheckbox = document.getElementById('clusteringToggle');
 // <input> tag used to toggle outline mode
 let filmCheckbox = document.getElementById('filmToggle');
 
+// <input> tag used to toggle outline mode
+let countryHoverCheckbox = document.getElementById('countryHoverToggle');
+
 // <input> tag used to search countries
 let searchInput = document.getElementById('searchCountry');
+
+// Country that the user selected
+let selectedCountryTag = document.getElementById('selectedCountry');
 
 // Country that is searched
 let searchedCountry;
 
 // Config object that holds value of preprocessing effects
-let preprocessingEffects = {
+let preprocessingOptions = {
     outlineMode: false,
     filmMode: true,
+};
+
+let renderingOptions = {
+    countryHover: false,
 };
 
 // Object that holds the world happiness data from the selected year as yearWorldHappiness.data
@@ -59,6 +72,19 @@ let yearWorldHappiness = {
     registerListener: function (listener) {
         this.dataListener = listener;
     },
+};
+
+// Make checkboxes unfocusable
+outlineCheckbox.onfocus = function () {
+    this.blur();
+};
+
+filmCheckbox.onfocus = function () {
+    this.blur();
+};
+
+countryHoverCheckbox.onfocus = function () {
+    this.blur();
 };
 
 // Event listeners that listen to click events on the labels
@@ -88,35 +114,43 @@ yearWorldHappiness.registerListener(function (val) {
         '%c Data has changed: year = ' + yearSliderValue,
         'color:green; font-weight: 900;'
     );
-    updateGlobe(yearWorldHappiness);
+    updateGlobeTexture(yearWorldHappiness);
 });
 
 // Event listener that listent to the outline mode enable checkbox
 outlineCheckbox.addEventListener('change', function (e) {
-    preprocessingEffects.outlineMode = !preprocessingEffects.outlineMode;
-    toggleSoblePass(preprocessingEffects);
+    preprocessingOptions.outlineMode = !preprocessingOptions.outlineMode;
+    toggleSoblePass(preprocessingOptions);
 });
 
 // Event listener that listent to the film mode enable checkbox
 filmCheckbox.addEventListener('change', function (e) {
-    preprocessingEffects.filmMode = !preprocessingEffects.filmMode;
-    toggleFilmPass(preprocessingEffects);
+    preprocessingOptions.filmMode = !preprocessingOptions.filmMode;
+    toggleFilmPass(preprocessingOptions);
+});
+
+countryHoverCheckbox.addEventListener('change', function (e) {
+    if (!renderingOptions.countryHover) {
+        createGPUHintPanel();
+    }
+    renderingOptions.countryHover = !renderingOptions.countryHover;
+    toggleHover();
 });
 
 // Event listener (from hotkeys-js) that listens to the combination ctrl+o or com+o
 hotkeys('ctrl+o', function (event, handler) {
     event.preventDefault();
     outlineCheckbox.checked = !outlineCheckbox.checked;
-    preprocessingEffects.outlineMode = !preprocessingEffects.outlineMode;
-    toggleSoblePass(preprocessingEffects);
+    preprocessingOptions.outlineMode = !preprocessingOptions.outlineMode;
+    toggleSoblePass(preprocessingOptions);
 });
 
-// Event listener (from hotkeys-js) that listens to the combination ctrl+k or com+k
+// Event listener (from hotkeys-js) that listens to the keyboard combinations
 hotkeys('ctrl+k', function (event, handler) {
     event.preventDefault();
     filmCheckbox.checked = !filmCheckbox.checked;
-    preprocessingEffects.filmMode = !preprocessingEffects.filmMode;
-    toggleFilmPass(preprocessingEffects);
+    preprocessingOptions.filmMode = !preprocessingOptions.filmMode;
+    toggleFilmPass(preprocessingOptions);
 });
 
 hotkeys('ctrl+f', function (event, handler) {
@@ -124,34 +158,27 @@ hotkeys('ctrl+f', function (event, handler) {
     searchInput.focus();
 });
 
+hotkeys('ctrl+h', function (event, handler) {
+    event.preventDefault();
+    if (!renderingOptions.countryHover) {
+        createGPUHintPanel();
+    }
+    countryHoverCheckbox.checked = !countryHoverCheckbox.checked;
+    renderingOptions.countryHover = !renderingOptions.countryHover;
+    toggleHover();
+});
+
+hotkeys('esc', function (event, handler) {
+    event.preventDefault();
+    resetClickedCountry();
+});
+
 // Event listener that listens to searching
 searchInput.addEventListener('keydown', function (e) {});
 
 // Even listener that listens to click to open current dataset
 showDataset.addEventListener('click', function (e) {
-    jsPanel.create({
-        theme: {
-            bgPanel: '#000',
-            bgContent: '#0f0f0f',
-            colorHeader: '#fff',
-            colorContent: `#fff`,
-        },
-        panelSize: {
-            width: () => window.innerWidth * 0.3,
-            height: '50vh',
-        },
-        headerTitle:
-            'World Happiness report ' + yearSliderValue + ' - JSON Dataset',
-        dragit: {
-            cursor: 'default',
-        },
-        maximizedMargin: [25, 25, 25, 25],
-        closeOnEscape: true,
-        data: JSON.stringify(yearWorldHappiness, null, '\t'),
-        callback: function () {
-            this.content.innerHTML = `<pre><code>${this.options.data}</code></pre>`;
-        },
-    });
+    createDatasetPanel(yearSliderValue, yearWorldHappiness);
 });
 
 initGlobe(yearWorldHappiness);
@@ -159,4 +186,12 @@ initGlobe(yearWorldHappiness);
 // Remove the loading screen once the whole page is loaded
 document.addEventListener('DOMContentLoaded', function (event) {
     document.getElementById('loader').remove();
+});
+
+selectedCountry.registerListener(function (val) {
+    if (selectedCountry.data.name != '') {
+        selectedCountryTag.innerHTML = `${selectedCountry.data.id} - ${selectedCountry.data.name}`;
+    } else {
+        selectedCountryTag.innerHTML = `${selectedCountry.data.id}`;
+    }
 });
