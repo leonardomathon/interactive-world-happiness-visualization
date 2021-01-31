@@ -194,4 +194,5 @@ selectedCountry.registerListener(function (val) {
     } else {
         selectedCountryTag.innerHTML = `${selectedCountry.data.id}`;
     }
+    console.log(selectedCountry);
 });
