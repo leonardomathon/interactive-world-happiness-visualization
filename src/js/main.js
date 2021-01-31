@@ -1,7 +1,12 @@
 import hotkeys from 'hotkeys-js';
+import * as clm from 'country-locale-map';
 
 // Import custom js
-import { createDatasetPanel, createGPUHintPanel } from './ui/panels.js';
+import {
+    createDatasetPanel,
+    createGPUHintPanel,
+    createErrorPanel,
+} from './ui/panels.js';
 import {
     initGlobe,
     updateGlobeTexture,
@@ -11,6 +16,7 @@ import {
     resetClickedCountry,
     searchedCountry,
 } from './webgl/globe/globe.js';
+import { isCountryDrawn } from './utils/geo.js';
 import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
@@ -43,6 +49,18 @@ let countryHoverCheckbox = document.getElementById('countryHoverToggle');
 
 // <input> tag used to search countries
 let searchInput = document.getElementById('searchCountry');
+
+// Container holding search match
+let searchMatches = document.getElementById('searchMatches');
+
+// Block that displays the search matche
+let searchMatch = document.getElementById('searchMatch');
+
+// Button to select country from search
+let searchMatchCountry = document.getElementById('searchMatchCountry');
+
+// Fuzzy search country name and alpha3 value
+let fuzzySearch;
 
 // Country that the user selected
 let hoveredCountryTag = document.getElementById('hoveredCountry');
@@ -139,7 +157,43 @@ countryHoverCheckbox.addEventListener('change', function (e) {
 });
 
 // Event listener that listens to searching
-searchInput.addEventListener('keydown', function (e) {});
+searchInput.addEventListener('keydown', function (e) {
+    if (searchInput.value != '') {
+        fuzzySearch = clm.getCountryByName(searchInput.value, true);
+    } else {
+        console.log('reset fuzzy');
+        searchMatch.remove();
+        fuzzySearch = undefined;
+    }
+    if (fuzzySearch != undefined) {
+        searchMatches.appendChild(searchMatch);
+        searchMatchCountry.innerHTML = fuzzySearch.name;
+    } else {
+        searchMatch.remove();
+    }
+});
+
+// Even listerner that listens to search match click
+searchMatch.addEventListener('click', function (e) {
+    // Reset input, remove search result
+    searchInput.value = '';
+    searchMatch.remove();
+
+    // Check if country has alpha 3
+    console.log(fuzzySearch);
+    if (fuzzySearch && isCountryDrawn(fuzzySearch.alpha3)) {
+        searchedCountry.data = {
+            id: fuzzySearch.alpha3,
+            name: fuzzySearch.name,
+            index: null,
+        };
+    } else {
+        createErrorPanel(
+            'Country not found',
+            'The country you searched for is not in our dataset and could thus not be found'
+        );
+    }
+});
 
 // Even listener that listens to click to open current dataset
 showDataset.addEventListener('click', function (e) {
@@ -149,11 +203,11 @@ showDataset.addEventListener('click', function (e) {
 // Remove the loading screen once the whole page is loaded
 document.addEventListener('DOMContentLoaded', function (event) {
     document.getElementById('loader').remove();
+    searchMatch.remove();
 });
 
 // Event listener that listens to hoveredCountry change and updates UI
 hoveredCountry.registerListener(function (val) {
-    console.log('Value of hovered country has changed!');
     if (hoveredCountry.data.name != '') {
         hoveredCountryTag.innerHTML = `${hoveredCountry.data.id} - ${hoveredCountry.data.name}`;
     } else {
@@ -203,12 +257,4 @@ hotkeys('ctrl+h', function (event, handler) {
 hotkeys('esc', function (event, handler) {
     event.preventDefault();
     resetClickedCountry();
-});
-
-hotkeys('enter', function (event, handler) {
-    searchedCountry.data = {
-        id: 'BRA',
-        name: 'Netherlands',
-        index: null,
-    };
 });

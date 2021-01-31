@@ -46,3 +46,18 @@ export function createDatasetPanel(yearSliderValue, yearWorldHappiness) {
         },
     });
 }
+
+export function createErrorPanel(errorTitle, errorMsg) {
+    jsPanel.hint.create({
+        position: 'center-top 0 15 down',
+        contentSize: '330 auto',
+        content: `<p class="p-2 text-sm">${errorMsg}</p>`,
+        theme: '#b12424 filled',
+        headerTitle: `<i class="ri-error-warning-line mr-2"></i> ${errorTitle}`,
+        closeOnEscape: true,
+        autoclose: {
+            time: '4s',
+            progressbar: false,
+        },
+    });
+}
