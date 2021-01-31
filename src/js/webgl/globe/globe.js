@@ -22,6 +22,7 @@ import { createWorldTexture, createCountryTexture } from '../texture.js';
 
 let worldContainer = document.getElementById('worldContainer');
 worldContainer.addEventListener('dblclick', clickedOnCountry);
+worldContainer.addEventListener('contextmenu', resetClickedCountry);
 
 // Variable that is true when country hover is enabled from options
 let countryHoverEnabled = false;
@@ -124,7 +125,12 @@ export function initGlobe(yearWorldHappiness) {
 }
 
 function clickedOnCountry() {
-    clickedCountry = raycastToGlobe();
+    // The user is only able to click on a country, when no other country is clicked
+    if (clickedCountry && clickedCountry.id == 'No country selected') {
+        clickedCountry = raycastToGlobe();
+    } else if (!clickedCountry) {
+        clickedCountry = raycastToGlobe();
+    }
 }
 
 // Sends a ray from mouse to globe
@@ -175,6 +181,17 @@ function updateCountryTexture(countryIntersect) {
             clickedCountry.index,
             clickedCountry.id
         );
+    } else if (
+        !countryIntersect &&
+        selectedCountry.data.id &&
+        selectedCountry.data.id == 'No country selected'
+    ) {
+        countryGlobe.material.map = countryTextureCach(-1, 'blank');
+    } else if (
+        selectedCountry.data.id &&
+        selectedCountry.data.id == 'No country selected'
+    ) {
+        countryGlobe.material.map = countryTextureCach(-1, 'blank');
     } else if (!countryIntersect && selectedCountry.data.id) {
         countryGlobe.material.map = countryTextureCach(-1, 'blank');
         selectedCountry.data = {
