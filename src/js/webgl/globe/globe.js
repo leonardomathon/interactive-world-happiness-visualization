@@ -46,7 +46,7 @@ let countryMaterial, countrySphere, countryGlobe;
 // Is not null when double clicked on a country
 let clickedCountry;
 
-export var selectedCountry = {
+export var hoveredCountry = {
     dataInteral: {
         id: 'No country selected',
         name: '',
@@ -161,43 +161,38 @@ function raycastToGlobe() {
 
 // Updates the country texture
 function updateCountryTexture(countryIntersect) {
-    if (
-        countryIntersect &&
-        !clickedCountry &&
-        selectedCountry.data.id != countryIntersect.id
-    ) {
-        selectedCountry.data = {
-            id: countryIntersect.id,
-            name: countryIntersect.name,
-        };
-        if (countryHoverEnabled) {
-            countryGlobe.material.map = countryTextureCach(
-                countryIntersect.index,
-                countryIntersect.id
-            );
-        }
-    } else if (clickedCountry) {
+    if (clickedCountry) {
         countryGlobe.material.map = countryTextureCach(
             clickedCountry.index,
             clickedCountry.id
         );
-    } else if (
-        !countryIntersect &&
-        selectedCountry.data.id &&
-        selectedCountry.data.id == 'No country selected'
-    ) {
-        countryGlobe.material.map = countryTextureCach(-1, 'blank');
-    } else if (
-        selectedCountry.data.id &&
-        selectedCountry.data.id == 'No country selected'
-    ) {
-        countryGlobe.material.map = countryTextureCach(-1, 'blank');
-    } else if (!countryIntersect && selectedCountry.data.id) {
-        countryGlobe.material.map = countryTextureCach(-1, 'blank');
-        selectedCountry.data = {
-            id: 'No country selected',
-            name: '',
-        };
+    } else {
+        if (countryIntersect) {
+            if (hoveredCountry.data.id != countryIntersect.id) {
+                // Update hovered country
+                hoveredCountry.data = {
+                    id: countryIntersect.id,
+                    name: countryIntersect.name,
+                };
+                // Update overlay texture if enabled
+                if (countryHoverEnabled) {
+                    countryGlobe.material.map = countryTextureCach(
+                        countryIntersect.index,
+                        countryIntersect.id
+                    );
+                }
+            }
+        } else {
+            if (hoveredCountry.data.id == 'No country selected') {
+                countryGlobe.material.map = countryTextureCach(-1, 'blank');
+            } else if (hoveredCountry.data.id) {
+                countryGlobe.material.map = countryTextureCach(-1, 'blank');
+                hoveredCountry.data = {
+                    id: 'No country selected',
+                    name: '',
+                };
+            }
+        }
     }
 }
 
@@ -220,6 +215,12 @@ export function updateGlobeTexture(yearWorldHappiness) {
 export function toggleHover() {
     countryGlobe.material.map = countryTextureCach(-1, 'blank');
     countryHoverEnabled = !countryHoverEnabled;
+}
+
+export function setClickedCountry(country) {
+    hoveredCountry.data.id = country.id;
+    hoveredCountry.data.name = country.name;
+    updateCountryTexture();
 }
 
 // Resets the current clicked country
