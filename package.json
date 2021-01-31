@@ -21,6 +21,7 @@
   "homepage": "https://github.com/leonardomathon/2IMV20#readme",
   "dependencies": {
     "autoprefixer": "^10.2.1",
+    "country-locale-map": "^1.4.12",
     "d3": "^6.3.1",
     "hotkeys-js": "^3.8.2",
     "jspanel4": "^4.11.2",

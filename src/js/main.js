@@ -1,14 +1,22 @@
 import hotkeys from 'hotkeys-js';
+import * as clm from 'country-locale-map';
 
 // Import custom js
-import { createDatasetPanel, createGPUHintPanel } from './ui/panels.js';
+import {
+    createDatasetPanel,
+    createGPUHintPanel,
+    createErrorPanel,
+} from './ui/panels.js';
 import {
     initGlobe,
     updateGlobeTexture,
     toggleHover,
-    selectedCountry,
+    hoveredCountry,
+    setClickedCountry,
     resetClickedCountry,
+    searchedCountry,
 } from './webgl/globe/globe.js';
+import { isCountryDrawn } from './utils/geo.js';
 import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
@@ -42,11 +50,20 @@ let countryHoverCheckbox = document.getElementById('countryHoverToggle');
 // <input> tag used to search countries
 let searchInput = document.getElementById('searchCountry');
 
-// Country that the user selected
-let selectedCountryTag = document.getElementById('selectedCountry');
+// Container holding search match
+let searchMatches = document.getElementById('searchMatches');
 
-// Country that is searched
-let searchedCountry;
+// Block that displays the search matche
+let searchMatch = document.getElementById('searchMatch');
+
+// Button to select country from search
+let searchMatchCountry = document.getElementById('searchMatchCountry');
+
+// Fuzzy search country name and alpha3 value
+let fuzzySearch;
+
+// Country that the user selected
+let hoveredCountryTag = document.getElementById('hoveredCountry');
 
 // Config object that holds value of preprocessing effects
 let preprocessingOptions = {
@@ -86,6 +103,8 @@ filmCheckbox.onfocus = function () {
 countryHoverCheckbox.onfocus = function () {
     this.blur();
 };
+
+initGlobe(yearWorldHappiness);
 
 // Event listeners that listen to click events on the labels
 for (let i = 0; i < yearSliderLabels.length; i++) {
@@ -137,7 +156,75 @@ countryHoverCheckbox.addEventListener('change', function (e) {
     toggleHover();
 });
 
-// Event listener (from hotkeys-js) that listens to the combination ctrl+o or com+o
+// Event listener that listens to searching
+searchInput.addEventListener('keydown', function (e) {
+    if (searchInput.value != '') {
+        fuzzySearch = clm.getCountryByName(searchInput.value, true);
+    } else {
+        console.log('reset fuzzy');
+        searchMatch.remove();
+        fuzzySearch = undefined;
+    }
+    if (fuzzySearch != undefined) {
+        searchMatches.appendChild(searchMatch);
+        searchMatchCountry.innerHTML = fuzzySearch.name;
+    } else {
+        searchMatch.remove();
+    }
+});
+
+// Even listerner that listens to search match click
+searchMatch.addEventListener('click', function (e) {
+    // Reset input, remove search result
+    searchInput.value = '';
+    searchMatch.remove();
+
+    // Check if country has alpha 3
+    console.log(fuzzySearch);
+    if (fuzzySearch && isCountryDrawn(fuzzySearch.alpha3)) {
+        searchedCountry.data = {
+            id: fuzzySearch.alpha3,
+            name: fuzzySearch.name,
+            index: null,
+        };
+    } else {
+        createErrorPanel(
+            'Country not found',
+            'The country you searched for is not in our dataset and could thus not be found'
+        );
+    }
+});
+
+// Even listener that listens to click to open current dataset
+showDataset.addEventListener('click', function (e) {
+    createDatasetPanel(yearSliderValue, yearWorldHappiness);
+});
+
+// Remove the loading screen once the whole page is loaded
+document.addEventListener('DOMContentLoaded', function (event) {
+    document.getElementById('loader').remove();
+    searchMatch.remove();
+});
+
+// Event listener that listens to hoveredCountry change and updates UI
+hoveredCountry.registerListener(function (val) {
+    if (hoveredCountry.data.name != '') {
+        hoveredCountryTag.innerHTML = `${hoveredCountry.data.id} - ${hoveredCountry.data.name}`;
+    } else {
+        hoveredCountryTag.innerHTML = `${hoveredCountry.data.id}`;
+    }
+});
+
+searchedCountry.registerListener(function (val) {
+    setClickedCountry(searchedCountry.data);
+    // Update hovered country
+    hoveredCountry.data = {
+        id: searchedCountry.data.id,
+        name: searchedCountry.data.name,
+    };
+});
+
+// Event listeners (from hotkeys-js) that listen to keyboard combinations
 hotkeys('ctrl+o', function (event, handler) {
     event.preventDefault();
     outlineCheckbox.checked = !outlineCheckbox.checked;
@@ -145,7 +232,6 @@ hotkeys('ctrl+o', function (event, handler) {
     toggleSoblePass(preprocessingOptions);
 });
 
-// Event listener (from hotkeys-js) that listens to the keyboard combinations
 hotkeys('ctrl+k', function (event, handler) {
     event.preventDefault();
     filmCheckbox.checked = !filmCheckbox.checked;
@@ -171,28 +257,4 @@ hotkeys('ctrl+h', function (event, handler) {
 hotkeys('esc', function (event, handler) {
     event.preventDefault();
     resetClickedCountry();
-});
-
-// Event listener that listens to searching
-searchInput.addEventListener('keydown', function (e) {});
-
-// Even listener that listens to click to open current dataset
-showDataset.addEventListener('click', function (e) {
-    createDatasetPanel(yearSliderValue, yearWorldHappiness);
-});
-
-initGlobe(yearWorldHappiness);
-
-// Remove the loading screen once the whole page is loaded
-document.addEventListener('DOMContentLoaded', function (event) {
-    document.getElementById('loader').remove();
-});
-
-selectedCountry.registerListener(function (val) {
-    if (selectedCountry.data.name != '') {
-        selectedCountryTag.innerHTML = `${selectedCountry.data.id} - ${selectedCountry.data.name}`;
-    } else {
-        selectedCountryTag.innerHTML = `${selectedCountry.data.id}`;
-    }
-    console.log(selectedCountry);
 });

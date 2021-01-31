@@ -63,3 +63,13 @@ export function findCountry(a, b, c, worldSize) {
 
     return null;
 }
+
+// Checks if country is drawn on the globe
+export function isCountryDrawn(alpha3) {
+    for (let i = 0; i < world.features.length; i++) {
+        if (world.features[i].id == alpha3) {
+            return true;
+        }
+    }
+    return false;
+}

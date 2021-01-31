@@ -28,8 +28,8 @@ worldContainer.addEventListener('contextmenu', resetClickedCountry);
 let countryHoverEnabled = false;
 
 // Texture and country caches by memoization
-const worldTextureCach = memoize(createWorldTexture);
-const countryTextureCach = memoize(createCountryTexture);
+const worldTextureCache = memoize(createWorldTexture);
+const countryTextureCache = memoize(createCountryTexture);
 const countryCache = memoize(findCountry);
 
 // Globe geometry size and segments
@@ -43,10 +43,29 @@ let worldMaterial, worldSphere, worldGlobe;
 // Geometry and material for country overlay
 let countryMaterial, countrySphere, countryGlobe;
 
+// Variable that contains the hovered over country
+let countryIntersect;
+
 // Is not null when double clicked on a country
 let clickedCountry;
 
-export var selectedCountry = {
+// Country that is searched
+export var searchedCountry = {
+    dataInteral: null,
+    dataListener: function (val) {},
+    set data(val) {
+        this.dataInteral = val;
+        this.dataListener(val);
+    },
+    get data() {
+        return this.dataInteral;
+    },
+    registerListener: function (listener) {
+        this.dataListener = listener;
+    },
+};
+
+export var hoveredCountry = {
     dataInteral: {
         id: 'No country selected',
         name: '',
@@ -77,7 +96,7 @@ export function initGlobe(yearWorldHappiness) {
 
     // Generate the world map texture in texture.js
     worldMaterial = new THREE.MeshPhongMaterial({
-        map: worldTextureCach(yearWorldHappiness.data),
+        map: worldTextureCache(yearWorldHappiness.data),
     });
 
     // Create world globe
@@ -95,7 +114,7 @@ export function initGlobe(yearWorldHappiness) {
 
     // Generate the country texture in texture.js
     countryMaterial = new THREE.MeshPhongMaterial({
-        map: countryTextureCach(-1, 'blank'),
+        map: countryTextureCache(-1, 'blank'),
         transparent: true,
     });
 
@@ -114,9 +133,8 @@ export function initGlobe(yearWorldHappiness) {
         controls.update();
 
         // Send ray
-        let countryIntersect = raycastToGlobe();
-
-        updateCountryTexture(countryIntersect);
+        raycastToGlobe();
+        updateCountryTexture();
 
         // Render frame
         requestAnimationFrame(render);
@@ -141,9 +159,6 @@ function raycastToGlobe() {
     // Get intersection point
     const intersect = raycaster.intersectObjects([worldGlobe])[0];
 
-    // Variable that contains the hovered over country
-    let countryIntersect;
-
     // Find the country
     if (intersect) {
         // Find the country using the ray intersect
@@ -160,44 +175,52 @@ function raycastToGlobe() {
 }
 
 // Updates the country texture
-function updateCountryTexture(countryIntersect) {
-    if (
-        countryIntersect &&
-        !clickedCountry &&
-        selectedCountry.data.id != countryIntersect.id
-    ) {
-        selectedCountry.data = {
-            id: countryIntersect.id,
-            name: countryIntersect.name,
-        };
-        if (countryHoverEnabled) {
-            countryGlobe.material.map = countryTextureCach(
-                countryIntersect.index,
-                countryIntersect.id
-            );
-        }
-    } else if (clickedCountry) {
-        countryGlobe.material.map = countryTextureCach(
+function updateCountryTexture() {
+    // If clickedCountry is set, draw texture
+    if (clickedCountry) {
+        countryGlobe.material.map = countryTextureCache(
             clickedCountry.index,
             clickedCountry.id
         );
-    } else if (
-        !countryIntersect &&
-        selectedCountry.data.id &&
-        selectedCountry.data.id == 'No country selected'
-    ) {
-        countryGlobe.material.map = countryTextureCach(-1, 'blank');
-    } else if (
-        selectedCountry.data.id &&
-        selectedCountry.data.id == 'No country selected'
-    ) {
-        countryGlobe.material.map = countryTextureCach(-1, 'blank');
-    } else if (!countryIntersect && selectedCountry.data.id) {
-        countryGlobe.material.map = countryTextureCach(-1, 'blank');
-        selectedCountry.data = {
-            id: 'No country selected',
-            name: '',
-        };
+    } else {
+        if (countryIntersect) {
+            if (hoveredCountry.data.id != countryIntersect.id) {
+                // Update hovered country
+                hoveredCountry.data = {
+                    id: countryIntersect.id,
+                    name: countryIntersect.name,
+                };
+                // Update overlay texture if enabled
+                if (countryHoverEnabled) {
+                    countryGlobe.material.map = countryTextureCache(
+                        countryIntersect.index,
+                        countryIntersect.id
+                    );
+                } else {
+                    countryGlobe.material.map = countryTextureCache(
+                        -1,
+                        'blank'
+                    );
+                }
+            } else {
+                if (!countryHoverEnabled) {
+                    countryGlobe.material.map = countryTextureCache(
+                        -1,
+                        'blank'
+                    );
+                }
+            }
+        } else {
+            if (hoveredCountry.data.id == 'No country selected') {
+                countryGlobe.material.map = countryTextureCache(-1, 'blank');
+            } else if (hoveredCountry.data.id) {
+                countryGlobe.material.map = countryTextureCache(-1, 'blank');
+                hoveredCountry.data = {
+                    id: 'No country selected',
+                    name: '',
+                };
+            }
+        }
     }
 }
 
@@ -210,7 +233,7 @@ export function updateGlobeTexture(yearWorldHappiness) {
     worldGlobe = new THREE.Mesh(
         worldSphere,
         new THREE.MeshPhongMaterial({
-            map: worldTextureCach(yearWorldHappiness.data),
+            map: worldTextureCache(yearWorldHappiness.data),
         })
     );
     scene.add(worldGlobe);
@@ -218,15 +241,16 @@ export function updateGlobeTexture(yearWorldHappiness) {
 
 // Function is called when rederingoptions are changed
 export function toggleHover() {
-    countryGlobe.material.map = countryTextureCach(-1, 'blank');
+    countryGlobe.material.map = countryTextureCache(-1, 'blank');
     countryHoverEnabled = !countryHoverEnabled;
+}
+
+export function setClickedCountry(searchedCountry) {
+    clickedCountry = searchedCountry;
 }
 
 // Resets the current clicked country
 export function resetClickedCountry() {
-    if (clickedCountry) {
-        clickedCountry = null;
-        updateCountryTexture();
-    }
     clickedCountry = null;
+    updateCountryTexture();
 }
