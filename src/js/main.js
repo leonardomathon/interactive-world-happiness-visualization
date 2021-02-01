@@ -3,6 +3,7 @@ import * as clm from 'country-locale-map';
 
 // Import custom js
 import {
+    createChartPanel,
     createDatasetPanel,
     createGraphPanel,
     createGPUHintPanel,
@@ -23,7 +24,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
-import { initChart, updateData } from './chart.js';
+import { initChart, updateBarChartData } from './chart.js';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -139,7 +140,14 @@ for (let i = 0; i < yearSliderLabels.length; i++) {
 // Event listener that listens to the range slider
 yearSlider.addEventListener('change', function (e) {
     console.log('Yearslidervalue: ', yearSliderValue);
-    updateData(worldHappiness, yearSliderValue, 'NLD');
+
+    if (hoveredCountry.data.id != 'No country selected') {
+        updateBarChartData(
+            worldHappiness,
+            yearSliderValue,
+            hoveredCountry.data.id
+        );
+    }
 
     // Get slider value, update data and UI
     yearSliderValue = yearSlider.value;
@@ -238,11 +246,9 @@ hoveredCountry.registerListener(function (val) {
 // Event listener that listens to clickedCountry change and updates charts
 clickedCountry.registerListener(function (val) {
     if (clickedCountry.data) {
-        if (!document.getElementById('chart')) {
-            initChart(worldHappiness, clickedCountry.data.id);
-        } else {
-            updateData(worldHappiness, yearSliderValue, clickedCountry.data.id);
-        }
+        initChart(worldHappiness, clickedCountry.data.id);
+    } else {
+        document.getElementById('chart').querySelector('svg').remove();
     }
 });
 

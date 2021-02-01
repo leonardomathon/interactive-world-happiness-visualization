@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 
 var graph;
-var svg;
 
 // Height and Width of the graph
 const totalGraphWidth = 800;
@@ -16,17 +15,12 @@ const graphHeight = totalGraphHeight - margin.top - margin.bottom;
 var y;
 
 export function initChart(completeData, country) {
-    console.log('data: ', completeData);
-    console.log('country: ', country);
-    console.log('data[country]', completeData[yearSlider.value][country]);
-
     // Add the svg frame
-    svg = d3
+    const svg = d3
         .select('#chart')
         .append('svg')
-        .attr('width', totalGraphWidth)
-        .attr('height', totalGraphHeight);
-    //.attr('viewBox', '0 0 size size');
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .attr('viewBox', `0 0 ${totalGraphWidth} ${totalGraphHeight}`);
 
     // Append the graph
     graph = svg
@@ -94,7 +88,7 @@ export function initChart(completeData, country) {
     });
 
     // Range of values
-    y.domain([0, Math.ceil(d3.max(barsValues))]);
+    y.domain([0, (Math.ceil(d3.max(barsValues) * 10) / 10).toFixed(1)]);
 
     // Number of categories
     x.domain(barsKeys);
@@ -114,23 +108,13 @@ export function initChart(completeData, country) {
         .attr('fill', 'white')
         .attr('x', (d) => x(d.name))
         .attr('y', graphHeight)
-        .merge(rects) // Everything called below merge affects both entered and currently existing elements
+        .merge(rects)
         .transition()
         .duration(1500)
         .attr('y', (d) => {
-            // if (typeof d.value === 'string') {
-            //     const newValue = d.value.replace(/,/g, '.')
-            //     return y(newValue);
-            // }
-            console.log('d', d.value);
             return y(d.value);
         })
         .attr('height', (d) => {
-            // if (typeof d.value === 'string') {
-            //     const newValue = d.value.replace(/,/g, '.')
-            //     return graphHeight - y(newValue);
-            // }
-            console.log('height', d.value);
             return graphHeight - y(d.value);
         });
 
@@ -142,10 +126,10 @@ export function initChart(completeData, country) {
     xAxisGroup
         .selectAll('text')
         .attr('transform', `rotate(-40)`)
-        .attr('text-anchor', 'end');
-    //     .attr('fill', 'white')
-    //     .style('font-size', '17px')
-    //     .style('font-family', 'sans-serif')
+        .attr('text-anchor', 'end')
+        .attr('fill', 'white')
+        .style('font-size', '17px')
+        .style('font-family', 'sans-serif');
 
     function handleMouseOver(d, i) {
         // Add interactivity
@@ -182,7 +166,7 @@ export function initChart(completeData, country) {
 }
 
 // Update the data according to the new category
-export function updateData(completeData, year, country) {
+export function updateBarChartData(completeData, year, country) {
     // Set the data to the country data
     const data = completeData[year][country];
     const graphData = data;
