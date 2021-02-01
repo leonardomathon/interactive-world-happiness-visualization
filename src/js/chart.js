@@ -1,4 +1,15 @@
 import * as d3 from 'd3';
+import { raycastToGlobe } from './webgl/globe/globe.js'
+// Import scene file
+import {
+    scene,
+    canvas,
+    camera,
+    mouse,
+    renderer,
+    controls,
+    raycaster,
+} from './webgl/scene.js';
 
 export function initChart(completeData, country) {
     console.log('data: ', completeData);
@@ -156,4 +167,28 @@ export function initChart(completeData, country) {
         d3.selectAll('.hover').remove();  // Remove text location
     }
 }
+
+// let worldContainer = document.getElementById('worldContainer');
+// worldContainer.addEventListener('dblclick', selectCountry);
+// worldContainer.addEventListener('contextmenu', resetClickedCountry);
+
+// // Is not null when double clicked on a country
+// let clickedCountry;
+
+// function selectCountry() {
+//     // The user is only able to click on a country, when no other country is clicked
+//     if (clickedCountry && clickedCountry.id == 'No country selected') {
+//         clickedCountry = raycastToGlobe;
+//     } else if (!clickedCountry) {
+//         clickedCountry = raycastToGlobe;
+//     }
+//     console.log('Selected: ', clickedCountry);
+// }
+
+// // Resets the current clicked country
+// function resetClickedCountry() {
+//     clickedCountry = null;
+//     console.log('Reset');
+// }
+
 

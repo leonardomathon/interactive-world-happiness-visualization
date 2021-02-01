@@ -4,10 +4,13 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: './src/js/main.js',
+    entry: {
+        styles: './src/js/ui/styles.js',
+        main: './src/js/main.js',
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'js/bundle.js',
+        filename: 'js/[name].bundle.js',
     },
     module: {
         rules: [
@@ -15,7 +18,7 @@ module.exports = {
                 test: /\.html$/,
                 use: [
                     {
-                        loader: 'html-loader',
+                        loader: 'ejs-loader',
                         options: { minimize: true },
                     },
                 ],
@@ -29,8 +32,10 @@ module.exports = {
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new HtmlWebPackPlugin({
-            template: './src/index.html',
+            template: './src/index.ejs',
             filename: './index.html',
+            title: 'custom',
+            inject: false,
         }),
     ],
 };

@@ -1,3 +1,8 @@
+/* Loader */
+#loader i {
+    font-size: 100px;
+}
+
 /* Rangeslider */
 .rangeContainer {
     position: relative;
@@ -38,8 +43,9 @@ input[type=range] {
     -webkit-appearance: none;
     display: block;
     width: 95%;
+    height: 5px;
     margin-top: 10px;
-    border-radius: 100%;
+    border-radius: 25px;
 }
 
 input[type=range]:focus {
@@ -51,7 +57,7 @@ input[type=range]::-webkit-slider-runnable-track {
     height: 5px;
     background: #ddd;
     border: none;
-    border-radius: 3px;
+    border-radius: 0px;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -95,10 +101,12 @@ input[type=range]:focus::-moz-range-track {
 
 /* Panel */
 .jsPanel-titlebar .jsPanel-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-family: 'Manrope', sans-serif;
     font-variant: normal;
 }
-
 /* Info bar */
 #showDataset {
     position: relative;
@@ -109,4 +117,14 @@ input[type=range]:focus::-moz-range-track {
 #showDataset:hover {
     transform: translate(0, -20px);
     opacity: .5;
+}
+
+/* Search bar */
+#searchCountry {
+    background-color: #ffffff32;
+    transition: .2s ease-in-out;
+}
+
+#searchCountry:focus {
+    background-color: #ffffff;
 }
