@@ -4,12 +4,22 @@ export function initScatter(completeData, year) {
     console.log('data: ', data);
 
     var data = completeData[year];
-    var category;
+    var category = 'GDP Per Capita ($)';
+    var numberOfCountries;
 
     // <input> tag used for year selection
     let yearSlider = document.getElementById('yearSlider');
 
-    var numberOfCountries = year === 2015 ?
+    function numberCountries(selectedYear) {
+        return selectedYear === '2015' ?
+            158 : (selectedYear === '2016' ? 157 :
+                (selectedYear === '2017' ? 155 :
+                    (selectedYear === '2018' ? 156 :
+                        (selectedYear === '2019' ? 155 :
+                            (selectedYear === '2020' ? 153 : 0)))));
+    }
+
+    numberOfCountries = year === 2015 ?
         158 : (year === 2016 ? 157 :
             (year === 2017 ? 155 :
                 (year === 2018 ? 156 :
@@ -403,8 +413,7 @@ export function initScatter(completeData, year) {
             })
             .attr('cy', d => {
                 let happinessRankCircle = d['Happiness Rank']
-                console.log('NumberofCountries: ', numberOfCountries);
-                return y(((numberOfCountries + 1) - happinessRankCircle) / numberOfCountries);
+                return y(((numberCountries(year) + 1) - happinessRankCircle) / numberCountries(year));
             });
     }
 
@@ -484,7 +493,7 @@ export function initScatter(completeData, year) {
         // yearSliderValue = yearSlider.value;
         console.log('Yearslidesvalue: ', yearSlider.value);
 
-        let label;
+        let label = 'Economy (GDP per Capita)';
         if (category === 'graphSocialSupport') {
             label = 'Trust (Government Corruption)';
         } else if (category === 'graphFreedom') {
