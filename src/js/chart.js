@@ -1,29 +1,23 @@
 import * as d3 from 'd3';
 
-// Import scene file
-import {
-    scene,
-    canvas,
-    camera,
-    mouse,
-    renderer,
-    controls,
-    raycaster,
-} from './webgl/scene.js';
+var graph;
+
+// Height and Width of the graph
+const totalGraphWidth = 800;
+const totalGraphHeight = 400;
+
+// create margins and dimensions
+const margin = { top: 50, right: 20, bottom: 100, left: 50 };
+const graphWidth = totalGraphWidth - margin.left - margin.right;
+const graphHeight = totalGraphHeight - margin.top - margin.bottom;
+
+// Scale the y - axis
+var y;
 
 export function initChart(completeData, country) {
     console.log('data: ', completeData);
     console.log('country: ', country);
     console.log('data[country]', completeData[yearSlider.value][country]);
-
-    // Height and Width of the graph
-    const totalGraphWidth = 800;
-    const totalGraphHeight = 400;
-
-    // create margins and dimensions
-    const margin = { top: 50, right: 20, bottom: 100, left: 50 };
-    const graphWidth = totalGraphWidth - margin.left - margin.right;
-    const graphHeight = totalGraphHeight - margin.top - margin.bottom;
 
     // Add the svg frame
     const svg = d3.select('#chart')
@@ -33,7 +27,7 @@ export function initChart(completeData, country) {
     //.attr('viewBox', '0 0 size size');
 
     // Append the graph
-    const graph = svg.append('g')
+    graph = svg.append('g')
         .attr('width', graphWidth)
         .attr('height', graphHeight)
         .attr('transform', `translate(${margin.left}, ${margin.top})`)
@@ -45,8 +39,8 @@ export function initChart(completeData, country) {
     const yAxisGroup = graph.append('g');
 
     // Scale the y - axis
-    const y = d3.scaleLinear()
-        .range([graphHeight, 0])
+    y = d3.scaleLinear()
+    .range([graphHeight, 0])
 
     // Scale the x - axis, select space between bars using padding
     const x = d3.scaleBand()
@@ -170,54 +164,48 @@ export function initChart(completeData, country) {
         d3.select(this).attr('style', '#FFFFFF')
         d3.selectAll('.hover').remove();  // Remove text location
     }
+}
 
-    // Event listener that listens to the range slider
-    yearSlider.addEventListener('change', function (e) {
-        // Get slider value, update data and UI
-        console.log('Yearslidesvalue: ', yearSlider.value);
-        updateData(yearSlider.value, 'NLD');
+// Update the data according to the new category
+export function updateData(completeData, year, country) {
+
+    // Set the data to the country data
+    const data = completeData[year][country];
+    const graphData = data;
+    delete graphData['Country'];
+    delete graphData['Region'];
+    delete graphData['Happiness Rank'];
+    delete graphData['Happiness Score'];
+
+    // Name on the x-axis
+    const barsKeys = Object.keys(graphData);
+    // Value on the x-axis
+    const barsValues = Object.values(graphData);
+
+    // Create bar charts
+    const bars = []
+    barsKeys.forEach((key, idx) => {
+        bars[idx] = { name: barsKeys[idx], value: barsValues[idx] }
     });
 
-    // Update the data according to the new category
-    function updateData(year, country) {
-        // Set the data to the country data
-        const data = completeData[year][country];
-        const graphData = data;
-        delete graphData['Country'];
-        delete graphData['Region'];
-        delete graphData['Happiness Rank'];
-        delete graphData['Happiness Score'];
+    // Tie data to the rects available
+    const rects = graph
+        .selectAll('rect')
+        .data(bars);
+    rects.exit().remove();
 
-        // Name on the x-axis
-        const barsKeys = Object.keys(graphData);
-        // Value on the x-axis
-        const barsValues = Object.values(graphData);
-
-        // Create bar charts
-        const bars = []
-        barsKeys.forEach((key, idx) => {
-            bars[idx] = { name: barsKeys[idx], value: barsValues[idx] }
+    graph
+        .selectAll('rect')
+        .transition()
+        .duration(500)
+        .attr('y', d => {
+            console.log('new d', d);
+            return y(d.value);
+        })
+        .attr('height', d => {
+            console.log('new height', d.value);
+            return graphHeight - y(d.value);
         });
-
-        // Tie data to the rects available
-        const rects = graph
-            .selectAll('rect')
-            .data(bars);
-        rects.exit().remove();
-
-        graph
-            .selectAll('rect')
-            .transition()
-            .duration(500)
-            .attr('y', d => {
-                console.log('new d', d);
-                return y(d.value);
-            })
-            .attr('height', d => {
-                console.log('new height', d.value);
-                return graphHeight - y(d.value);
-            });
-    }
 }
 
 

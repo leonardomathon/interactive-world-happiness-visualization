@@ -21,7 +21,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
-import { initChart } from './chart.js';
+import { initChart, updateData } from './chart.js';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -122,6 +122,9 @@ for (let i = 0; i < yearSliderLabels.length; i++) {
 
 // Event listener that listens to the range slider
 yearSlider.addEventListener('change', function (e) {
+    console.log('Yearslidervalue: ', yearSliderValue);
+    updateData(worldHappiness, yearSliderValue, 'NLD');
+
     // Get slider value, update data and UI
     yearSliderValue = yearSlider.value;
     yearWorldHappiness.data = worldHappiness[yearSliderValue];
@@ -260,4 +263,4 @@ hotkeys('esc', function (event, handler) {
     resetClickedCountry();
 });
 
-initChart(worldHappiness, 'NLD');
+initChart(worldHappiness, hoveredCountry);
