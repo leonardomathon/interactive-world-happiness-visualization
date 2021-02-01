@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import countriesPopulation from '../../Datasets/countries-of-the-world.json';
 
 export function initScatter(completeData, year) {
     console.log('data: ', data);
@@ -222,7 +223,7 @@ export function initScatter(completeData, year) {
         .duration(animation_duration)
         .ease(animation_easing)
         .attr('r', d => {
-            return 10;
+            console.log('d: ', d)
             // if (d.population > 800000000) {
             //     return d.population / 25000000;
             // } else if (d.population > 50000000) {
