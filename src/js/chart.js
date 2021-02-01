@@ -14,7 +14,7 @@ const graphHeight = totalGraphHeight - margin.top - margin.bottom;
 // Scale the y - axis
 var y;
 
-export function initChart(completeData, country) {
+export function initBarChart(completeData, country) {
     // Add the svg frame
     const svg = d3
         .select('#chart')
