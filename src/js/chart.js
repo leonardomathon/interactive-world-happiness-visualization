@@ -23,8 +23,7 @@ export function initChart(completeData, country) {
     const svg = d3.select('#chart')
         .append('svg')
         .attr('width', totalGraphWidth)
-        .attr('height', totalGraphHeight)
-    //.attr('viewBox', '0 0 size size');
+        .attr('height', totalGraphHeight);
 
     // Append the graph
     graph = svg.append('g')
@@ -88,7 +87,7 @@ export function initChart(completeData, country) {
     });
 
     // Range of values
-    y.domain([0, Math.ceil(d3.max(barsValues))])
+    y.domain([0, (Math.ceil(d3.max(barsValues) * 10) / 10).toFixed(1)]);
 
     // Number of categories
     x.domain(barsKeys);
@@ -109,14 +108,12 @@ export function initChart(completeData, country) {
         .attr('fill', 'white')
         .attr('x', d => x(d.name))
         .attr('y', graphHeight)
-        .merge(rects) // Everything called below merge affects both entered and currently existing elements
+        .merge(rects) 
         .transition().duration(1500)
         .attr('y', d => {
-            console.log('d', d.value);
             return y(d.value);
         })
         .attr('height', d => {
-            console.log('height', d.value);
             return graphHeight - y(d.value);
         });
 
@@ -128,9 +125,9 @@ export function initChart(completeData, country) {
     xAxisGroup.selectAll('text')
         .attr('transform', `rotate(-40)`)
         .attr('text-anchor', 'end')
-    //     .attr('fill', 'white')
-    //     .style('font-size', '17px')
-    //     .style('font-family', 'sans-serif')
+        .attr('fill', 'white')
+        .style('font-size', '17px')
+        .style('font-family', 'sans-serif');
 
     function handleMouseOver(d, i) {  // Add interactivity
         // Use D3 to select element, change color and size
@@ -159,7 +156,7 @@ export function initChart(completeData, country) {
 }
 
 // Update the data according to the new category
-export function updateData(year, country) {
+export function updateData(completeData, year, country) {
 
     // Set the data to the country data
     const data = completeData[year][country];

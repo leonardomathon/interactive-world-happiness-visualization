@@ -3,6 +3,7 @@ import * as clm from 'country-locale-map';
 
 // Import custom js
 import {
+    createChartPanel,
     createDatasetPanel,
     createGPUHintPanel,
     createErrorPanel,
@@ -80,7 +81,7 @@ let renderingOptions = {
 // Object that holds the world happiness data from the selected year as yearWorldHappiness.data
 let yearWorldHappiness = {
     dataInteral: worldHappiness[yearSliderValue],
-    dataListener: function (val) {},
+    dataListener: function (val) { },
     set data(val) {
         this.dataInteral = val;
         this.dataListener(val);
@@ -221,12 +222,12 @@ hoveredCountry.registerListener(function (val) {
 });
 
 clickedCountry.registerListener(function (val) {
+    console.log('test');
     if (clickedCountry.data) {
-        if (!document.getElementById('#chart')) {
-            initChart(worldHappiness, clickedCountry.data.id);
-        } else {
-            updateData(worldHappiness, yearSliderValue, clickedCountry.data.id);
-        }
+
+        initChart(worldHappiness, clickedCountry.data.id);
+    } else {
+        document.getElementById('chart').querySelector('svg').remove();
     }
 });
 
