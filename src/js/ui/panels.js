@@ -97,29 +97,3 @@ export function createErrorPanel(errorTitle, errorMsg) {
     });
 }
 
-// // Creates a panel that shows the chart visualization
-// export function createChartPanel(completeData, country) {
-//     jsPanel.create({
-//         theme: {
-//             bgPanel: '#000',
-//             bgContent: '#0f0f0f',
-//             colorHeader: '#fff',
-//             colorContent: `#fff`,
-//         },
-//         panelSize: {
-//             width: () => window.innerWidth * 0.3,
-//             height: '50vh',
-//         },
-//         headerTitle:
-//             'World Happiness report',
-//         dragit: {
-//             cursor: 'default',
-//         },
-//         maximizedMargin: [25, 25, 25, 25],
-//         closeOnEscape: true,
-//         data: initChart(completeData, country),
-//         callback: function () {
-//             this.content.innerHTML = `<pre><code>${initChart(completeData, country)}</code></pre>`;
-//         },
-//     });
-// }

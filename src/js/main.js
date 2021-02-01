@@ -3,7 +3,6 @@ import * as clm from 'country-locale-map';
 
 // Import custom js
 import {
-    createChartPanel,
     createDatasetPanel,
     createGraphPanel,
     createGPUHintPanel,
@@ -25,6 +24,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
 import { initChart, updateBarChartData } from './chart.js';
+import { initScatter } from './scatter.js';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -85,6 +85,9 @@ let lineGraphState = false;
 // Panels for each visualization
 let barChartPanel = createGraphPanel('Barchart', '<div id="chart"></div>');
 barChartPanel.classList.add('panelInvisible');
+
+let scatterPanel = createGraphPanel('Scatterplot', '<div id="scatter"></div>');
+scatterPanel.classList.add('panelInvisible');
 
 // Config object that holds value of preprocessing effects
 let preprocessingOptions = {
@@ -287,9 +290,11 @@ scatterPlotToggle.addEventListener('click', function (e) {
     if (scatterPlotState) {
         // Make the toggle white
         scatterPlotToggle.classList.add('active');
+        scatterPanel.classList.remove('panelInvisible');
     } else {
         // Remove white toggle
         scatterPlotToggle.classList.remove('active');
+        scatterPanel.classList.add('panelInvisible');
     }
 });
 

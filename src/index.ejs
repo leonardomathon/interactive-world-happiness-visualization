@@ -133,7 +133,40 @@
         </div>
 
     </div>
+
+    <div class='header z-20' id='scatterButtons'>
+        <div class='header__btn-group btn-group'>
+            <a href='#' data-text='Economy (GDP per Capita)' class='btn-graphGdp header-graph__btn active'>Economy (GDP
+                per Capita)
+                <p class="nav__dropdown"><strong>Happiness</strong> x<br /><strong>Economy (GDP per Capita)</strong></p>
+            </a>
+            &nbsp;&nbsp;
+            <a href='#' data-text='Trust (Government Corruption)' class='btn-graphSocialSupport header-graph__btn'>Trust
+                (Government Corruption)
+                <p class="nav__dropdown"><strong>Happiness</strong> x<br /><strong>Trust (Government
+                        Corruption)</strong></p>
+            </a>
+            &nbsp;&nbsp;
+            <a href='#' data-text='Freedom to make life choices' class='btn-graphFreedom header-graph__btn'>Freedom to
+                make life choices
+                <p class="nav__dropdown"><strong>Happiness</strong> x<br /><strong>Freedom to make life choices</strong>
+                </p>
+            </a>
+            &nbsp;&nbsp;
+            <a href='#' data-text='Generosity' class='btn-graphGenerosity header-graph__btn'>Generosity
+                <p class="nav__dropdown"><strong>Happiness</strong> x<br /><strong>Generosity</strong></p>
+            </a>
+            &nbsp;&nbsp;
+            <a href='#' data-text='Healthy life expectancy' class='btn-graphLifeExpectancy header-graph__btn'>Healthy
+                life expectancy
+                <p class="nav__dropdown"><strong>Happiness</strong> x<br /><strong>Healthy life expectancy</strong></p>
+            </a>
+            &nbsp;&nbsp;
+        </div>
+    </div>
+
     <div id="worldContainer" class="absolute top-0"></div>
+    <div id="scatter"></div>
     <script src="<%= htmlWebpackPlugin.files.js[1] %>"></script>
 </body>
 
