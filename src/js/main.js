@@ -21,6 +21,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
+import { initChart } from './chart.js';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -258,3 +259,5 @@ hotkeys('esc', function (event, handler) {
     event.preventDefault();
     resetClickedCountry();
 });
+
+initChart(yearWorldHappiness.data, 'NLD');

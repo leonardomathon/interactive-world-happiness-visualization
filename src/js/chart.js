@@ -117,14 +117,16 @@ export function initChart(completeData, country) {
         .attr('y', d => {
             if (typeof d.value === 'string') {
                 const newValue = d.value.replace(/,/g, '.')
-                console.log('new', newValue);
+                console.log('new y', newValue);
                 return y(newValue);
             }
+            console.log('new d', d.value);
             return y(d.value);
         })
         .attr('height', d => {
             if (typeof d.value === 'string') {
                 const newValue = d.value.replace(/,/g, '.')
+                console.log('new height', newValue);
                 return graphHeight - y(newValue);
             }
             return graphHeight - y(d.value);
@@ -167,28 +169,5 @@ export function initChart(completeData, country) {
         d3.selectAll('.hover').remove();  // Remove text location
     }
 }
-
-// let worldContainer = document.getElementById('worldContainer');
-// worldContainer.addEventListener('dblclick', selectCountry);
-// worldContainer.addEventListener('contextmenu', resetClickedCountry);
-
-// // Is not null when double clicked on a country
-// let clickedCountry;
-
-// function selectCountry() {
-//     // The user is only able to click on a country, when no other country is clicked
-//     if (clickedCountry && clickedCountry.id == 'No country selected') {
-//         clickedCountry = raycastToGlobe;
-//     } else if (!clickedCountry) {
-//         clickedCountry = raycastToGlobe;
-//     }
-//     console.log('Selected: ', clickedCountry);
-// }
-
-// // Resets the current clicked country
-// function resetClickedCountry() {
-//     clickedCountry = null;
-//     console.log('Reset');
-// }
 
 
