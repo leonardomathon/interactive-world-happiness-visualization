@@ -24,7 +24,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
-import { initChart, updateBarChartData } from './chart.js';
+import { initBarChart, updateBarChartData } from './chart.js';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -80,7 +80,7 @@ let scatterPlotState = false;
 let lineGraphState = false;
 
 // Panels for each visualization
-let barChartPanel = createGraphPanel('Barchart', '<div id="chart"></div>');
+let barChartPanel = createGraphPanel('Bar chart', '<div id="chart"></div>');
 barChartPanel.classList.add('panelInvisible');
 
 // Config object that holds value of preprocessing effects
@@ -246,14 +246,24 @@ hoveredCountry.registerListener(function (val) {
 // Event listener that listens to clickedCountry change and updates charts
 clickedCountry.registerListener(function (val) {
     if (clickedCountry.data) {
-        initChart(worldHappiness, clickedCountry.data.id);
+        // Init bar chart
+        initBarChart(worldHappiness, clickedCountry.data.id);
+        barChartPanel.setHeaderTitle(
+            `Bar chart of ${hoveredCountry.data.name}`
+        );
     } else {
+        // Remove bar chart
         document.getElementById('chart').querySelector('svg').remove();
+        barChartPanel.setHeaderTitle('Bar chart');
     }
 });
 
 // Event listener that listens to searchCountry change and updates hoveredCountry
 searchedCountry.registerListener(function (val) {
+    // Reset the clicked country so that charts are emptied
+    if (clickedCountry.data) {
+        clickedCountry.data = null;
+    }
     setClickedCountry(searchedCountry.data);
     // Update hovered country
     hoveredCountry.data = {

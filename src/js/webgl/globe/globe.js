@@ -38,6 +38,9 @@ const worldSize = 500;
 const worldXSegments = 500;
 const worldYSegments = 500;
 
+// Root globe, containing worldGlobe and countryGlobe
+let globe;
+
 // Globe geometry and globe object
 let worldMaterial, worldSphere, worldGlobe;
 
@@ -101,6 +104,9 @@ export var hoveredCountry = {
 
 // Handles creation of the globe
 export function initGlobe(yearWorldHappiness) {
+    // Object that will hold worldGlobe and countryGlobe
+    globe = new THREE.Object3D();
+
     // Create sphere (size, veritcal segments, horizontal segments)
     worldSphere = new THREE.SphereGeometry(
         worldSize,
@@ -116,8 +122,8 @@ export function initGlobe(yearWorldHappiness) {
     // Create world globe
     worldGlobe = new THREE.Mesh(worldSphere, worldMaterial);
 
-    // Add to scene
-    scene.add(worldGlobe);
+    // Add to globe base object
+    globe.add(worldGlobe);
 
     // Create sphere for country overlay (size, veritcal segments, horizontal segments)
     countrySphere = new THREE.SphereGeometry(
@@ -135,8 +141,11 @@ export function initGlobe(yearWorldHappiness) {
     // Create country overlay globe
     countryGlobe = new THREE.Mesh(countrySphere, countryMaterial);
 
-    // Add to scene
-    scene.add(countryGlobe);
+    // Add to globe base object
+    globe.add(countryGlobe);
+
+    // Add globe base object to scene
+    scene.add(globe);
 
     // Start render loop
     render();
