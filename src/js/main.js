@@ -4,7 +4,8 @@ import * as clm from 'country-locale-map';
 // Import custom js
 import {
     createDatasetPanel,
-    createGraphPanel,
+    createBarChartPanel,
+    createScatterPanel,
     createGPUHintPanel,
     createErrorPanel,
 } from './ui/panels.js';
@@ -23,7 +24,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
-import { initChart, updateBarChartData } from './chart.js';
+import { initBarChart, updateBarChartData } from './chart.js';
 import { initScatter } from './scatter.js';
 
 // <span> tag displaying selected year
@@ -82,11 +83,20 @@ let barChartState = false;
 let scatterPlotState = false;
 let lineGraphState = false;
 
+// HTML code for the scatter panel
+let scatterButtons = document.getElementById('scatterButtons');
+scatterButtons.remove();
+
 // Panels for each visualization
-let barChartPanel = createGraphPanel('Bar chart', '<div id="chart"></div>');
+let barChartPanel = createBarChartPanel('Bar chart', '<div id="chart"></div>');
 barChartPanel.classList.add('panelInvisible');
 
-let scatterPanel = createGraphPanel('Scatterplot', '<div id="scatter"></div>');
+let scatterPanel = createScatterPanel(
+    'Scatterplot',
+    `<div id="scatter">${new XMLSerializer().serializeToString(
+        scatterButtons
+    )}</div>`
+);
 scatterPanel.classList.add('panelInvisible');
 
 // Config object that holds value of preprocessing effects
@@ -102,7 +112,7 @@ let renderingOptions = {
 // Object that holds the world happiness data from the selected year as yearWorldHappiness.data
 let yearWorldHappiness = {
     dataInteral: worldHappiness[yearSliderValue],
-    dataListener: function (val) { },
+    dataListener: function (val) {},
     set data(val) {
         this.dataInteral = val;
         this.dataListener(val);
