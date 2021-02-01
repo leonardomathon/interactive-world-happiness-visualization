@@ -260,4 +260,4 @@ hotkeys('esc', function (event, handler) {
     resetClickedCountry();
 });
 
-initChart(yearWorldHappiness.data, 'NLD');
+initChart(worldHappiness, 'NLD');

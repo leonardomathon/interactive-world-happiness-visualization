@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { raycastToGlobe } from './webgl/globe/globe.js'
+
 // Import scene file
 import {
     scene,
@@ -14,7 +14,7 @@ import {
 export function initChart(completeData, country) {
     console.log('data: ', completeData);
     console.log('country: ', country);
-    console.log('data[country]', completeData[country]);
+    console.log('data[country]', completeData[yearSlider.value][country]);
 
     // Height and Width of the graph
     const totalGraphWidth = 800;
@@ -75,8 +75,9 @@ export function initChart(completeData, country) {
     const yAxis = d3.axisLeft(y);
 
     // Set the data to the country data
-    const data = completeData[country];
+    const data = completeData[yearSlider.value][country];
     const graphData = data;
+    delete graphData['Country'];
     delete graphData['Region'];
     delete graphData['Happiness Rank'];
     delete graphData['Happiness Score'];
@@ -101,12 +102,14 @@ export function initChart(completeData, country) {
     // Tie data to the rects available
     const rects = graph
         .selectAll('rect')
-        .data(bars)
+        .data(bars);
+    rects.exit().remove();
 
     rects.enter()
         .append('rect')
         .on('mouseover', handleMouseOver)
         .on('mouseout', handleMouseOut)
+        .attr('class', 'rect')
         .attr('width', x.bandwidth)
         .attr('height', 0)
         .attr('fill', 'white')
@@ -115,20 +118,19 @@ export function initChart(completeData, country) {
         .merge(rects) // Everything called below merge affects both entered and currently existing elements
         .transition().duration(1500)
         .attr('y', d => {
-            if (typeof d.value === 'string') {
-                const newValue = d.value.replace(/,/g, '.')
-                console.log('new y', newValue);
-                return y(newValue);
-            }
-            console.log('new d', d.value);
+            // if (typeof d.value === 'string') {
+            //     const newValue = d.value.replace(/,/g, '.')
+            //     return y(newValue);
+            // }
+            console.log('d', d.value);
             return y(d.value);
         })
         .attr('height', d => {
-            if (typeof d.value === 'string') {
-                const newValue = d.value.replace(/,/g, '.')
-                console.log('new height', newValue);
-                return graphHeight - y(newValue);
-            }
+            // if (typeof d.value === 'string') {
+            //     const newValue = d.value.replace(/,/g, '.')
+            //     return graphHeight - y(newValue);
+            // }
+            console.log('height', d.value);
             return graphHeight - y(d.value);
         });
 
@@ -167,6 +169,54 @@ export function initChart(completeData, country) {
     function handleMouseOut(d, i) {
         d3.select(this).attr('style', '#FFFFFF')
         d3.selectAll('.hover').remove();  // Remove text location
+    }
+
+    // Event listener that listens to the range slider
+    yearSlider.addEventListener('change', function (e) {
+        // Get slider value, update data and UI
+        console.log('Yearslidesvalue: ', yearSlider.value);
+        updateData(yearSlider.value, 'NLD');
+    });
+
+    // Update the data according to the new category
+    function updateData(year, country) {
+        // Set the data to the country data
+        const data = completeData[year][country];
+        const graphData = data;
+        delete graphData['Country'];
+        delete graphData['Region'];
+        delete graphData['Happiness Rank'];
+        delete graphData['Happiness Score'];
+
+        // Name on the x-axis
+        const barsKeys = Object.keys(graphData);
+        // Value on the x-axis
+        const barsValues = Object.values(graphData);
+
+        // Create bar charts
+        const bars = []
+        barsKeys.forEach((key, idx) => {
+            bars[idx] = { name: barsKeys[idx], value: barsValues[idx] }
+        });
+
+        // Tie data to the rects available
+        const rects = graph
+            .selectAll('rect')
+            .data(bars);
+        rects.exit().remove();
+
+        graph
+            .selectAll('rect')
+            .transition()
+            .duration(500)
+            .attr('y', d => {
+                console.log('new d', d);
+                return y(d.value);
+            })
+            .attr('height', d => {
+                console.log('new height', d.value);
+                return graphHeight - y(d.value);
+            });
     }
 }
 
