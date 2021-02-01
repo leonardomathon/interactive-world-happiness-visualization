@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 
 var graph;
+var svg;
 
 // Height and Width of the graph
 const totalGraphWidth = 800;
@@ -20,36 +21,40 @@ export function initChart(completeData, country) {
     console.log('data[country]', completeData[yearSlider.value][country]);
 
     // Add the svg frame
-    const svg = d3.select('#chart')
+    svg = d3
+        .select('#chart')
         .append('svg')
         .attr('width', totalGraphWidth)
-        .attr('height', totalGraphHeight)
+        .attr('height', totalGraphHeight);
     //.attr('viewBox', '0 0 size size');
 
     // Append the graph
-    graph = svg.append('g')
+    graph = svg
+        .append('g')
         .attr('width', graphWidth)
         .attr('height', graphHeight)
-        .attr('transform', `translate(${margin.left}, ${margin.top})`)
+        .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     // Append the x - axis, set the position of the axis at 0
-    const xAxisGroup = graph.append('g')
-        .attr('transform', `translate(0, ${graphHeight})`)
+    const xAxisGroup = graph
+        .append('g')
+        .attr('transform', `translate(0, ${graphHeight})`);
     // Append the y - axis
     const yAxisGroup = graph.append('g');
 
     // Scale the y - axis
-    y = d3.scaleLinear()
-    .range([graphHeight, 0])
+    y = d3.scaleLinear().range([graphHeight, 0]);
 
     // Scale the x - axis, select space between bars using padding
-    const x = d3.scaleBand()
+    const x = d3
+        .scaleBand()
         .range([0, graphWidth])
         .paddingInner(0.2)
         .paddingOuter(0.2);
 
     // Add a title to the graph
-    const xTitle = graph.append('text')
+    const xTitle = graph
+        .append('text')
         .attr('text-anchor', 'end')
         .attr('x', graphWidth + 10)
         .attr('y', graphHeight + 50)
@@ -57,10 +62,11 @@ export function initChart(completeData, country) {
         .text('Category');
 
     // Add a title to the graph
-    const yTitle = graph.append('text')
+    const yTitle = graph
+        .append('text')
         .attr('text-anchor', 'end')
         .attr('x', margin.right)
-        .attr('y', - 20)
+        .attr('y', -20)
         .attr('fill', 'white')
         .text('Value');
 
@@ -82,24 +88,23 @@ export function initChart(completeData, country) {
     const barsValues = Object.values(graphData);
 
     // Create bar charts
-    const bars = []
+    const bars = [];
     barsKeys.forEach((key, idx) => {
-        bars[idx] = { name: barsKeys[idx], value: barsValues[idx] }
+        bars[idx] = { name: barsKeys[idx], value: barsValues[idx] };
     });
 
     // Range of values
-    y.domain([0, Math.ceil(d3.max(barsValues))])
+    y.domain([0, Math.ceil(d3.max(barsValues))]);
 
     // Number of categories
     x.domain(barsKeys);
 
     // Tie data to the rects available
-    const rects = graph
-        .selectAll('rect')
-        .data(bars);
+    const rects = graph.selectAll('rect').data(bars);
     rects.exit().remove();
 
-    rects.enter()
+    rects
+        .enter()
         .append('rect')
         .on('mouseover', handleMouseOver)
         .on('mouseout', handleMouseOut)
@@ -107,11 +112,12 @@ export function initChart(completeData, country) {
         .attr('width', x.bandwidth)
         .attr('height', 0)
         .attr('fill', 'white')
-        .attr('x', d => x(d.name))
+        .attr('x', (d) => x(d.name))
         .attr('y', graphHeight)
         .merge(rects) // Everything called below merge affects both entered and currently existing elements
-        .transition().duration(1500)
-        .attr('y', d => {
+        .transition()
+        .duration(1500)
+        .attr('y', (d) => {
             // if (typeof d.value === 'string') {
             //     const newValue = d.value.replace(/,/g, '.')
             //     return y(newValue);
@@ -119,7 +125,7 @@ export function initChart(completeData, country) {
             console.log('d', d.value);
             return y(d.value);
         })
-        .attr('height', d => {
+        .attr('height', (d) => {
             // if (typeof d.value === 'string') {
             //     const newValue = d.value.replace(/,/g, '.')
             //     return graphHeight - y(newValue);
@@ -133,27 +139,36 @@ export function initChart(completeData, country) {
     yAxisGroup.call(yAxis);
 
     // Lay-out text below graph
-    xAxisGroup.selectAll('text')
+    xAxisGroup
+        .selectAll('text')
         .attr('transform', `rotate(-40)`)
-        .attr('text-anchor', 'end')
+        .attr('text-anchor', 'end');
     //     .attr('fill', 'white')
     //     .style('font-size', '17px')
     //     .style('font-family', 'sans-serif')
 
-    function handleMouseOver(d, i) {  // Add interactivity
+    function handleMouseOver(d, i) {
+        // Add interactivity
         // Use D3 to select element, change color and size
-        d3.select(this)
-            .style('fill', '#B3B6B7');
+        d3.select(this).style('fill', '#B3B6B7');
 
         let valueCharacter = i.value.toString();
 
         // Specify where to put label of text
-        const hover = graph.append('text')
+        const hover = graph
+            .append('text')
             .transition()
             .duration(500)
             .attr('id', 't' + d.x + '-' + d.y)
-            .attr('y', graphHeight - (parseInt(d3.select(this).attr('height')) / 2))
-            .attr('x', parseInt(d3.select(this).attr('x')) + (parseInt(d3.select(this).attr('width')) / 2 - 12))
+            .attr(
+                'y',
+                graphHeight - parseInt(d3.select(this).attr('height')) / 2
+            )
+            .attr(
+                'x',
+                parseInt(d3.select(this).attr('x')) +
+                    (parseInt(d3.select(this).attr('width')) / 2 - 12)
+            )
             .attr('pointer-events', 'none')
             .attr('class', 'hover')
             .style('fill', '#FFFFFF')
@@ -161,14 +176,13 @@ export function initChart(completeData, country) {
     }
 
     function handleMouseOut(d, i) {
-        d3.select(this).attr('style', '#FFFFFF')
-        d3.selectAll('.hover').remove();  // Remove text location
+        d3.select(this).attr('style', '#FFFFFF');
+        d3.selectAll('.hover').remove(); // Remove text location
     }
 }
 
 // Update the data according to the new category
 export function updateData(completeData, year, country) {
-
     // Set the data to the country data
     const data = completeData[year][country];
     const graphData = data;
@@ -183,29 +197,25 @@ export function updateData(completeData, year, country) {
     const barsValues = Object.values(graphData);
 
     // Create bar charts
-    const bars = []
+    const bars = [];
     barsKeys.forEach((key, idx) => {
-        bars[idx] = { name: barsKeys[idx], value: barsValues[idx] }
+        bars[idx] = { name: barsKeys[idx], value: barsValues[idx] };
     });
 
     // Tie data to the rects available
-    const rects = graph
-        .selectAll('rect')
-        .data(bars);
+    const rects = graph.selectAll('rect').data(bars);
     rects.exit().remove();
 
     graph
         .selectAll('rect')
         .transition()
         .duration(500)
-        .attr('y', d => {
+        .attr('y', (d) => {
             console.log('new d', d);
             return y(d.value);
         })
-        .attr('height', d => {
+        .attr('height', (d) => {
             console.log('new height', d.value);
             return graphHeight - y(d.value);
         });
 }
-
-

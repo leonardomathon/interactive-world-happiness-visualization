@@ -25,6 +25,23 @@
         <p class="text-xs font-normal">Selected country:</p>
         <h1 id="hoveredCountry" class="text-2xl">No country selected</h1>
     </div>
+    <div id="visualizationSelectBar" class="absolute w-full flex justify-center z-10">
+        <ul class='flex cursor-pointer'>
+            <li id="barChartToggle"
+                class='mx-2 py-2 px-6 bg-black bg-opacity-30 rounded-b-lg text-gray-600 bg-gray-200 hover:bg-white hover:bg-opacity-10 transition-all'>
+                <i class="ri-bar-chart-2-fill"></i>
+            </li>
+            <li id="scatterPlotToggle"
+                class='flex items-center mx-2 py-2 px-6 bg-black bg-opacity-30 rounded-b-lg text-gray-600 bg-gray-200 hover:bg-white hover:bg-opacity-10 transition-all'>
+                <i class="ri-bubble-chart-fill"></i>
+            </li>
+            <li id="lineGraphToggle"
+                class='mx-2 py-2 px-6 bg-black bg-opacity-30 rounded-b-lg text-gray-600 bg-gray-200 hover:bg-white hover:bg-opacity-10 transition-all'>
+                <i class="ri-line-chart-fill"></i>
+            </li>
+
+        </ul>
+    </div>
     <div id="toolbar" class="relative float-right flex flex-col z-10">
         <div id="options-block" class="m-5 p-5 flex flex-col justify-end bg-black bg-opacity-30 rounded-lg ">
             <p class="font-bold">Options</p>
@@ -117,7 +134,6 @@
 
     </div>
     <div id="worldContainer" class="absolute top-0"></div>
-    <div id="chart" class="absolute top-0"></div>
     <script src="<%= htmlWebpackPlugin.files.js[1] %>"></script>
 </body>
 

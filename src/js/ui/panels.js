@@ -47,6 +47,33 @@ export function createDatasetPanel(yearSliderValue, yearWorldHappiness) {
     });
 }
 
+// Creates a panel that shows a visualization
+export function createGraphPanel(panelTitle, html) {
+    return jsPanel.create({
+        theme: {
+            bgPanel: '#000',
+            bgContent: '#0f0f0f',
+            colorHeader: '#fff',
+            colorContent: `#fff`,
+        },
+        headerControls: {
+            minimize: 'remove',
+            close: 'remove',
+        },
+        panelSize: {
+            width: () => window.innerWidth * 0.3,
+            height: '50vh',
+        },
+        headerTitle: panelTitle,
+        dragit: {
+            cursor: 'default',
+        },
+        content: html,
+        maximizedMargin: [25, 25, 25, 25],
+        closeOnEscape: true,
+    });
+}
+
 export function createErrorPanel(errorTitle, errorMsg) {
     jsPanel.hint.create({
         position: 'center-top 0 15 down',
