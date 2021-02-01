@@ -7,7 +7,7 @@ const totalGraphWidth = 800;
 const totalGraphHeight = 400;
 
 // create margins and dimensions
-const margin = { top: 50, right: 20, bottom: 100, left: 50 };
+const margin = { top: 50, right: 20, bottom: 120, left: 80 };
 const graphWidth = totalGraphWidth - margin.left - margin.right;
 const graphHeight = totalGraphHeight - margin.top - margin.bottom;
 
@@ -128,8 +128,7 @@ export function initBarChart(completeData, country) {
         .attr('transform', `rotate(-40)`)
         .attr('text-anchor', 'end')
         .attr('fill', 'white')
-        .style('font-size', '17px')
-        .style('font-family', 'sans-serif');
+        .style('font-size', '12px');
 
     function handleMouseOver(d, i) {
         // Add interactivity
