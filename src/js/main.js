@@ -222,6 +222,11 @@ hoveredCountry.registerListener(function (val) {
 
 clickedCountry.registerListener(function (val) {
     if (clickedCountry.data) {
+        if (!document.getElementById('#chart')) {
+            initChart(worldHappiness, clickedCountry.data.id);
+        } else {
+            updateData(worldHappiness, yearSliderValue, clickedCountry.data.id);
+        }
     }
 });
 
@@ -268,5 +273,3 @@ hotkeys('esc', function (event, handler) {
     event.preventDefault();
     resetClickedCountry();
 });
-
-initChart(worldHappiness, hoveredCountry);
