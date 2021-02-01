@@ -108,4 +108,4 @@ showDataset.addEventListener('click', function (e) {
     });
 });
 
-initScatter(yearWorldHappiness.data, yearSliderValue);
+initScatter(worldHappiness, yearSliderValue);

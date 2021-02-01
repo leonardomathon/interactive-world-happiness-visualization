@@ -1,12 +1,15 @@
 import * as d3 from 'd3';
 
-export function initScatter(data, year) {
+export function initScatter(completeData, year) {
     console.log('data: ', data);
+
+    var data = completeData[year];
+    var category;
 
     // <input> tag used for year selection
     let yearSlider = document.getElementById('yearSlider');
 
-    const numberOfCountries = year === 2015 ?
+    var numberOfCountries = year === 2015 ?
         158 : (year === 2016 ? 157 :
             (year === 2017 ? 155 :
                 (year === 2018 ? 156 :
@@ -160,8 +163,10 @@ export function initScatter(data, year) {
     // Render circles
     const circles = graph
         .selectAll('circle')
-        .data(Object.values(data))
-        .enter()
+        .data(Object.values(data));
+
+
+    circles.enter()
         .append('circle')
         .attr(
             'class',
@@ -197,7 +202,6 @@ export function initScatter(data, year) {
         .attr('stroke', '#CDCDCD')
         .attr('stroke-width', '2px')
         .attr('cx', d => {
-            console.log('dataform: ', d['Economy (GDP per Capita)'])
             return x(d['Economy (GDP per Capita)']);
         })
         .on('mouseover', showTooltip)
@@ -328,8 +332,84 @@ export function initScatter(data, year) {
         .style('fill', '#FFFFFF');
 
     // Update the data according to the new category
-    function updateData(category) {
+    function updateYear(year, category) {
+        // Render circles
+        const bubbles = graph
+            .selectAll('.country-bubble')
+        bubbles.remove();
 
+        data = completeData[year];
+
+        // Render circles
+        const circles = graph
+            .selectAll('circle')
+            .data(Object.values(data))
+            .enter()
+            .append('circle')
+            .attr(
+                'class',
+                d =>
+                    `country ${d.Country} continent-${d.Region
+                        .split(' ')
+                        .join('-')} country-bubble`
+            )
+            .attr('fill', d => {
+                if (d.Region === 'Central and Eastern Europe') {
+                    return '#7cbd1e';
+                } else if (d.Region === 'Western Europe') {
+                    return '#ff1f5a';
+                } else if (d.Region === 'Southern Asia') {
+                    return '#303481';
+                } else if (d.Region === 'Southeastern Asia') {
+                    return '#ff5b44';
+                } else if (d.Region === 'Eastern Asia') {
+                    return '#2fc5cc';
+                } else if (d.Region === 'Middle East and Northern Africa') {
+                    return '#F7DC6F';
+                } else if (d.Region === 'Sub-Saharan Africa') {
+                    return '#BB8FCE';
+                } else if (d.Region === 'Latin America and Caribbean') {
+                    return '#E74C3C';
+                } else if (d.Region === 'North America') {
+                    return '#3498DB';
+                } else {
+                    return 'red';
+                }
+            })
+            .attr('opacity', '.7')
+            .attr('stroke', '#CDCDCD')
+            .attr('stroke-width', '2px')
+            .attr('cx', d => {
+                return x(d[category]);
+            })
+            .on('mouseover', showTooltip)
+            .on('mousemove', moveTooltip)
+            .on('mouseleave', hideTooltip)
+            .transition()
+            .delay((d, i) => i * animation_delay)
+            .duration(animation_duration)
+            .ease(animation_easing)
+            .attr('r', d => {
+                return 10;
+                // if (d.population > 800000000) {
+                //     return d.population / 25000000;
+                // } else if (d.population > 50000000) {
+                //     return d.population / 10000000;
+                // } else if (d.population > 1000000) {
+                //     return d.population / 1500000;
+                // } else {
+                //     return d.population / 100000;
+                // }
+            })
+            .attr('cy', d => {
+                let happinessRankCircle = d['Happiness Rank']
+                console.log('NumberofCountries: ', numberOfCountries);
+                return y(((numberOfCountries + 1) - happinessRankCircle) / numberOfCountries);
+            });
+    }
+
+    // Update the data according to the new category
+    function updateData(category) {
         let label;
         if (category === 'graphSocialSupport') {
             label = 'Trust (Government Corruption)';
@@ -385,6 +465,7 @@ export function initScatter(data, year) {
 
         if (currentBtnType === "header-graph__btn") {
             currentBtnClass = currentBtn.classList[0].split("-")[1];
+            category = currentBtnClass;
         }
 
         if (currentBtnType === "header-graph__btn") {
@@ -402,9 +483,21 @@ export function initScatter(data, year) {
         // Get slider value, update data and UI
         // yearSliderValue = yearSlider.value;
         console.log('Yearslidesvalue: ', yearSlider.value);
+
+        let label;
+        if (category === 'graphSocialSupport') {
+            label = 'Trust (Government Corruption)';
+        } else if (category === 'graphFreedom') {
+            label = 'Freedom to make life choices';
+        } else if (category === 'graphGenerosity') {
+            label = 'Generosity';
+        } else if (category === 'graphLifeExpectancy') {
+            label = 'Healthy life expectancy';
+        } else if (category === 'graphGdp') {
+            label = 'Economy (GDP per Capita)';
+        }
+
+        updateYear(yearSlider.value, label);
     });
-
-
-
 }
 
