@@ -12,6 +12,7 @@ import {
     updateGlobeTexture,
     toggleHover,
     hoveredCountry,
+    clickedCountry,
     setClickedCountry,
     resetClickedCountry,
     searchedCountry,
@@ -213,6 +214,11 @@ hoveredCountry.registerListener(function (val) {
         hoveredCountryTag.innerHTML = `${hoveredCountry.data.id} - ${hoveredCountry.data.name}`;
     } else {
         hoveredCountryTag.innerHTML = `${hoveredCountry.data.id}`;
+    }
+});
+
+clickedCountry.registerListener(function (val) {
+    if (clickedCountry.data) {
     }
 });
 

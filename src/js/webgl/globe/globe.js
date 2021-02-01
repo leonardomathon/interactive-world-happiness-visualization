@@ -48,7 +48,20 @@ let countryMaterial, countrySphere, countryGlobe;
 let countryIntersect;
 
 // Is not null when double clicked on a country
-let clickedCountry;
+export var clickedCountry = {
+    dataInteral: null,
+    dataListener: function (val) {},
+    set data(val) {
+        this.dataInteral = val;
+        this.dataListener(val);
+    },
+    get data() {
+        return this.dataInteral;
+    },
+    registerListener: function (listener) {
+        this.dataListener = listener;
+    },
+};
 
 // Country that is searched
 export var searchedCountry = {
@@ -145,10 +158,13 @@ export function initGlobe(yearWorldHappiness) {
 
 function clickedOnCountry() {
     // The user is only able to click on a country, when no other country is clicked
-    if (clickedCountry && clickedCountry.id == 'No country selected') {
-        clickedCountry = raycastToGlobe();
-    } else if (!clickedCountry) {
-        clickedCountry = raycastToGlobe();
+    if (
+        clickedCountry.data &&
+        clickedCountry.data.id == 'No country selected'
+    ) {
+        clickedCountry.data = raycastToGlobe();
+    } else if (!clickedCountry.data) {
+        clickedCountry.data = raycastToGlobe();
     }
 }
 
@@ -177,11 +193,11 @@ function raycastToGlobe() {
 
 // Updates the country texture
 function updateCountryTexture() {
-    // If clickedCountry is set, draw texture
-    if (clickedCountry) {
+    // If clickedCountry.data is set, draw texture
+    if (clickedCountry.data) {
         countryGlobe.material.map = countryTextureCache(
-            clickedCountry.index,
-            clickedCountry.id
+            clickedCountry.data.index,
+            clickedCountry.data.id
         );
     } else {
         if (countryIntersect) {
@@ -247,11 +263,11 @@ export function toggleHover() {
 }
 
 export function setClickedCountry(searchedCountry) {
-    clickedCountry = searchedCountry;
+    clickedCountry.data = searchedCountry;
 }
 
 // Resets the current clicked country
 export function resetClickedCountry() {
-    clickedCountry = null;
+    clickedCountry.data = null;
     updateCountryTexture();
 }
