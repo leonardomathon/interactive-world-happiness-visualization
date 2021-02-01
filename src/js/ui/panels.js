@@ -57,8 +57,8 @@ export function createDatasetPanel(yearSliderValue, yearWorldHappiness) {
     });
 }
 
-// Creates a panel that shows a visualization
-export function createGraphPanel(panelTitle, html) {
+// Creates a panel that shows a bar chart visualization
+export function createBarChartPanel(panelTitle, html) {
     return jsPanel.create({
         theme: panelTheme,
         borderRadius: '.5rem',
@@ -71,6 +71,36 @@ export function createGraphPanel(panelTitle, html) {
             at: 'left-top',
             offsetX: 15,
             offsetY: 100,
+        },
+        headerControls: {
+            minimize: 'remove',
+            close: 'remove',
+            size: 'md',
+        },
+        headerTitle: panelTitle,
+        dragit: {
+            cursor: 'default',
+        },
+        content: html,
+        maximizedMargin: [25, 25, 25, 25],
+        closeOnEscape: true,
+    });
+}
+
+// Creates a panel that shows a bar chart visualization
+export function createScatterPanel(panelTitle, html) {
+    return jsPanel.create({
+        theme: panelTheme,
+        borderRadius: '.5rem',
+        panelSize: {
+            width: 500,
+            height: 300,
+        },
+        position: {
+            my: 'left-top',
+            at: 'left-top',
+            offsetX: 15,
+            offsetY: 450,
         },
         headerControls: {
             minimize: 'remove',
@@ -101,4 +131,3 @@ export function createErrorPanel(errorTitle, errorMsg) {
         },
     });
 }
-
