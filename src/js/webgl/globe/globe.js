@@ -268,6 +268,10 @@ export function setClickedCountry(searchedCountry) {
 
 // Resets the current clicked country
 export function resetClickedCountry() {
+    if (document.getElementById('chart')) {
+        var chart = document.getElementById('chart');
+        chart.remove();
+    }
     clickedCountry.data = null;
     updateCountryTexture();
 }

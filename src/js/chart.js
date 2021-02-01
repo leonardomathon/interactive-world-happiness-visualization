@@ -112,18 +112,10 @@ export function initChart(completeData, country) {
         .merge(rects) // Everything called below merge affects both entered and currently existing elements
         .transition().duration(1500)
         .attr('y', d => {
-            // if (typeof d.value === 'string') {
-            //     const newValue = d.value.replace(/,/g, '.')
-            //     return y(newValue);
-            // }
             console.log('d', d.value);
             return y(d.value);
         })
         .attr('height', d => {
-            // if (typeof d.value === 'string') {
-            //     const newValue = d.value.replace(/,/g, '.')
-            //     return graphHeight - y(newValue);
-            // }
             console.log('height', d.value);
             return graphHeight - y(d.value);
         });
@@ -167,7 +159,7 @@ export function initChart(completeData, country) {
 }
 
 // Update the data according to the new category
-export function updateData(completeData, year, country) {
+export function updateData(year, country) {
 
     // Set the data to the country data
     const data = completeData[year][country];
