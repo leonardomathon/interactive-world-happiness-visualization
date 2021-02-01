@@ -3,7 +3,9 @@ import * as clm from 'country-locale-map';
 
 // Import custom js
 import {
+    createChartPanel,
     createDatasetPanel,
+    createGraphPanel,
     createGPUHintPanel,
     createErrorPanel,
 } from './ui/panels.js';
@@ -12,6 +14,7 @@ import {
     updateGlobeTexture,
     toggleHover,
     hoveredCountry,
+    clickedCountry,
     setClickedCountry,
     resetClickedCountry,
     searchedCountry,
@@ -21,6 +24,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
+import { initBarChart, updateBarChartData } from './chart.js';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -64,6 +68,20 @@ let fuzzySearch;
 
 // Country that the user selected
 let hoveredCountryTag = document.getElementById('hoveredCountry');
+
+// Toggle buttons for all graphs
+let barChartToggle = document.getElementById('barChartToggle');
+let scatterPlotToggle = document.getElementById('scatterPlotToggle');
+let lineGraphToggle = document.getElementById('lineGraphToggle');
+
+// States for all toggle buttons
+let barChartState = false;
+let scatterPlotState = false;
+let lineGraphState = false;
+
+// Panels for each visualization
+let barChartPanel = createGraphPanel('Bar chart', '<div id="chart"></div>');
+barChartPanel.classList.add('panelInvisible');
 
 // Config object that holds value of preprocessing effects
 let preprocessingOptions = {
@@ -121,6 +139,16 @@ for (let i = 0; i < yearSliderLabels.length; i++) {
 
 // Event listener that listens to the range slider
 yearSlider.addEventListener('change', function (e) {
+    console.log('Yearslidervalue: ', yearSliderValue);
+
+    if (hoveredCountry.data.id != 'No country selected') {
+        updateBarChartData(
+            worldHappiness,
+            yearSliderValue,
+            hoveredCountry.data.id
+        );
+    }
+
     // Get slider value, update data and UI
     yearSliderValue = yearSlider.value;
     yearWorldHappiness.data = worldHappiness[yearSliderValue];
@@ -215,13 +243,74 @@ hoveredCountry.registerListener(function (val) {
     }
 });
 
+// Event listener that listens to clickedCountry change and updates charts
+clickedCountry.registerListener(function (val) {
+    if (clickedCountry.data) {
+        // Init bar chart
+        initBarChart(worldHappiness, clickedCountry.data.id);
+        barChartPanel.setHeaderTitle(
+            `Bar chart of ${hoveredCountry.data.name}`
+        );
+    } else {
+        // Remove bar chart
+        document.getElementById('chart').querySelector('svg').remove();
+        barChartPanel.setHeaderTitle('Bar chart');
+    }
+});
+
+// Event listener that listens to searchCountry change and updates hoveredCountry
 searchedCountry.registerListener(function (val) {
+    // Reset the clicked country so that charts are emptied
+    if (clickedCountry.data) {
+        clickedCountry.data = null;
+    }
     setClickedCountry(searchedCountry.data);
     // Update hovered country
     hoveredCountry.data = {
         id: searchedCountry.data.id,
         name: searchedCountry.data.name,
     };
+});
+
+// Event listerer that listens to bar chart toggle button click
+barChartToggle.addEventListener('click', function (e) {
+    // switch state
+    barChartState = !barChartState;
+    if (barChartState) {
+        // Make the toggle white
+        barChartToggle.classList.add('active');
+        barChartPanel.classList.remove('panelInvisible');
+    } else {
+        // Remove white toggle
+        barChartToggle.classList.remove('active');
+        barChartPanel.classList.add('panelInvisible');
+    }
+});
+
+// Event listerer that listens to scatterplot toggle button click
+scatterPlotToggle.addEventListener('click', function (e) {
+    // switch state
+    scatterPlotState = !scatterPlotState;
+    if (scatterPlotState) {
+        // Make the toggle white
+        scatterPlotToggle.classList.add('active');
+    } else {
+        // Remove white toggle
+        scatterPlotToggle.classList.remove('active');
+    }
+});
+
+// Event listerer that listens to line graph toggle button click
+lineGraphToggle.addEventListener('click', function (e) {
+    // switch state
+    lineGraphState = !lineGraphState;
+    if (scatterPlotState) {
+        // Make the toggle white
+        lineGraphToggle.classList.add('active');
+    } else {
+        // Remove white toggle
+        lineGraphToggle.classList.remove('active');
+    }
 });
 
 // Event listeners (from hotkeys-js) that listen to keyboard combinations

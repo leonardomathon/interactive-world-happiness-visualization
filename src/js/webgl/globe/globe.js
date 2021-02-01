@@ -19,6 +19,7 @@ import { composer } from '../../fx/postprocessing.js';
 
 // Import texture file
 import { createWorldTexture, createCountryTexture } from '../texture.js';
+import { initChart } from '../../chart.js';
 
 let worldContainer = document.getElementById('worldContainer');
 worldContainer.addEventListener('dblclick', clickedOnCountry);
@@ -37,6 +38,9 @@ const worldSize = 500;
 const worldXSegments = 500;
 const worldYSegments = 500;
 
+// Root globe, containing worldGlobe and countryGlobe
+let globe;
+
 // Globe geometry and globe object
 let worldMaterial, worldSphere, worldGlobe;
 
@@ -47,7 +51,20 @@ let countryMaterial, countrySphere, countryGlobe;
 let countryIntersect;
 
 // Is not null when double clicked on a country
-let clickedCountry;
+export var clickedCountry = {
+    dataInteral: null,
+    dataListener: function (val) {},
+    set data(val) {
+        this.dataInteral = val;
+        this.dataListener(val);
+    },
+    get data() {
+        return this.dataInteral;
+    },
+    registerListener: function (listener) {
+        this.dataListener = listener;
+    },
+};
 
 // Country that is searched
 export var searchedCountry = {
@@ -87,6 +104,9 @@ export var hoveredCountry = {
 
 // Handles creation of the globe
 export function initGlobe(yearWorldHappiness) {
+    // Object that will hold worldGlobe and countryGlobe
+    globe = new THREE.Object3D();
+
     // Create sphere (size, veritcal segments, horizontal segments)
     worldSphere = new THREE.SphereGeometry(
         worldSize,
@@ -102,8 +122,8 @@ export function initGlobe(yearWorldHappiness) {
     // Create world globe
     worldGlobe = new THREE.Mesh(worldSphere, worldMaterial);
 
-    // Add to scene
-    scene.add(worldGlobe);
+    // Add to globe base object
+    globe.add(worldGlobe);
 
     // Create sphere for country overlay (size, veritcal segments, horizontal segments)
     countrySphere = new THREE.SphereGeometry(
@@ -121,8 +141,11 @@ export function initGlobe(yearWorldHappiness) {
     // Create country overlay globe
     countryGlobe = new THREE.Mesh(countrySphere, countryMaterial);
 
-    // Add to scene
-    scene.add(countryGlobe);
+    // Add to globe base object
+    globe.add(countryGlobe);
+
+    // Add globe base object to scene
+    scene.add(globe);
 
     // Start render loop
     render();
@@ -144,10 +167,13 @@ export function initGlobe(yearWorldHappiness) {
 
 function clickedOnCountry() {
     // The user is only able to click on a country, when no other country is clicked
-    if (clickedCountry && clickedCountry.id == 'No country selected') {
-        clickedCountry = raycastToGlobe();
-    } else if (!clickedCountry) {
-        clickedCountry = raycastToGlobe();
+    if (
+        clickedCountry.data &&
+        clickedCountry.data.id == 'No country selected'
+    ) {
+        clickedCountry.data = raycastToGlobe();
+    } else if (!clickedCountry.data) {
+        clickedCountry.data = raycastToGlobe();
     }
 }
 
@@ -176,11 +202,11 @@ function raycastToGlobe() {
 
 // Updates the country texture
 function updateCountryTexture() {
-    // If clickedCountry is set, draw texture
-    if (clickedCountry) {
+    // If clickedCountry.data is set, draw texture
+    if (clickedCountry.data) {
         countryGlobe.material.map = countryTextureCache(
-            clickedCountry.index,
-            clickedCountry.id
+            clickedCountry.data.index,
+            clickedCountry.data.id
         );
     } else {
         if (countryIntersect) {
@@ -246,11 +272,11 @@ export function toggleHover() {
 }
 
 export function setClickedCountry(searchedCountry) {
-    clickedCountry = searchedCountry;
+    clickedCountry.data = searchedCountry;
 }
 
 // Resets the current clicked country
 export function resetClickedCountry() {
-    clickedCountry = null;
+    clickedCountry.data = null;
     updateCountryTexture();
 }
