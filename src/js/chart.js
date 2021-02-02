@@ -72,10 +72,10 @@ export function initBarChart(completeData, country) {
     const data = completeData[yearSlider.value][country];
     const graphData = {
         'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
-        'Freedom to make life choices': data['Economy (GDP per Capita)'],
-        'Generosity': data['Economy (GDP per Capita)'],
-        'Healthy life expectancy': data['Economy (GDP per Capita)'],
-        'Trust (Government Corruption': data['Economy (GDP per Capita)'],
+        'Freedom to make life choices': data['Freedom to make life choices'],
+        'Generosity': data['Generosity'],
+        'Healthy life expectancy': data['Healthy life expectancy'],
+        'Trust (Government Corruption': data['Trust (Government Corruption'],
     };
     console.log('Graphdata: ', graphData);
 

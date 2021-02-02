@@ -154,7 +154,7 @@ export function initScatter(completeData, year) {
     const setClickedCountryScatter = function (d, i) {
         let countryClicked = {
             id: i[0],
-            name: countriesOfTheWorld[i[0]]['Country'],
+            name: i[1]['Country'],
             index: null,
         };
         if (clickedCountry.data) {
@@ -164,7 +164,7 @@ export function initScatter(completeData, year) {
         // Update hovered country
         hoveredCountry.data = {
             id: i[0],
-            name: countriesOfTheWorld[i[0]]['Country'],
+            name: i[1]['Country'],
         };
     };
 
