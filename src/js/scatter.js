@@ -178,7 +178,6 @@ export function initScatter(completeData, year) {
 
     // Render circles
     const circles = graph.selectAll('circle').data(Object.values(data));
-
     circles
         .enter()
         .append('circle')

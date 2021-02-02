@@ -58,7 +58,7 @@ export function createDatasetPanel(yearSliderValue, yearWorldHappiness) {
 }
 
 // Creates a panel that shows a bar chart visualization
-export function createBarChartPanel(panelTitle, html) {
+export function createBarChartPanel(panelTitle, contentHtml) {
     return jsPanel.create({
         theme: panelTheme,
         borderRadius: '.5rem',
@@ -81,14 +81,14 @@ export function createBarChartPanel(panelTitle, html) {
         dragit: {
             cursor: 'default',
         },
-        content: html,
+        content: contentHtml,
         maximizedMargin: [25, 25, 25, 25],
         closeOnEscape: true,
     });
 }
 
 // Creates a panel that shows a bar chart visualization
-export function createScatterPanel(panelTitle, html) {
+export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
     return jsPanel.create({
         theme: panelTheme,
         borderRadius: '.5rem',
@@ -111,7 +111,8 @@ export function createScatterPanel(panelTitle, html) {
         dragit: {
             cursor: 'default',
         },
-        content: html,
+        content: contentHtml,
+        footerToolbar: footerHtml,
         maximizedMargin: [25, 25, 25, 25],
         closeOnEscape: true,
     });

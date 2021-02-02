@@ -94,9 +94,8 @@ barChartPanel.classList.add('panelInvisible');
 
 let scatterPanel = createScatterPanel(
     'Scatterplot',
-    `<div id="scatter">${new XMLSerializer().serializeToString(
-        scatterButtons
-    )}</div>`
+    '<div id="scatter"></div>',
+    new XMLSerializer().serializeToString(scatterButtons)
 );
 scatterPanel.classList.add('panelInvisible');
 
