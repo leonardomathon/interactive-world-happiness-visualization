@@ -10,7 +10,7 @@ import {
 
 export function initScatter(completeData, year) {
     var data = completeData[year];
-    var category = 'GDP Per Capita ($)';
+    var category = 'Economy (GDP per Capita)';
     var numberOfCountries;
 
     // <input> tag used for year selection
@@ -172,8 +172,7 @@ export function initScatter(completeData, year) {
     const showTooltip = function (d, i) {
         let happinessRankTooltip = i[1]['Happiness Rank'];
         console.log('Category var: ', category);
-        console.log('Category: ', i[1][category.trim()]);
-        console.log('Catergory Manual: ', i[1]['category.toString()']);
+        console.log('Category: ', i[1][category.trim]);
 
         tooltip.transition().duration(200);
         tooltip
@@ -186,7 +185,7 @@ export function initScatter(completeData, year) {
             <strong>Happiness Ranking:</strong> ${formatOrdinal(
                     happinessRankTooltip
                 )}<br/>
-            <strong>${category}:</strong> ${i[1][category]}
+            <strong>${category}:</strong> ${i[1][category].toString().substring(0, 4)}
                 `
             )
             .style('top', d.y - 100 + 'px')
@@ -218,6 +217,7 @@ export function initScatter(completeData, year) {
                     .join('-')} country-circle`
         )
         .attr('fill', (d) => {
+            console.log('d: ', d)
             if (d[1]['Region'] === 'Central and Eastern Europe') {
                 return '#7cbd1e';
             } else if (d[1]['Region'] === 'Western Europe') {
@@ -292,7 +292,6 @@ export function initScatter(completeData, year) {
     };
 
     function regionFocusOn(i, d) {
-        console.log('Focus1', d);
         graph
             .selectAll(
                 `circle:not(.continent-${d['Region'].split(' ').join('-')})`
@@ -301,7 +300,6 @@ export function initScatter(completeData, year) {
     }
 
     function regionFocusOff(i, d) {
-        console.log('Focus2', d);
         graph
             .selectAll(
                 `circle:not(.continent-${d['Region'].split(' ').join('-')})`
@@ -549,18 +547,6 @@ export function initScatter(completeData, year) {
         // yearSliderValue = yearSlider.value;
         console.log('Yearslidesvalue: ', yearSlider.value);
 
-        if (category === 'graphSocialSupport') {
-            label = 'Trust (Government Corruption)';
-        } else if (category === 'graphFreedom') {
-            label = 'Freedom to make life choices';
-        } else if (category === 'graphGenerosity') {
-            label = 'Generosity';
-        } else if (category === 'graphLifeExpectancy') {
-            label = 'Healthy life expectancy';
-        } else if (category === 'graphGdp') {
-            label = 'Economy (GDP per Capita)';
-        }
-
-        updateYear(yearSlider.value, label);
+        updateYear(yearSlider.value, category);
     });
 }
