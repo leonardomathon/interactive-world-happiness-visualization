@@ -171,11 +171,13 @@ export function initBarChart(completeData, country) {
 export function updateBarChartData(completeData, year, country) {
     // Set the data to the country data
     const data = completeData[year][country];
-    const graphData = data;
-    delete graphData['Country'];
-    delete graphData['Region'];
-    delete graphData['Happiness Rank'];
-    delete graphData['Happiness Score'];
+    const graphData = {
+        'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
+        'Freedom to make life choices': data['Freedom to make life choices'],
+        'Generosity': data['Generosity'],
+        'Healthy life expectancy': data['Healthy life expectancy'],
+        'Trust (Government Corruption)': data['Trust (Government Corruption)'],
+    };
 
     // Name on the x-axis
     const barsKeys = Object.keys(graphData);
