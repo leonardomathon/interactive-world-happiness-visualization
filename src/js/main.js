@@ -26,7 +26,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 // Import charts
 import { initBarChart, updateBarChartData } from './chart.js';
 import { initScatter, countryFocusOff, countryFocusOn } from './scatter.js';
-import { initLineChart } from './linechart';
+import { initLineChart, removeLineChart } from './linechart';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
@@ -105,7 +105,7 @@ scatterPanel.classList.add('panelInvisible');
 
 let lineChartPanel = createLineChartPanel(
     'Line chart',
-    '<div id="linechart"></div>'
+    '<div id="lineChart"></div>'
 );
 lineChartPanel.classList.add('panelInvisible');
 
@@ -149,7 +149,6 @@ countryHoverCheckbox.onfocus = function () {
 };
 
 initGlobe(yearWorldHappiness);
-initLineChart();
 
 // Event listeners that listen to click events on the labels
 for (let i = 0; i < yearSliderLabels.length; i++) {
@@ -281,6 +280,9 @@ clickedCountry.registerListener(function (val) {
         barChartPanel.setHeaderTitle(
             `Bar chart of ${hoveredCountry.data.name}`
         );
+
+        // Init line chart
+        initLineChart(worldHappiness, clickedCountry.data.id);
     } else {
         // Remove focus from selected country in scatter plot
         countryFocusOff();
@@ -288,6 +290,9 @@ clickedCountry.registerListener(function (val) {
         // Remove bar chart
         document.getElementById('chart').querySelector('svg').remove();
         barChartPanel.setHeaderTitle('Bar chart');
+
+        // Remove line chart
+        removeLineChart();
     }
 });
 

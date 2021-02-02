@@ -123,7 +123,7 @@ export function createLineChartPanel(panelTitle, contentHtml) {
         borderRadius: '.5rem',
         panelSize: {
             width: 500,
-            height: 500,
+            height: 300,
         },
         position: {
             my: 'right-bottom',

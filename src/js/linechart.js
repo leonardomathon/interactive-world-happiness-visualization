@@ -1,35 +1,32 @@
 import * as d3 from 'd3';
+let svg;
+const totalGraphWidth = 800;
+const totalGraphHeight = 350;
 
-import worldHappiness from '../../datasets/world-happiness.json';
+export function initLineChart(data, countryId) {
+    svg = d3
+        .select('#lineChart')
+        .append('svg')
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .attr('viewBox', `0 0 ${totalGraphWidth} ${totalGraphHeight}`);
+    console.log(data);
 
-export function initLineChart() {
-    const svg = d3.select('#chart').append('svg');
-
-    const width = +svg.attr('width');
-    const height = +svg.attr('height');
-
-    let country = 'China';
-
-    console.log(worldHappiness);
-    console.log(worldHappiness.filter((d) => d['Country'] == country));
+    let dataFilter = [];
+    for (let year = 2015; year <= 2020; year++) {
+        let countryData = data[year][countryId];
+        countryData.Year = year;
+        countryData.ISO = countryId;
+        dataFilter.push(countryData);
+    }
+    render(dataFilter);
 }
-
-// fetch('./world-happiness-cleaned-default.json')
-//     .then((resp) => {
-//         return resp.json();
-//     })
-//     .then((data) => {
-//         const dataFilter = data.filter((d) => d['Country'] == country);
-//         console.log('dataFilter', dataFilter);
-//         render(dataFilter);
-//     });
 
 const render = (data) => {
     const yAxisLabel = 'Happiness Score';
     const xAxisLabel = 'Year';
     const margin = { top: 20, right: 40, bottom: 20, left: 50 };
-    const innerWidth = width - margin.left - margin.right;
-    const innerHeight = height - margin.bottom - margin.top;
+    const innerWidth = totalGraphWidth - margin.left - margin.right;
+    const innerHeight = totalGraphHeight - margin.bottom - margin.top;
     const numberFormat = d3.format('.3f');
 
     const scores = {
@@ -559,35 +556,45 @@ const render = (data) => {
         .attr('y', 130)
         .text(scores.happiness.type)
         .style('font-size', legendFontSize)
+        .style('color', '#fff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 160)
         .text(scores.economy.type)
         .style('font-size', legendFontSize)
+        .style('color', '#fff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 190)
         .text(scores.freedom.type)
         .style('font-size', legendFontSize)
+        .style('color', '#fff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 220)
         .text(scores.health.type)
         .style('font-size', legendFontSize)
+        .style('color', '#fff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 250)
         .text(scores.generosity.type)
         .style('font-size', legendFontSize)
+        .style('color', '#fff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 280)
         .text(scores.trust.type)
         .style('font-size', legendFontSize)
+        .style('color', '#fff')
         .attr('alignment-baseline', 'middle');
 };
+
+export function removeLineChart() {
+    document.getElementById('lineChart').querySelector('svg').remove();
+}
