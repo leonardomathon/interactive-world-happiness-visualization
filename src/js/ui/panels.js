@@ -116,6 +116,33 @@ export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
     });
 }
 
+// Creates a panel that shows a bar chart visualization
+export function createLineChartPanel(panelTitle, contentHtml) {
+    return jsPanel.create({
+        theme: panelTheme,
+        borderRadius: '.5rem',
+        panelSize: {
+            width: 500,
+            height: 500,
+        },
+        position: {
+            my: 'left-top',
+            at: 'left-top',
+            offsetX: 15,
+            offsetY: 425,
+        },
+        headerControls: {
+            minimize: 'remove',
+            close: 'remove',
+            size: 'md',
+        },
+        dragit: {
+            cursor: 'default',
+        },
+        content: contentHtml,
+    });
+}
+
 export function createErrorPanel(errorTitle, errorMsg) {
     jsPanel.hint.create({
         position: 'center-top 0 15 down',

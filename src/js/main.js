@@ -6,6 +6,7 @@ import {
     createDatasetPanel,
     createBarChartPanel,
     createScatterPanel,
+    createLineChartPanel,
     createGPUHintPanel,
     createErrorPanel,
 } from './ui/panels.js';
@@ -76,12 +77,12 @@ let hoveredCountryTag = document.getElementById('hoveredCountry');
 // Toggle buttons for all graphs
 let barChartToggle = document.getElementById('barChartToggle');
 let scatterPlotToggle = document.getElementById('scatterPlotToggle');
-let lineGraphToggle = document.getElementById('lineGraphToggle');
+let lineChartToggle = document.getElementById('lineChartToggle');
 
 // States for all toggle buttons
 let barChartState = false;
 let scatterPlotState = false;
-let lineGraphState = false;
+let lineChartState = false;
 
 // HTML code for the scatter panel
 let scatterButtons = document.getElementById('scatterButtons');
@@ -98,6 +99,12 @@ let scatterPanel = createScatterPanel(
     new XMLSerializer().serializeToString(scatterButtons)
 );
 scatterPanel.classList.add('panelInvisible');
+
+let lineChartPanel = createLineChartPanel(
+    'Line chart',
+    '<div id="linechart"></div>'
+);
+lineChartPanel.classList.add('panelInvisible');
 
 // Config object that holds value of preprocessing effects
 let preprocessingOptions = {
@@ -264,7 +271,7 @@ clickedCountry.registerListener(function (val) {
     if (clickedCountry.data) {
         // Put focus on selected country in scatter plot
         countryFocusOn(clickedCountry.data.name);
-        
+
         // Init bar chart
         initBarChart(worldHappiness, clickedCountry.data.id);
         barChartPanel.setHeaderTitle(
@@ -325,15 +332,17 @@ scatterPlotToggle.addEventListener('click', function (e) {
 });
 
 // Event listerer that listens to line graph toggle button click
-lineGraphToggle.addEventListener('click', function (e) {
+lineChartToggle.addEventListener('click', function (e) {
     // switch state
-    lineGraphState = !lineGraphState;
-    if (scatterPlotState) {
+    lineChartState = !lineChartState;
+    if (lineChartState) {
         // Make the toggle white
-        lineGraphToggle.classList.add('active');
+        lineChartToggle.classList.add('active');
+        lineChartPanel.classList.remove('panelInvisible');
     } else {
         // Remove white toggle
-        lineGraphToggle.classList.remove('active');
+        lineChartToggle.classList.remove('active');
+        lineChartPanel.classList.add('panelInvisible');
     }
 });
 
