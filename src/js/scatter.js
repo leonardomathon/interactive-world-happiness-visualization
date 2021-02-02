@@ -425,7 +425,6 @@ export function initScatter(completeData, year) {
                 } else if (d[1]['Region'] === 'Australia and New Zealand') {
                     return '#138D75';
                 } else {
-                    console.log('Outlier: ', d[1]['Country'], d[1]['Region']); 
                     return 'red';
                 }
             })

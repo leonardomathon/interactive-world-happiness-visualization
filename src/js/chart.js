@@ -70,15 +70,18 @@ export function initBarChart(completeData, country) {
 
     // Set the data to the country data
     const data = completeData[yearSlider.value][country];
-    const graphData = data;
-    delete graphData['Country'];
-    delete graphData['Region'];
-    delete graphData['Happiness Rank'];
-    delete graphData['Happiness Score'];
+    const graphData = {
+        'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
+        'Freedom to make life choices': data['Economy (GDP per Capita)'],
+        'Generosity': data['Economy (GDP per Capita)'],
+        'Healthy life expectancy': data['Economy (GDP per Capita)'],
+        'Trust (Government Corruption': data['Economy (GDP per Capita)'],
+    };
+    console.log('Graphdata: ', graphData);
 
     // Name on the x-axis
     const barsKeys = Object.keys(graphData);
-    // Value on the x-axis
+    // Value on the y-axis
     const barsValues = Object.values(graphData);
 
     // Create bar charts
