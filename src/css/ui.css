@@ -164,7 +164,6 @@ input[type=range]:focus::-moz-range-track {
     transition: all 100ms ease-in;
     border-bottom: 2px solid transparent;
     position: relative;
-
 }
 
 /* Style of the categories on hover */
@@ -176,14 +175,15 @@ input[type=range]:focus::-moz-range-track {
 
 /* Style of the active category */
 .scatter-menu-button.active {
-    border-bottom: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff; 
     text-decoration: none;
-    text-shadow: 0 0 .65px #333, 0 0 .65px #333;
+    text-shadow: 0 0 .65px #333, 0 0 .65px #333; 
     color: #ffffff;
+    background-color: transparent;
 }
 
 /* Dropdown visible on category hover */
-.scatter-menu-button:hover .nav__dropdown {
+.scatter-menu-button:hover .category-tooltip {
     opacity: 1;
     visibility: visible;
 }
