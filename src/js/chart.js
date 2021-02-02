@@ -75,7 +75,7 @@ export function initBarChart(completeData, country) {
         'Freedom to make life choices': data['Freedom to make life choices'],
         'Generosity': data['Generosity'],
         'Healthy life expectancy': data['Healthy life expectancy'],
-        'Trust (Government Corruption': data['Trust (Government Corruption'],
+        'Trust (Government Corruption)': data['Trust (Government Corruption)'],
     };
     console.log('Graphdata: ', graphData);
 
