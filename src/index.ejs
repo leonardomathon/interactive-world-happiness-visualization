@@ -133,6 +133,48 @@
         </div>
 
     </div>
+
+    <div class='scatter-menu z-20 scatterButtonsInvisible relative flex justify-between items-center'
+        id='scatterButtons'>
+        <div class='scatter-menu-buttons buttons'>
+            <a href='#' data-text='Economy (GDP per Capita)' class='button-graphGdp scatter-menu-button active'>Economy
+                (GDP
+                per Capita)
+                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Economy (GDP per Capita)</strong>
+                </p>
+            </a>
+            &nbsp;&nbsp;
+            <a href='#' data-text='Trust (Government Corruption)'
+                class='button-graphSocialSupport scatter-menu-button'>Trust
+                (Government Corruption)
+                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Trust (Government
+                        Corruption)</strong></p>
+            </a>
+            &nbsp;&nbsp;
+            <a href='#' data-text='Freedom to make life choices' class='button-graphFreedom scatter-menu-button'>Freedom
+                to
+                make life choices
+                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Freedom to make life
+                        choices</strong>
+                </p>
+            </a>
+            &nbsp;&nbsp;
+            <a href='#' data-text='Generosity' class='button-graphGenerosity scatter-menu-button'>Generosity
+                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Generosity</strong></p>
+            </a>
+            &nbsp;&nbsp;
+            <a href='#' data-text='Healthy life expectancy'
+                class='button-graphLifeExpectancy scatter-menu-button'>Healthy
+                life expectancy
+                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Healthy life expectancy</strong>
+                </p>
+            </a>
+            &nbsp;&nbsp;
+        </div>
+    </div>
+
+
+
     <div id="worldContainer" class="absolute top-0"></div>
     <script src="<%= htmlWebpackPlugin.files.js[1] %>"></script>
 </body>

@@ -48,7 +48,6 @@ export function createDatasetPanel(yearSliderValue, yearWorldHappiness) {
             offsetX: -5,
             offsetY: -69,
         },
-        maximizedMargin: [25, 25, 25, 25],
         closeOnEscape: true,
         data: JSON.stringify(yearWorldHappiness, null, '\t'),
         callback: function () {
@@ -57,8 +56,8 @@ export function createDatasetPanel(yearSliderValue, yearWorldHappiness) {
     });
 }
 
-// Creates a panel that shows a visualization
-export function createGraphPanel(panelTitle, html) {
+// Creates a panel that shows a bar chart visualization
+export function createBarChartPanel(panelTitle, contentHtml) {
     return jsPanel.create({
         theme: panelTheme,
         borderRadius: '.5rem',
@@ -81,9 +80,39 @@ export function createGraphPanel(panelTitle, html) {
         dragit: {
             cursor: 'default',
         },
-        content: html,
-        maximizedMargin: [25, 25, 25, 25],
-        closeOnEscape: true,
+        content: contentHtml,
+    });
+}
+
+// Creates a panel that shows a bar chart visualization
+export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
+    return jsPanel.create({
+        theme: panelTheme,
+        borderRadius: '.5rem',
+        panelSize: {
+            width: 550,
+            height: 400,
+        },
+        resizeit: {
+            aspectRatio: 'content',
+        },
+        position: {
+            my: 'left-top',
+            at: 'left-top',
+            offsetX: 15,
+            offsetY: 425,
+        },
+        headerControls: {
+            minimize: 'remove',
+            close: 'remove',
+            size: 'md',
+        },
+        headerTitle: panelTitle,
+        dragit: {
+            cursor: 'default',
+        },
+        content: contentHtml,
+        footerToolbar: footerHtml,
     });
 }
 
@@ -101,30 +130,3 @@ export function createErrorPanel(errorTitle, errorMsg) {
         },
     });
 }
-
-// // Creates a panel that shows the chart visualization
-// export function createChartPanel(completeData, country) {
-//     jsPanel.create({
-//         theme: {
-//             bgPanel: '#000',
-//             bgContent: '#0f0f0f',
-//             colorHeader: '#fff',
-//             colorContent: `#fff`,
-//         },
-//         panelSize: {
-//             width: () => window.innerWidth * 0.3,
-//             height: '50vh',
-//         },
-//         headerTitle:
-//             'World Happiness report',
-//         dragit: {
-//             cursor: 'default',
-//         },
-//         maximizedMargin: [25, 25, 25, 25],
-//         closeOnEscape: true,
-//         data: initChart(completeData, country),
-//         callback: function () {
-//             this.content.innerHTML = `<pre><code>${initChart(completeData, country)}</code></pre>`;
-//         },
-//     });
-// }

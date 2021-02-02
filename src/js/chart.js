@@ -70,15 +70,17 @@ export function initBarChart(completeData, country) {
 
     // Set the data to the country data
     const data = completeData[yearSlider.value][country];
-    const graphData = data;
-    delete graphData['Country'];
-    delete graphData['Region'];
-    delete graphData['Happiness Rank'];
-    delete graphData['Happiness Score'];
+    const graphData = {
+        'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
+        'Freedom to make life choices': data['Freedom to make life choices'],
+        'Generosity': data['Generosity'],
+        'Healthy life expectancy': data['Healthy life expectancy'],
+        'Trust (Government Corruption)': data['Trust (Government Corruption)'],
+    };
 
     // Name on the x-axis
     const barsKeys = Object.keys(graphData);
-    // Value on the x-axis
+    // Value on the y-axis
     const barsValues = Object.values(graphData);
 
     // Create bar charts
@@ -141,7 +143,7 @@ export function initBarChart(completeData, country) {
         const hover = graph
             .append('text')
             .transition()
-            .duration(500)
+            .duration(1000)
             .attr('id', 't' + d.x + '-' + d.y)
             .attr(
                 'y',
@@ -168,11 +170,13 @@ export function initBarChart(completeData, country) {
 export function updateBarChartData(completeData, year, country) {
     // Set the data to the country data
     const data = completeData[year][country];
-    const graphData = data;
-    delete graphData['Country'];
-    delete graphData['Region'];
-    delete graphData['Happiness Rank'];
-    delete graphData['Happiness Score'];
+    const graphData = {
+        'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
+        'Freedom to make life choices': data['Freedom to make life choices'],
+        'Generosity': data['Generosity'],
+        'Healthy life expectancy': data['Healthy life expectancy'],
+        'Trust (Government Corruption)': data['Trust (Government Corruption)'],
+    };
 
     // Name on the x-axis
     const barsKeys = Object.keys(graphData);
@@ -194,11 +198,9 @@ export function updateBarChartData(completeData, year, country) {
         .transition()
         .duration(500)
         .attr('y', (d) => {
-            console.log('new d', d);
             return y(d.value);
         })
         .attr('height', (d) => {
-            console.log('new height', d.value);
             return graphHeight - y(d.value);
         });
 }

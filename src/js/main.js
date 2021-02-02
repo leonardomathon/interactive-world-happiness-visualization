@@ -3,9 +3,9 @@ import * as clm from 'country-locale-map';
 
 // Import custom js
 import {
-    createChartPanel,
     createDatasetPanel,
-    createGraphPanel,
+    createBarChartPanel,
+    createScatterPanel,
     createGPUHintPanel,
     createErrorPanel,
 } from './ui/panels.js';
@@ -25,6 +25,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
 import { initBarChart, updateBarChartData } from './chart.js';
+import { initScatter, countryFocusOff, countryFocusOn } from './scatter.js';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -34,6 +35,9 @@ let showDataset = document.getElementById('showDataset');
 
 // <input> tag used for year selection
 let yearSlider = document.getElementById('yearSlider');
+
+// buttons for category selection
+let buttons = document.getElementById('scatterButtons');
 
 // Variable that holds the current selected year (default is 2018)
 let yearSliderValue = 2018;
@@ -79,9 +83,21 @@ let barChartState = false;
 let scatterPlotState = false;
 let lineGraphState = false;
 
+// HTML code for the scatter panel
+let scatterButtons = document.getElementById('scatterButtons');
+scatterButtons.classList.remove('scatterButtonsInvisible');
+scatterButtons.remove();
+
 // Panels for each visualization
-let barChartPanel = createGraphPanel('Bar chart', '<div id="chart"></div>');
+let barChartPanel = createBarChartPanel('Bar chart', '<div id="chart"></div>');
 barChartPanel.classList.add('panelInvisible');
+
+let scatterPanel = createScatterPanel(
+    'Scatterplot',
+    '<div id="scatter"></div>',
+    new XMLSerializer().serializeToString(scatterButtons)
+);
+scatterPanel.classList.add('panelInvisible');
 
 // Config object that holds value of preprocessing effects
 let preprocessingOptions = {
@@ -246,12 +262,18 @@ hoveredCountry.registerListener(function (val) {
 // Event listener that listens to clickedCountry change and updates charts
 clickedCountry.registerListener(function (val) {
     if (clickedCountry.data) {
+        // Put focus on selected country in scatter plot
+        countryFocusOn(clickedCountry.data.name);
+        
         // Init bar chart
         initBarChart(worldHappiness, clickedCountry.data.id);
         barChartPanel.setHeaderTitle(
             `Bar chart of ${hoveredCountry.data.name}`
         );
     } else {
+        // Remove focus from selected country in scatter plot
+        countryFocusOff();
+
         // Remove bar chart
         document.getElementById('chart').querySelector('svg').remove();
         barChartPanel.setHeaderTitle('Bar chart');
@@ -294,9 +316,11 @@ scatterPlotToggle.addEventListener('click', function (e) {
     if (scatterPlotState) {
         // Make the toggle white
         scatterPlotToggle.classList.add('active');
+        scatterPanel.classList.remove('panelInvisible');
     } else {
         // Remove white toggle
         scatterPlotToggle.classList.remove('active');
+        scatterPanel.classList.add('panelInvisible');
     }
 });
 
@@ -347,3 +371,5 @@ hotkeys('esc', function (event, handler) {
     event.preventDefault();
     resetClickedCountry();
 });
+
+initScatter(worldHappiness, yearSliderValue);
