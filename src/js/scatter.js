@@ -14,32 +14,32 @@ export function initScatter(completeData, year) {
         return selectedYear === '2015'
             ? 158
             : selectedYear === '2016'
-            ? 157
-            : selectedYear === '2017'
-            ? 155
-            : selectedYear === '2018'
-            ? 156
-            : selectedYear === '2019'
-            ? 155
-            : selectedYear === '2020'
-            ? 153
-            : 0;
+                ? 157
+                : selectedYear === '2017'
+                    ? 155
+                    : selectedYear === '2018'
+                        ? 156
+                        : selectedYear === '2019'
+                            ? 155
+                            : selectedYear === '2020'
+                                ? 153
+                                : 0;
     }
 
     numberOfCountries =
         year === 2015
             ? 158
             : year === 2016
-            ? 157
-            : year === 2017
-            ? 155
-            : year === 2018
-            ? 156
-            : year === 2019
-            ? 155
-            : year === 2020
-            ? 153
-            : 0;
+                ? 157
+                : year === 2017
+                    ? 155
+                    : year === 2018
+                        ? 156
+                        : year === 2019
+                            ? 155
+                            : year === 2020
+                                ? 153
+                                : 0;
 
     // Animations
     const animation_duration = 1000;
@@ -148,6 +148,9 @@ export function initScatter(completeData, year) {
     // Render initial tooltip
     const showTooltip = function (d, i) {
         let happinessRankTooltip = i[1]['Happiness Rank'];
+        console.log('Category var: ', category);
+        console.log('Category: ', i[1][category.trim()]);
+        console.log('Catergory Manual: ', i[1]['category.toString()']);
 
         tooltip.transition().duration(200);
         tooltip
@@ -156,8 +159,9 @@ export function initScatter(completeData, year) {
                 `
             <strong>Country:</strong> ${i[1]['Country']} (${i[1]['Region']})<br/>
             <strong>Happiness Ranking:</strong> ${formatOrdinal(
-                happinessRankTooltip
-            )}
+                    happinessRankTooltip
+                )}<br/>
+            <strong>${category}:</strong> ${i[1][category]}
                 `
             )
             .style('top', d.y - 100 + 'px')
@@ -225,27 +229,28 @@ export function initScatter(completeData, year) {
         .duration(animation_duration)
         .ease(animation_easing)
         .attr('r', (d) => {
-        if (countriesOfTheWorld[d[0]] === undefined) {
-            return 10;
-        } else {
-            if (countriesOfTheWorld[d[0]].population > 800000000) {
-                return countriesOfTheWorld[d[0]]['Population'] / 25000000;
-            } else if (countriesOfTheWorld[d[0]]['Population'] > 50000000) {
-                return countriesOfTheWorld[d[0]]['Population'] / 10000000;
-            } else if (countriesOfTheWorld[d[0]]['Population'] > 1000000) {
-                return countriesOfTheWorld[d[0]]['Population'] / 1500000;
+            if (countriesOfTheWorld[d[0]] === undefined) {
+                return 10;
             } else {
-                return countriesOfTheWorld[d[0]]['Population'] / 100000;
+                if (countriesOfTheWorld[d[0]].population > 800000000) {
+                    return countriesOfTheWorld[d[0]]['Population'] / 25000000;
+                } else if (countriesOfTheWorld[d[0]]['Population'] > 50000000) {
+                    return countriesOfTheWorld[d[0]]['Population'] / 10000000;
+                } else if (countriesOfTheWorld[d[0]]['Population'] > 1000000) {
+                    return countriesOfTheWorld[d[0]]['Population'] / 1500000;
+                } else {
+                    return countriesOfTheWorld[d[0]]['Population'] / 100000;
+                }
             }
-        }
         })
         .attr('cy', (d) => {
             let happinessRankCircle = d[1]['Happiness Rank'];
             return y(
                 (numberOfCountries + 1 - happinessRankCircle) /
-                    numberOfCountries
+                numberOfCountries
             );
         });
+
 
     // Legenda
     const continents = {
@@ -293,7 +298,7 @@ export function initScatter(completeData, year) {
         .append('rect')
         .attr('x', 0)
         .attr('y', function (d, i) {
-            return 25 * i;
+            return 20 * i;
         })
         .attr('width', 20)
         .attr('height', 20)
@@ -331,7 +336,7 @@ export function initScatter(completeData, year) {
         .attr('text-anchor', 'start')
         .attr('class', (d) => `legend-${d.Region.split(' ').join('-')}`)
         .attr('y', function (d, i) {
-            return 25 * i;
+            return 20 * i;
         })
         .attr('dy', '1.15em')
         .text(function (d) {
@@ -354,7 +359,7 @@ export function initScatter(completeData, year) {
         .style('fill', '#FFFFFF');
 
     // Update the data according to the new category
-    function updateYear(year, category) {
+    function updateYear(year, label) {
         // Render circles
         const countryCircles = graph.selectAll('.country-circle');
         countryCircles.remove();
@@ -401,7 +406,7 @@ export function initScatter(completeData, year) {
             .attr('stroke', '#CDCDCD')
             .attr('stroke-width', '2px')
             .attr('cx', (d) => {
-                return x(d[1][category]);
+                return x(d[1][label]);
             })
             .on('mouseover', showTooltip)
             .on('mousemove', moveTooltip)
@@ -429,24 +434,23 @@ export function initScatter(completeData, year) {
                 let happinessRankCircle = d[1]['Happiness Rank'];
                 return y(
                     (numberCountries(year) + 1 - happinessRankCircle) /
-                        numberCountries(year)
+                    numberCountries(year)
                 );
             });
     }
 
     // Update the data according to the new category
-    function updateData(category) {
-        let label;
-        if (category === 'graphSocialSupport') {
-            label = 'Trust (Government Corruption)';
-        } else if (category === 'graphFreedom') {
-            label = 'Freedom to make life choices';
-        } else if (category === 'graphGenerosity') {
-            label = 'Generosity';
-        } else if (category === 'graphLifeExpectancy') {
-            label = 'Healthy life expectancy';
-        } else if (category === 'graphGdp') {
-            label = 'Economy (GDP per Capita)';
+    function updateData(label) {
+        if (label === 'graphSocialSupport') {
+            category = 'Trust (Government Corruption)';
+        } else if (label === 'graphFreedom') {
+            category = 'Freedom to make life choices';
+        } else if (label === 'graphGenerosity') {
+            category = 'Generosity';
+        } else if (label === 'graphLifeExpectancy') {
+            category = 'Healthy life expectancy';
+        } else if (label === 'graphGdp') {
+            category = 'Economy (GDP per Capita)';
         }
 
         graph
@@ -455,25 +459,24 @@ export function initScatter(completeData, year) {
             .duration(500)
             .ease(animation_easing)
             .attr('cx', (d) => {
-                return x(d[1][label]);
+                return x(d[1][category]);
             });
 
         updateAxisLabel(category);
     }
 
-    function updateAxisLabel(category) {
+    function updateAxisLabel(label) {
         // Update the category displayed on the x-axis
-        let label;
-        if (category === 'graphSocialSupport') {
-            label = 'Trust (Government Corruption)';
-        } else if (category === 'graphFreedom') {
-            label = 'Freedom to make life choices';
-        } else if (category === 'graphGenerosity') {
-            label = 'Generosity';
-        } else if (category === 'graphLifeExpectancy') {
-            label = 'Healthy life expectancy';
-        } else if (category === 'graphGdp') {
-            label = 'Economy (GDP per Capita)';
+        if (label === 'graphSocialSupport') {
+            category = 'Trust (Government Corruption)';
+        } else if (label === 'graphFreedom') {
+            category = 'Freedom to make life choices';
+        } else if (label === 'graphGenerosity') {
+            category = 'Generosity';
+        } else if (label === 'graphLifeExpectancy') {
+            category = 'Healthy life expectancy';
+        } else if (label === 'graphGdp') {
+            category = 'Economy (GDP per Capita)';
         }
 
         // Update the category displayed on the x-axis
@@ -490,7 +493,6 @@ export function initScatter(completeData, year) {
 
         if (currentBtnType === 'scatter-menu-button') {
             currentBtnClass = currentBtn.classList[0].split('-')[1];
-            category = currentBtnClass;
         }
 
         if (currentBtnType === 'scatter-menu-button') {
@@ -509,7 +511,6 @@ export function initScatter(completeData, year) {
         // yearSliderValue = yearSlider.value;
         console.log('Yearslidesvalue: ', yearSlider.value);
 
-        let label = 'Economy (GDP per Capita)';
         if (category === 'graphSocialSupport') {
             label = 'Trust (Government Corruption)';
         } else if (category === 'graphFreedom') {
