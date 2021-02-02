@@ -152,13 +152,13 @@ export function initScatter(completeData, year) {
         .style('display', 'block');
 
     const setClickedCountryScatter = function (d, i) {
-        console.log('Country: ', i[1]['Country']);
         let countryClicked = {
             id: i[0],
             name: i[1]['Country'],
             index: null,
         };
         if (clickedCountry.data) {
+            countryFocusOff();
             resetClickedCountry();
         }
         // Update hovered country
@@ -167,6 +167,7 @@ export function initScatter(completeData, year) {
             name: i[1]['Country'],
         };
         setClickedCountry(countryClicked);
+        countryFocusOn(i[1]['Country']);
     };
 
     // Render initial tooltip
@@ -210,7 +211,7 @@ export function initScatter(completeData, year) {
         .attr(
             'class',
             (d) =>
-                `country ${d[1]['Country']} continent-${d[1]['Region']
+                `country-${d[1]['Country']} continent-${d[1]['Region']
                     .split(' ')
                     .join('-')} country-circle`
         )
@@ -291,7 +292,24 @@ export function initScatter(completeData, year) {
         ANZ: { Region: 'Australia and New Zealand' }
     };
 
+    function countryFocusOn(country) {
+        graph
+            .selectAll(
+                `circle:not(.country-${country.split(' ').join('-')})`
+            )
+            .attr('opacity', '0.05');
+    }
+
+    function countryFocusOff() {
+        graph
+            .selectAll(
+                `circle`
+            )
+            .attr('opacity', '0.7');
+    }
+
     function regionFocusOn(i, d) {
+        console.log('Test2: ', `circle:not(.continent-${d['Region'].split(' ').join('-')})`)
         graph
             .selectAll(
                 `circle:not(.continent-${d['Region'].split(' ').join('-')})`
@@ -400,7 +418,7 @@ export function initScatter(completeData, year) {
             .attr(
                 'class',
                 (d) =>
-                    `country ${d[1]['Country']} continent-${d[1]['Region']
+                    `country-${d[1]['Country']} continent-${d[1]['Region']
                         .split(' ')
                         .join('-')} country-circle`
             )
