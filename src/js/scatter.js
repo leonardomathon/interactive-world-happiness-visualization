@@ -1,6 +1,13 @@
 import * as d3 from 'd3';
 import countriesOfTheWorld from '../../Datasets/countries-of-the-world.json';
 
+import {
+    hoveredCountry,
+    clickedCountry,
+    setClickedCountry,
+    resetClickedCountry,
+} from './webgl/globe/globe.js';
+
 export function initScatter(completeData, year) {
     var data = completeData[year];
     var category = 'GDP Per Capita ($)';
@@ -144,6 +151,23 @@ export function initScatter(completeData, year) {
         .style('position', 'absolute')
         .style('display', 'block');
 
+    const setClickedCountryScatter = function (d, i) {
+        let countryClicked = {
+            id: i[0],
+            name: countriesOfTheWorld[i[0]]['Country'],
+            index: null,
+        };
+        if (clickedCountry.data) {
+            resetClickedCountry();
+        }
+        setClickedCountry(countryClicked);
+        // Update hovered country
+        hoveredCountry.data = {
+            id: i[0],
+            name: countriesOfTheWorld[i[0]]['Country'],
+        };
+    };
+
     // Render initial tooltip
     const showTooltip = function (d, i) {
         let happinessRankTooltip = i[1]['Happiness Rank'];
@@ -221,6 +245,7 @@ export function initScatter(completeData, year) {
         .on('mouseover', showTooltip)
         .on('mousemove', moveTooltip)
         .on('mouseleave', hideTooltip)
+        .on('click', setClickedCountryScatter)
         .transition()
         .delay((d, i) => i * animation_delay)
         .duration(animation_duration)
