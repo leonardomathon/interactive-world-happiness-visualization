@@ -171,16 +171,13 @@ export function initScatter(completeData, year) {
     // Render initial tooltip
     const showTooltip = function (d, i) {
         let happinessRankTooltip = i[1]['Happiness Rank'];
-        console.log('Category var: ', category);
-        console.log('Category: ', i[1][category.trim]);
 
         tooltip.transition().duration(200);
         tooltip
             .style('visibility', 'visible')
             .html(
                 `
-            <strong>Country:</strong> ${i[1]['Country']} (${
-                    i[1]['Region']
+            <strong>Country:</strong> ${i[1]['Country']} (${i[1]['Region']
                 })<br/>
             <strong>Happiness Ranking:</strong> ${formatOrdinal(
                     happinessRankTooltip
@@ -217,7 +214,6 @@ export function initScatter(completeData, year) {
                     .join('-')} country-circle`
         )
         .attr('fill', (d) => {
-            console.log('d: ', d)
             if (d[1]['Region'] === 'Central and Eastern Europe') {
                 return '#7cbd1e';
             } else if (d[1]['Region'] === 'Western Europe') {
@@ -236,6 +232,8 @@ export function initScatter(completeData, year) {
                 return '#E74C3C';
             } else if (d[1]['Region'] === 'North America') {
                 return '#3498DB';
+            } else if (d[1]['Region'] === 'Australia and New Zealand') {
+                return '#138D75';
             } else {
                 return 'red';
             }
@@ -289,6 +287,7 @@ export function initScatter(completeData, year) {
         SSA: { Region: 'Sub-Saharan Africa' },
         LAC: { Region: 'Latin America and Caribbean' },
         NA: { Region: 'North America' },
+        ANZ: { Region: 'Australia and New Zealand'}
     };
 
     function regionFocusOn(i, d) {
@@ -327,25 +326,26 @@ export function initScatter(completeData, year) {
         .attr('width', 20)
         .attr('height', 20)
         .style('fill', function (d) {
-            console.log('Focus3', d);
             if (d['Region'] === 'Central and Eastern Europe') {
                 return '#7cbd1e';
-            } else if (d.Region === 'Western Europe') {
+            } else if (d['Region'] === 'Western Europe') {
                 return '#ff1f5a';
-            } else if (d.Region === 'Southern Asia') {
+            } else if (d['Region'] === 'Southern Asia') {
                 return '#303481';
-            } else if (d.Region === 'Southeastern Asia') {
+            } else if (d['Region'] === 'Southeastern Asia') {
                 return '#ff5b44';
-            } else if (d.Region === 'Eastern Asia') {
+            } else if (d['Region'] === 'Eastern Asia') {
                 return '#2fc5cc';
-            } else if (d.Region === 'Middle East and Northern Africa') {
+            } else if (d['Region'] === 'Middle East and Northern Africa') {
                 return '#F7DC6F';
-            } else if (d.Region === 'Sub-Saharan Africa') {
+            } else if (d['Region'] === 'Sub-Saharan Africa') {
                 return '#BB8FCE';
-            } else if (d.Region === 'Latin America and Caribbean') {
+            } else if (d['Region'] === 'Latin America and Caribbean') {
                 return '#E74C3C';
-            } else if (d.Region === 'North America') {
+            } else if (d['Region'] === 'North America') {
                 return '#3498DB';
+            } else if (d['Region'] === 'Australia and New Zealand') {
+                return '#138D75';
             } else {
                 return 'red';
             }
@@ -414,9 +414,7 @@ export function initScatter(completeData, year) {
                     return '#ff5b44';
                 } else if (d[1]['Region'] === 'Eastern Asia') {
                     return '#2fc5cc';
-                } else if (
-                    d[1]['Region'] === 'Middle East and Northern Africa'
-                ) {
+                } else if (d[1]['Region'] === 'Middle East and Northern Africa') {
                     return '#F7DC6F';
                 } else if (d[1]['Region'] === 'Sub-Saharan Africa') {
                     return '#BB8FCE';
@@ -424,7 +422,10 @@ export function initScatter(completeData, year) {
                     return '#E74C3C';
                 } else if (d[1]['Region'] === 'North America') {
                     return '#3498DB';
+                } else if (d[1]['Region'] === 'Australia and New Zealand') {
+                    return '#138D75';
                 } else {
+                    console.log('Outlier: ', d[1]['Country'], d[1]['Region']); 
                     return 'red';
                 }
             })
