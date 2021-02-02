@@ -142,6 +142,10 @@ input[type=range]:focus::-moz-range-track {
 
 /* Scatter plot */
 /* Location of categories */
+.scatterButtonsInvisible {
+    display: none !important;
+}
+
 .header {
     position: absolute;
     margin-top: 50px;

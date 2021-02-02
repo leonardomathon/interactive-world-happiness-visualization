@@ -85,6 +85,7 @@ let lineGraphState = false;
 
 // HTML code for the scatter panel
 let scatterButtons = document.getElementById('scatterButtons');
+scatterButtons.classList.remove('scatterButtonsInvisible');
 scatterButtons.remove();
 
 // Panels for each visualization
