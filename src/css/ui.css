@@ -146,7 +146,7 @@ input[type=range]:focus::-moz-range-track {
     display: none !important;
 }
 
-.header {
+.scatter-menu {
     position: absolute;
     margin-top: 50px;
     margin-left: 100px;
@@ -156,44 +156,44 @@ input[type=range]:focus::-moz-range-track {
 }
 
 /* Right margin of the categories */
-.header__btn-group {
+.scatter-menu-buttons {
     margin-right: 2rem;
 }
 
 /* Style of the categories */
-.header-graph__btn {
+.scatter-menu-button {
     color: #ffffff;
     text-transform: uppercase;
     text-decoration: none;
     transition: all 100ms ease-in;
     border-bottom: 2px solid transparent;
     position: relative;
-
 }
 
 /* Style of the categories on hover */
-.header-graph__btn:hover {
+.scatter-menu-button:hover {
     border-bottom: 2px solid #ffffff;
     text-decoration: none;
     color: #ffffff;
 }
 
 /* Style of the active category */
-.header-graph__btn.active {
-    border-bottom: 2px solid #ffffff;
+.scatter-menu-button.active {
+    border-bottom: 2px solid #ffffff; 
     text-decoration: none;
-    text-shadow: 0 0 .65px #333, 0 0 .65px #333;
+    text-shadow: 0 0 .65px #333, 0 0 .65px #333; 
     color: #ffffff;
+    background-color: transparent;
 }
 
 /* Dropdown visible on category hover */
-.header-graph__btn:hover .nav__dropdown {
+.scatter-menu-button:hover .category-tooltip {
     opacity: 1;
     visibility: visible;
 }
 
 /* nav dropdown */
-.nav__dropdown {
+.category-tooltip {
     opacity: 0;
     visibility: hidden;
     position: absolute;
@@ -213,7 +213,7 @@ input[type=range]:focus::-moz-range-track {
 }
 
 /* Outer traingle of pointer */
-.nav__dropdown:before {
+.category-tooltip:before {
     content: '';
     width: 0;
     height: 0;
@@ -226,7 +226,7 @@ input[type=range]:focus::-moz-range-track {
 }
 
 /* Inner traingle of pointer */
-.nav__dropdown:after {
+.category-tooltip:after {
     content: '';
     width: 0;
     height: 0;
@@ -238,6 +238,6 @@ input[type=range]:focus::-moz-range-track {
     top: -12px;
 }
 
-.country-bubble:hover {
+.country-circle:hover {
     stroke: #000000;
 }
