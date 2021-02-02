@@ -437,6 +437,7 @@ export function initScatter(completeData, year) {
             .on('mouseover', showTooltip)
             .on('mousemove', moveTooltip)
             .on('mouseleave', hideTooltip)
+            .on('click', setClickedCountryScatter)
             .transition()
             .delay((d, i) => i * animation_delay)
             .duration(animation_duration)
