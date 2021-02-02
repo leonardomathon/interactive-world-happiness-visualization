@@ -152,6 +152,7 @@ export function initScatter(completeData, year) {
         .style('display', 'block');
 
     const setClickedCountryScatter = function (d, i) {
+        console.log('Country: ', i[1]['Country']);
         let countryClicked = {
             id: i[0],
             name: i[1]['Country'],
@@ -160,12 +161,12 @@ export function initScatter(completeData, year) {
         if (clickedCountry.data) {
             resetClickedCountry();
         }
-        setClickedCountry(countryClicked);
         // Update hovered country
         hoveredCountry.data = {
             id: i[0],
             name: i[1]['Country'],
         };
+        setClickedCountry(countryClicked);
     };
 
     // Render initial tooltip
@@ -287,7 +288,7 @@ export function initScatter(completeData, year) {
         SSA: { Region: 'Sub-Saharan Africa' },
         LAC: { Region: 'Latin America and Caribbean' },
         NA: { Region: 'North America' },
-        ANZ: { Region: 'Australia and New Zealand'}
+        ANZ: { Region: 'Australia and New Zealand' }
     };
 
     function regionFocusOn(i, d) {

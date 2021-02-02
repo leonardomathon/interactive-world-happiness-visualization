@@ -77,7 +77,6 @@ export function initBarChart(completeData, country) {
         'Healthy life expectancy': data['Healthy life expectancy'],
         'Trust (Government Corruption)': data['Trust (Government Corruption)'],
     };
-    console.log('Graphdata: ', graphData);
 
     // Name on the x-axis
     const barsKeys = Object.keys(graphData);
@@ -199,11 +198,9 @@ export function updateBarChartData(completeData, year, country) {
         .transition()
         .duration(500)
         .attr('y', (d) => {
-            console.log('new d', d);
             return y(d.value);
         })
         .attr('height', (d) => {
-            console.log('new height', d.value);
             return graphHeight - y(d.value);
         });
 }

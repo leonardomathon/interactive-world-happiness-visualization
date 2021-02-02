@@ -264,6 +264,7 @@ clickedCountry.registerListener(function (val) {
     if (clickedCountry.data) {
         // Init bar chart
         initBarChart(worldHappiness, clickedCountry.data.id);
+        console.log('name: ', hoveredCountry.data.name);
         barChartPanel.setHeaderTitle(
             `Bar chart of ${hoveredCountry.data.name}`
         );
