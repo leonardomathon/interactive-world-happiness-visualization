@@ -1,9 +1,7 @@
 import * as d3 from 'd3';
-import countriesPopulation from '../../Datasets/countries-of-the-world.json';
+import countriesOfTheWorld from '../../Datasets/countries-of-the-world.json';
 
 export function initScatter(completeData, year) {
-    console.log('data: ', data);
-
     var data = completeData[year];
     var category = 'GDP Per Capita ($)';
     var numberOfCountries;
@@ -148,14 +146,16 @@ export function initScatter(completeData, year) {
 
     // Render initial tooltip
     const showTooltip = function (d, i) {
-        let happinessRankTooltip = i['Happiness Rank'];
+        let happinessRankTooltip = i[1]['Happiness Rank'];
 
         tooltip.transition().duration(200);
         tooltip
             .style('visibility', 'visible')
             .html(
                 `
-            <strong>Country:</strong> ${i.Country} (${i.Region})<br/>
+            <strong>Country:</strong> ${i[1]['Country']} (${
+                    i[1]['Region']
+                })<br/>
             <strong>Happiness Ranking:</strong> ${formatOrdinal(
                 happinessRankTooltip
             )}
@@ -177,35 +177,36 @@ export function initScatter(completeData, year) {
     };
 
     // Render circles
-    const circles = graph.selectAll('circle').data(Object.values(data));
+    const circles = graph.selectAll('circle').data(Object.entries(data));
+
     circles
         .enter()
         .append('circle')
         .attr(
             'class',
             (d) =>
-                `country ${d.Country} continent-${d.Region.split(' ').join(
-                    '-'
-                )} country-circle`
+                `country ${d[1]['Country']} continent-${d[1]['Region']
+                    .split(' ')
+                    .join('-')} country-circle`
         )
         .attr('fill', (d) => {
-            if (d.Region === 'Central and Eastern Europe') {
+            if (d[1]['Region'] === 'Central and Eastern Europe') {
                 return '#7cbd1e';
-            } else if (d.Region === 'Western Europe') {
+            } else if (d[1]['Region'] === 'Western Europe') {
                 return '#ff1f5a';
-            } else if (d.Region === 'Southern Asia') {
+            } else if (d[1]['Region'] === 'Southern Asia') {
                 return '#303481';
-            } else if (d.Region === 'Southeastern Asia') {
+            } else if (d[1]['Region'] === 'Southeastern Asia') {
                 return '#ff5b44';
-            } else if (d.Region === 'Eastern Asia') {
+            } else if (d[1]['Region'] === 'Eastern Asia') {
                 return '#2fc5cc';
-            } else if (d.Region === 'Middle East and Northern Africa') {
+            } else if (d[1]['Region'] === 'Middle East and Northern Africa') {
                 return '#F7DC6F';
-            } else if (d.Region === 'Sub-Saharan Africa') {
+            } else if (d[1]['Region'] === 'Sub-Saharan Africa') {
                 return '#BB8FCE';
-            } else if (d.Region === 'Latin America and Caribbean') {
+            } else if (d[1]['Region'] === 'Latin America and Caribbean') {
                 return '#E74C3C';
-            } else if (d.Region === 'North America') {
+            } else if (d[1]['Region'] === 'North America') {
                 return '#3498DB';
             } else {
                 return 'red';
@@ -215,7 +216,7 @@ export function initScatter(completeData, year) {
         .attr('stroke', '#CDCDCD')
         .attr('stroke-width', '2px')
         .attr('cx', (d) => {
-            return x(d['Economy (GDP per Capita)']);
+            return x(d[1]['Economy (GDP per Capita)']);
         })
         .on('mouseover', showTooltip)
         .on('mousemove', moveTooltip)
@@ -225,19 +226,22 @@ export function initScatter(completeData, year) {
         .duration(animation_duration)
         .ease(animation_easing)
         .attr('r', (d) => {
-            return 10;
-            // if (d.population > 800000000) {
-            //     return d.population / 25000000;
-            // } else if (d.population > 50000000) {
-            //     return d.population / 10000000;
-            // } else if (d.population > 1000000) {
-            //     return d.population / 1500000;
-            // } else {
-            //     return d.population / 100000;
-            // }
+            if (countriesOfTheWorld[d[0]] === undefined) {
+                return 10;
+            } else {
+                if (countriesOfTheWorld[d[0]].population > 800000000) {
+                    return countriesOfTheWorld[d[0]]['Population'] / 25000000;
+                } else if (countriesOfTheWorld[d[0]]['Population'] > 50000000) {
+                    return countriesOfTheWorld[d[0]]['Population'] / 10000000;
+                } else if (countriesOfTheWorld[d[0]]['Population'] > 1000000) {
+                    return countriesOfTheWorld[d[0]]['Population'] / 1500000;
+                } else {
+                    return countriesOfTheWorld[d[0]]['Population'] / 100000;
+                }
+            }
         })
         .attr('cy', (d) => {
-            let happinessRankCircle = d['Happiness Rank'];
+            let happinessRankCircle = d[1]['Happiness Rank'];
             return y(
                 (numberOfCountries + 1 - happinessRankCircle) /
                     numberOfCountries
@@ -258,17 +262,19 @@ export function initScatter(completeData, year) {
     };
 
     function regionFocusOn(i, d) {
+        console.log('Focus1', d);
         graph
             .selectAll(
-                `circle:not(.continent-${d.Region.split(' ').join('-')})`
+                `circle:not(.continent-${d['Region'].split(' ').join('-')})`
             )
             .attr('opacity', '0.05');
     }
 
     function regionFocusOff(i, d) {
+        console.log('Focus2', d);
         graph
             .selectAll(
-                `circle:not(.continent-${d.Region.split(' ').join('-')})`
+                `circle:not(.continent-${d['Region'].split(' ').join('-')})`
             )
             .attr('opacity', '0.7');
     }
@@ -293,7 +299,8 @@ export function initScatter(completeData, year) {
         .attr('width', 20)
         .attr('height', 20)
         .style('fill', function (d) {
-            if (d.Region === 'Central and Eastern Europe') {
+            console.log('Focus3', d);
+            if (d['Region'] === 'Central and Eastern Europe') {
                 return '#7cbd1e';
             } else if (d.Region === 'Western Europe') {
                 return '#ff1f5a';
@@ -358,34 +365,36 @@ export function initScatter(completeData, year) {
         // Render circles
         const circles = graph
             .selectAll('circle')
-            .data(Object.values(data))
+            .data(Object.entries(data))
             .enter()
             .append('circle')
             .attr(
                 'class',
                 (d) =>
-                    `country ${d.Country} continent-${d.Region.split(' ').join(
-                        '-'
-                    )} country-circle`
+                    `country ${d[1]['Country']} continent-${d[1]['Region']
+                        .split(' ')
+                        .join('-')} country-circle`
             )
             .attr('fill', (d) => {
-                if (d.Region === 'Central and Eastern Europe') {
+                if (d[1]['Region'] === 'Central and Eastern Europe') {
                     return '#7cbd1e';
-                } else if (d.Region === 'Western Europe') {
+                } else if (d[1]['Region'] === 'Western Europe') {
                     return '#ff1f5a';
-                } else if (d.Region === 'Southern Asia') {
+                } else if (d[1]['Region'] === 'Southern Asia') {
                     return '#303481';
-                } else if (d.Region === 'Southeastern Asia') {
+                } else if (d[1]['Region'] === 'Southeastern Asia') {
                     return '#ff5b44';
-                } else if (d.Region === 'Eastern Asia') {
+                } else if (d[1]['Region'] === 'Eastern Asia') {
                     return '#2fc5cc';
-                } else if (d.Region === 'Middle East and Northern Africa') {
+                } else if (
+                    d[1]['Region'] === 'Middle East and Northern Africa'
+                ) {
                     return '#F7DC6F';
-                } else if (d.Region === 'Sub-Saharan Africa') {
+                } else if (d[1]['Region'] === 'Sub-Saharan Africa') {
                     return '#BB8FCE';
-                } else if (d.Region === 'Latin America and Caribbean') {
+                } else if (d[1]['Region'] === 'Latin America and Caribbean') {
                     return '#E74C3C';
-                } else if (d.Region === 'North America') {
+                } else if (d[1]['Region'] === 'North America') {
                     return '#3498DB';
                 } else {
                     return 'red';
@@ -395,7 +404,7 @@ export function initScatter(completeData, year) {
             .attr('stroke', '#CDCDCD')
             .attr('stroke-width', '2px')
             .attr('cx', (d) => {
-                return x(d[category]);
+                return x(d[1][category]);
             })
             .on('mouseover', showTooltip)
             .on('mousemove', moveTooltip)
@@ -405,19 +414,32 @@ export function initScatter(completeData, year) {
             .duration(animation_duration)
             .ease(animation_easing)
             .attr('r', (d) => {
-                return 10;
-                // if (d.population > 800000000) {
-                //     return d.population / 25000000;
-                // } else if (d.population > 50000000) {
-                //     return d.population / 10000000;
-                // } else if (d.population > 1000000) {
-                //     return d.population / 1500000;
-                // } else {
-                //     return d.population / 100000;
-                // }
+                if (countriesOfTheWorld[d[0]] === undefined) {
+                    return 10;
+                } else {
+                    if (countriesOfTheWorld[d[0]].population > 800000000) {
+                        return (
+                            countriesOfTheWorld[d[0]]['Population'] / 25000000
+                        );
+                    } else if (
+                        countriesOfTheWorld[d[0]]['Population'] > 50000000
+                    ) {
+                        return (
+                            countriesOfTheWorld[d[0]]['Population'] / 10000000
+                        );
+                    } else if (
+                        countriesOfTheWorld[d[0]]['Population'] > 1000000
+                    ) {
+                        return (
+                            countriesOfTheWorld[d[0]]['Population'] / 1500000
+                        );
+                    } else {
+                        return countriesOfTheWorld[d[0]]['Population'] / 100000;
+                    }
+                }
             })
             .attr('cy', (d) => {
-                let happinessRankCircle = d['Happiness Rank'];
+                let happinessRankCircle = d[1]['Happiness Rank'];
                 return y(
                     (numberCountries(year) + 1 - happinessRankCircle) /
                         numberCountries(year)
@@ -446,7 +468,7 @@ export function initScatter(completeData, year) {
             .duration(500)
             .ease(animation_easing)
             .attr('cx', (d) => {
-                return x(d[label]);
+                return x(d[1][label]);
             });
 
         updateAxisLabel(category);
