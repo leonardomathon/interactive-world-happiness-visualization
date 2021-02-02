@@ -1,8 +1,14 @@
 import * as d3 from 'd3';
 import countriesOfTheWorld from '../../Datasets/countries-of-the-world.json';
 
-export function initScatter(completeData, year) {
+import {
+    hoveredCountry,
+    clickedCountry,
+    setClickedCountry,
+    resetClickedCountry,
+} from './webgl/globe/globe.js';
 
+export function initScatter(completeData, year) {
     var data = completeData[year];
     var category = 'GDP Per Capita ($)';
     var numberOfCountries;
@@ -137,13 +143,30 @@ export function initScatter(completeData, year) {
         .append('div')
         .style('visibility', 'hidden')
         .attr('class', 'tooltip')
-        .style('background-color', 'black')
+        .style('background-color', 'rgba(0,0,0,0.3)')
         .style('border-radius', '5px')
         .style('padding', '10px')
         .style('color', 'white')
         .style('z-index', '999999999')
         .style('position', 'absolute')
         .style('display', 'block');
+
+    const setClickedCountryScatter = function (d, i) {
+        let countryClicked = {
+            id: i[0],
+            name: countriesOfTheWorld[i[0]]['Country'],
+            index: null,
+        };
+        if (clickedCountry.data) {
+            resetClickedCountry();
+        }
+        setClickedCountry(countryClicked);
+        // Update hovered country
+        hoveredCountry.data = {
+            id: i[0],
+            name: countriesOfTheWorld[i[0]]['Country'],
+        };
+    };
 
     // Render initial tooltip
     const showTooltip = function (d, i) {
@@ -157,7 +180,9 @@ export function initScatter(completeData, year) {
             .style('visibility', 'visible')
             .html(
                 `
-            <strong>Country:</strong> ${i[1]['Country']} (${i[1]['Region']})<br/>
+            <strong>Country:</strong> ${i[1]['Country']} (${
+                    i[1]['Region']
+                })<br/>
             <strong>Happiness Ranking:</strong> ${formatOrdinal(
                     happinessRankTooltip
                 )}<br/>
@@ -188,9 +213,9 @@ export function initScatter(completeData, year) {
         .attr(
             'class',
             (d) =>
-                `country ${d[1]['Country']} continent-${d[1]['Region'].split(' ').join(
-                    '-'
-                )} country-circle`
+                `country ${d[1]['Country']} continent-${d[1]['Region']
+                    .split(' ')
+                    .join('-')} country-circle`
         )
         .attr('fill', (d) => {
             if (d[1]['Region'] === 'Central and Eastern Europe') {
@@ -224,6 +249,7 @@ export function initScatter(completeData, year) {
         .on('mouseover', showTooltip)
         .on('mousemove', moveTooltip)
         .on('mouseleave', hideTooltip)
+        .on('click', setClickedCountryScatter)
         .transition()
         .delay((d, i) => i * animation_delay)
         .duration(animation_duration)
@@ -266,7 +292,7 @@ export function initScatter(completeData, year) {
     };
 
     function regionFocusOn(i, d) {
-        console.log('Focus1', d)
+        console.log('Focus1', d);
         graph
             .selectAll(
                 `circle:not(.continent-${d['Region'].split(' ').join('-')})`
@@ -275,7 +301,7 @@ export function initScatter(completeData, year) {
     }
 
     function regionFocusOff(i, d) {
-        console.log('Focus2', d)
+        console.log('Focus2', d);
         graph
             .selectAll(
                 `circle:not(.continent-${d['Region'].split(' ').join('-')})`
@@ -303,7 +329,7 @@ export function initScatter(completeData, year) {
         .attr('width', 20)
         .attr('height', 20)
         .style('fill', function (d) {
-            console.log('Focus3', d)
+            console.log('Focus3', d);
             if (d['Region'] === 'Central and Eastern Europe') {
                 return '#7cbd1e';
             } else if (d.Region === 'Western Europe') {
@@ -375,9 +401,9 @@ export function initScatter(completeData, year) {
             .attr(
                 'class',
                 (d) =>
-                    `country ${d[1]['Country']} continent-${d[1]['Region'].split(' ').join(
-                        '-'
-                    )} country-circle`
+                    `country ${d[1]['Country']} continent-${d[1]['Region']
+                        .split(' ')
+                        .join('-')} country-circle`
             )
             .attr('fill', (d) => {
                 if (d[1]['Region'] === 'Central and Eastern Europe') {
@@ -390,7 +416,9 @@ export function initScatter(completeData, year) {
                     return '#ff5b44';
                 } else if (d[1]['Region'] === 'Eastern Asia') {
                     return '#2fc5cc';
-                } else if (d[1]['Region'] === 'Middle East and Northern Africa') {
+                } else if (
+                    d[1]['Region'] === 'Middle East and Northern Africa'
+                ) {
                     return '#F7DC6F';
                 } else if (d[1]['Region'] === 'Sub-Saharan Africa') {
                     return '#BB8FCE';
@@ -420,11 +448,21 @@ export function initScatter(completeData, year) {
                     return 10;
                 } else {
                     if (countriesOfTheWorld[d[0]].population > 800000000) {
-                        return countriesOfTheWorld[d[0]]['Population'] / 25000000;
-                    } else if (countriesOfTheWorld[d[0]]['Population'] > 50000000) {
-                        return countriesOfTheWorld[d[0]]['Population'] / 10000000;
-                    } else if (countriesOfTheWorld[d[0]]['Population'] > 1000000) {
-                        return countriesOfTheWorld[d[0]]['Population'] / 1500000;
+                        return (
+                            countriesOfTheWorld[d[0]]['Population'] / 25000000
+                        );
+                    } else if (
+                        countriesOfTheWorld[d[0]]['Population'] > 50000000
+                    ) {
+                        return (
+                            countriesOfTheWorld[d[0]]['Population'] / 10000000
+                        );
+                    } else if (
+                        countriesOfTheWorld[d[0]]['Population'] > 1000000
+                    ) {
+                        return (
+                            countriesOfTheWorld[d[0]]['Population'] / 1500000
+                        );
                     } else {
                         return countriesOfTheWorld[d[0]]['Population'] / 100000;
                     }

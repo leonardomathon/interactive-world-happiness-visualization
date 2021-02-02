@@ -134,7 +134,8 @@
 
     </div>
 
-    <div class='scatter-menu z-20 scatterButtonsInvisible' id='scatterButtons'>
+    <div class='scatter-menu z-20 scatterButtonsInvisible relative flex justify-between items-center'
+        id='scatterButtons'>
         <div class='scatter-menu-buttons buttons'>
             <a href='#' data-text='Economy (GDP per Capita)' class='button-graphGdp scatter-menu-button active'>Economy
                 (GDP
@@ -171,6 +172,8 @@
             &nbsp;&nbsp;
         </div>
     </div>
+
+
 
     <div id="worldContainer" class="absolute top-0"></div>
     <script src="<%= htmlWebpackPlugin.files.js[1] %>"></script>

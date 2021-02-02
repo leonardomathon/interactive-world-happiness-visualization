@@ -108,6 +108,10 @@ input[type=range]:focus::-moz-range-track {
     font-variant: normal;
 }
 
+.jsPanel .jsPanel-ftr {
+    background-color: #10224D;
+}
+
 .panelInvisible {
     display: none;
 }
@@ -146,24 +150,10 @@ input[type=range]:focus::-moz-range-track {
     display: none !important;
 }
 
-.scatter-menu {
-    position: absolute;
-    margin-top: 50px;
-    margin-left: 100px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Right margin of the categories */
-.scatter-menu-buttons {
-    margin-right: 2rem;
-}
-
 /* Style of the categories */
 .scatter-menu-button {
-    color: #ffffff;
-    text-transform: uppercase;
+    color: #fff;
+    opacity: .3;
     text-decoration: none;
     transition: all 100ms ease-in;
     border-bottom: 2px solid transparent;
@@ -172,16 +162,15 @@ input[type=range]:focus::-moz-range-track {
 
 /* Style of the categories on hover */
 .scatter-menu-button:hover {
-    border-bottom: 2px solid #ffffff;
     text-decoration: none;
-    color: #ffffff;
+    opacity: 1;
 }
 
 /* Style of the active category */
 .scatter-menu-button.active {
-    border-bottom: 2px solid #ffffff; 
     text-decoration: none;
-    text-shadow: 0 0 .65px #333, 0 0 .65px #333; 
+    opacity: 1;
+    text-shadow: 0 0 .65px #333, 0 0 .65px #333;
     color: #ffffff;
     background-color: transparent;
 }

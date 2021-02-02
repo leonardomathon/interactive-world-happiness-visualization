@@ -48,7 +48,6 @@ export function createDatasetPanel(yearSliderValue, yearWorldHappiness) {
             offsetX: -5,
             offsetY: -69,
         },
-        maximizedMargin: [25, 25, 25, 25],
         closeOnEscape: true,
         data: JSON.stringify(yearWorldHappiness, null, '\t'),
         callback: function () {
@@ -58,7 +57,7 @@ export function createDatasetPanel(yearSliderValue, yearWorldHappiness) {
 }
 
 // Creates a panel that shows a bar chart visualization
-export function createBarChartPanel(panelTitle, html) {
+export function createBarChartPanel(panelTitle, contentHtml) {
     return jsPanel.create({
         theme: panelTheme,
         borderRadius: '.5rem',
@@ -81,26 +80,27 @@ export function createBarChartPanel(panelTitle, html) {
         dragit: {
             cursor: 'default',
         },
-        content: html,
-        maximizedMargin: [25, 25, 25, 25],
-        closeOnEscape: true,
+        content: contentHtml,
     });
 }
 
 // Creates a panel that shows a bar chart visualization
-export function createScatterPanel(panelTitle, html) {
+export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
     return jsPanel.create({
         theme: panelTheme,
         borderRadius: '.5rem',
         panelSize: {
-            width: 500,
-            height: 300,
+            width: 550,
+            height: 400,
+        },
+        resizeit: {
+            aspectRatio: 'content',
         },
         position: {
             my: 'left-top',
             at: 'left-top',
             offsetX: 15,
-            offsetY: 450,
+            offsetY: 425,
         },
         headerControls: {
             minimize: 'remove',
@@ -111,9 +111,8 @@ export function createScatterPanel(panelTitle, html) {
         dragit: {
             cursor: 'default',
         },
-        content: html,
-        maximizedMargin: [25, 25, 25, 25],
-        closeOnEscape: true,
+        content: contentHtml,
+        footerToolbar: footerHtml,
     });
 }
 
