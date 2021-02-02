@@ -9,12 +9,12 @@ import {
 } from './webgl/globe/globe.js';
 
 var graph
+var focusedCountry;
 
 export function initScatter(completeData, year) {
     var data = completeData[year];
     var category = 'Economy (GDP per Capita)';
     var numberOfCountries;
-    var focusedCountry;
 
     // <input> tag used for year selection
     let yearSlider = document.getElementById('yearSlider');
@@ -481,7 +481,9 @@ export function initScatter(completeData, year) {
                     numberCountries(year)
                 );
             });
+        if (focusedCountry !== undefined) {
             countryFocusOn(focusedCountry);
+        }
     }
 
     // Update the data according to the new category
@@ -561,6 +563,7 @@ export function initScatter(completeData, year) {
 }
 
 export function countryFocusOff() {
+    focusedCountry = undefined;
     graph
         .selectAll(
             `circle`
