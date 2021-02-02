@@ -48,7 +48,6 @@ export function createDatasetPanel(yearSliderValue, yearWorldHappiness) {
             offsetX: -5,
             offsetY: -69,
         },
-        maximizedMargin: [25, 25, 25, 25],
         closeOnEscape: true,
         data: JSON.stringify(yearWorldHappiness, null, '\t'),
         callback: function () {
@@ -82,8 +81,6 @@ export function createBarChartPanel(panelTitle, contentHtml) {
             cursor: 'default',
         },
         content: contentHtml,
-        maximizedMargin: [25, 25, 25, 25],
-        closeOnEscape: true,
     });
 }
 
@@ -116,8 +113,6 @@ export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
         },
         content: contentHtml,
         footerToolbar: footerHtml,
-        maximizedMargin: [25, 25, 25, 25],
-        closeOnEscape: true,
     });
 }
 
