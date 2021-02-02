@@ -187,7 +187,7 @@ export function initScatter(completeData, year) {
             (d) =>
                 `country ${d.Country} continent-${d.Region.split(' ').join(
                     '-'
-                )} country-bubble`
+                )} country-circle`
         )
         .attr('fill', (d) => {
             if (d.Region === 'Central and Eastern Europe') {
@@ -351,8 +351,8 @@ export function initScatter(completeData, year) {
     // Update the data according to the new category
     function updateYear(year, category) {
         // Render circles
-        const bubbles = graph.selectAll('.country-bubble');
-        bubbles.remove();
+        const countryCircles = graph.selectAll('.country-circle');
+        countryCircles.remove();
 
         data = completeData[year];
 
@@ -367,7 +367,7 @@ export function initScatter(completeData, year) {
                 (d) =>
                     `country ${d.Country} continent-${d.Region.split(' ').join(
                         '-'
-                    )} country-bubble`
+                    )} country-circle`
             )
             .attr('fill', (d) => {
                 if (d.Region === 'Central and Eastern Europe') {
@@ -442,7 +442,7 @@ export function initScatter(completeData, year) {
         }
 
         graph
-            .selectAll('.country-bubble')
+            .selectAll('.country-circle')
             .transition()
             .duration(500)
             .ease(animation_easing)
@@ -473,19 +473,19 @@ export function initScatter(completeData, year) {
     }
 
     // Button group event listener, checks button group and updates if button is not currently selected
-    let btnGroup = document.querySelector('.btn-group');
+    let btnGroup = document.querySelector('.buttons');
     btnGroup.addEventListener('mousedown', (e) => {
         e.preventDefault();
         let currentBtn = e.target;
         let currentBtnType = currentBtn.classList[1];
         let currentBtnClass;
 
-        if (currentBtnType === 'header-graph__btn') {
+        if (currentBtnType === 'scatter-menu-button') {
             currentBtnClass = currentBtn.classList[0].split('-')[1];
             category = currentBtnClass;
         }
 
-        if (currentBtnType === 'header-graph__btn') {
+        if (currentBtnType === 'scatter-menu-button') {
             updateData(currentBtnClass);
             let allBtns = btnGroup.querySelectorAll('a');
             allBtns.forEach((btn) => {
