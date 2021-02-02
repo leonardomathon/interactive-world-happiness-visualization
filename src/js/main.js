@@ -23,10 +23,13 @@ import {
 import { isCountryDrawn } from './utils/geo.js';
 import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
-// Import data sets
-import worldHappiness from '../../datasets/world-happiness.json';
+// Import charts
 import { initBarChart, updateBarChartData } from './chart.js';
 import { initScatter, countryFocusOff, countryFocusOn } from './scatter.js';
+import { initLineChart } from './linechart';
+
+// Import data sets
+import worldHappiness from '../../datasets/world-happiness.json';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -146,6 +149,7 @@ countryHoverCheckbox.onfocus = function () {
 };
 
 initGlobe(yearWorldHappiness);
+initLineChart();
 
 // Event listeners that listen to click events on the labels
 for (let i = 0; i < yearSliderLabels.length; i++) {

@@ -126,16 +126,17 @@ export function createLineChartPanel(panelTitle, contentHtml) {
             height: 500,
         },
         position: {
-            my: 'left-top',
-            at: 'left-top',
-            offsetX: 15,
-            offsetY: 425,
+            my: 'right-bottom',
+            at: 'right-bottom',
+            offsetX: -5,
+            offsetY: -69,
         },
         headerControls: {
             minimize: 'remove',
             close: 'remove',
             size: 'md',
         },
+        headerTitle: panelTitle,
         dragit: {
             cursor: 'default',
         },
