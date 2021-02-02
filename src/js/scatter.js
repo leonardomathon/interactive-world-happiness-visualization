@@ -12,6 +12,7 @@ export function initScatter(completeData, year) {
     var data = completeData[year];
     var category = 'Economy (GDP per Capita)';
     var numberOfCountries;
+    var focusedCountry;
 
     // <input> tag used for year selection
     let yearSlider = document.getElementById('yearSlider');
@@ -152,6 +153,7 @@ export function initScatter(completeData, year) {
         .style('display', 'block');
 
     const setClickedCountryScatter = function (d, i) {
+        focusedCountry = i[1]['Country'];
         let countryClicked = {
             id: i[0],
             name: i[1]['Country'],
@@ -493,6 +495,7 @@ export function initScatter(completeData, year) {
                     numberCountries(year)
                 );
             });
+            countryFocusOn(focusedCountry);
     }
 
     // Update the data according to the new category
