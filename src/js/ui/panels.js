@@ -93,14 +93,17 @@ export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
         theme: panelTheme,
         borderRadius: '.5rem',
         panelSize: {
-            width: 500,
-            height: 300,
+            width: 550,
+            height: 400,
+        },
+        resizeit: {
+            aspectRatio: 'content',
         },
         position: {
             my: 'left-top',
             at: 'left-top',
             offsetX: 15,
-            offsetY: 450,
+            offsetY: 425,
         },
         headerControls: {
             minimize: 'remove',

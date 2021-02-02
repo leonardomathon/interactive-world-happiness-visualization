@@ -138,7 +138,7 @@ export function initScatter(completeData, year) {
         .append('div')
         .style('visibility', 'hidden')
         .attr('class', 'tooltip')
-        .style('background-color', 'black')
+        .style('background-color', 'rgba(0,0,0,0.3)')
         .style('border-radius', '5px')
         .style('padding', '10px')
         .style('color', 'white')

@@ -152,7 +152,8 @@ input[type=range]:focus::-moz-range-track {
 
 /* Style of the categories */
 .scatter-menu-button {
-    color: #acacac;
+    color: #fff;
+    opacity: .3;
     text-decoration: none;
     transition: all 100ms ease-in;
     border-bottom: 2px solid transparent;
@@ -162,12 +163,13 @@ input[type=range]:focus::-moz-range-track {
 /* Style of the categories on hover */
 .scatter-menu-button:hover {
     text-decoration: none;
-    color: #ffffff;
+    opacity: 1;
 }
 
 /* Style of the active category */
 .scatter-menu-button.active {
     text-decoration: none;
+    opacity: 1;
     text-shadow: 0 0 .65px #333, 0 0 .65px #333;
     color: #ffffff;
     background-color: transparent;
