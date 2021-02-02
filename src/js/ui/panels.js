@@ -91,7 +91,7 @@ export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
         borderRadius: '.5rem',
         panelSize: {
             width: 550,
-            height: 400,
+            height: 360,
         },
         resizeit: {
             aspectRatio: 'content',
