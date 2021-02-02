@@ -8,6 +8,8 @@ import {
     resetClickedCountry,
 } from './webgl/globe/globe.js';
 
+var graph
+
 export function initScatter(completeData, year) {
     var data = completeData[year];
     var category = 'Economy (GDP per Capita)';
@@ -83,7 +85,7 @@ export function initScatter(completeData, year) {
         );
 
     // Append the graph
-    const graph = svg
+    graph = svg
         .append('g')
         .attr('position', 'relative')
         .attr('class', 'main__svg')
@@ -293,22 +295,6 @@ export function initScatter(completeData, year) {
         NA: { Region: 'North America' },
         ANZ: { Region: 'Australia and New Zealand' }
     };
-
-    function countryFocusOn(country) {
-        graph
-            .selectAll(
-                `circle:not(.country-${country.split(' ').join('-')})`
-            )
-            .attr('opacity', '0.05');
-    }
-
-    function countryFocusOff() {
-        graph
-            .selectAll(
-                `circle`
-            )
-            .attr('opacity', '0.7');
-    }
 
     function regionFocusOn(i, d) {
         console.log('Test2: ', `circle:not(.continent-${d['Region'].split(' ').join('-')})`)
@@ -572,4 +558,20 @@ export function initScatter(completeData, year) {
 
         updateYear(yearSlider.value, category);
     });
+}
+
+export function countryFocusOff() {
+    graph
+        .selectAll(
+            `circle`
+        )
+        .attr('opacity', '0.7');
+}
+
+export function countryFocusOn(country) {
+    graph
+        .selectAll(
+            `circle:not(.country-${country.split(' ').join('-')})`
+        )
+        .attr('opacity', '0.05');
 }

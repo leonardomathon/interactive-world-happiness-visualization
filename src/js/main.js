@@ -25,7 +25,7 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
 import { initBarChart, updateBarChartData } from './chart.js';
-import { initScatter } from './scatter.js';
+import { initScatter, countryFocusOff, countryFocusOn } from './scatter.js';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
@@ -262,13 +262,18 @@ hoveredCountry.registerListener(function (val) {
 // Event listener that listens to clickedCountry change and updates charts
 clickedCountry.registerListener(function (val) {
     if (clickedCountry.data) {
+        // Put focus on selected country in scatter plot
+        countryFocusOn(clickedCountry.data.name);
+        
         // Init bar chart
         initBarChart(worldHappiness, clickedCountry.data.id);
-        console.log('name: ', hoveredCountry.data.name);
         barChartPanel.setHeaderTitle(
             `Bar chart of ${hoveredCountry.data.name}`
         );
     } else {
+        // Remove focus from selected country in scatter plot
+        countryFocusOff();
+
         // Remove bar chart
         document.getElementById('chart').querySelector('svg').remove();
         barChartPanel.setHeaderTitle('Bar chart');
