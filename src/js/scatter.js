@@ -572,6 +572,7 @@ export function countryFocusOff() {
 }
 
 export function countryFocusOn(country) {
+    focusedCountry = country;
     graph
         .selectAll(
             `circle:not(.country-${country.split(' ').join('-')})`
