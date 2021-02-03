@@ -293,7 +293,8 @@ export function initScatter(completeData, year) {
         SSA: { Region: 'Sub-Saharan Africa' },
         LAC: { Region: 'Latin America and Caribbean' },
         NA: { Region: 'North America' },
-        ANZ: { Region: 'Australia and New Zealand' }
+        ANZ: { Region: 'Australia and New Zealand' },
+        ALR: { Region: 'Select all regions' }
     };
 
     // Position of legenda
@@ -337,7 +338,7 @@ export function initScatter(completeData, year) {
             } else if (d['Region'] === 'Australia and New Zealand') {
                 return '#138D75';
             } else {
-                return 'red';
+                return '#ffffff';
             }
         })
         .on('click', regionFocusOn)
@@ -487,7 +488,7 @@ export function initScatter(completeData, year) {
             scale = 1.8;
         }
 
-       graph.selectAll('.x-axis').remove();
+        graph.selectAll('.x-axis').remove();
 
         // Scale the x - axis, select space between bars using padding
         const x = d3.scaleLinear().domain([0, scale]).range([0, graphWidth]);
@@ -585,16 +586,20 @@ export function countryFocusOn(country) {
 }
 
 export function regionFocusOn(i, d) {
-    regionFocusOff();
-    if (focusedCountry !== undefined) {
-        countryFocusOff();
-        resetClickedCountry();
+    if (d['Region'] === 'Select all regions') {
+        regionFocusOff();
+    } else {
+        regionFocusOff();
+        if (focusedCountry !== undefined) {
+            countryFocusOff();
+            resetClickedCountry();
+        }
+        graph
+            .selectAll(
+                `circle:not(.continent-${d['Region'].split(' ').join('-')})`
+            )
+            .attr('opacity', '0.05');
     }
-    graph
-        .selectAll(
-            `circle:not(.continent-${d['Region'].split(' ').join('-')})`
-        )
-        .attr('opacity', '0.05');
 }
 
 export function regionFocusOff() {
