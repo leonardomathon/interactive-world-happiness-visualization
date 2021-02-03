@@ -279,6 +279,9 @@ clickedCountry.registerListener(function (val) {
 
         // Init line chart
         initLineChart(worldHappiness, clickedCountry.data.id);
+        lineChartPanel.setHeaderTitle(
+            `Line chart of ${hoveredCountry.data.name}`
+        );
     } else {
         // Remove focus from selected country in scatter plot
         countryFocusOff();
