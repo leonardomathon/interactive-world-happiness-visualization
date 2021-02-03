@@ -32,9 +32,6 @@ import { initLineChart, removeLineChart } from './linechart';
 import worldHappiness from '../../datasets/world-happiness.json';
 import countriesOfTheWorld from '../../Datasets/countries-of-the-world.json';
 
-import { initBarChart, updateBarChartData } from './chart.js';
-import { initScatter, countryFocusOff, countryFocusOn } from './scatter.js';
-
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
 
