@@ -24,6 +24,8 @@ import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
+import countriesOfTheWorld from '../../Datasets/countries-of-the-world.json';
+
 import { initBarChart, updateBarChartData } from './chart.js';
 import { initScatter, countryFocusOff, countryFocusOn } from './scatter.js';
 
@@ -72,6 +74,12 @@ let fuzzySearch;
 
 // Country that the user selected
 let hoveredCountryTag = document.getElementById('hoveredCountry');
+
+// Variables for the countryInfomation
+let countryPopulationTag = document.getElementById('countryPopulationTag');
+let countryDensityTag = document.getElementById('countryDensityTag');
+let countryAreaTag = document.getElementById('countryAreaTag');
+let countyGDPTag = document.getElementById('countyGDPTag');
 
 // Toggle buttons for all graphs
 let barChartToggle = document.getElementById('barChartToggle');
@@ -254,8 +262,26 @@ document.addEventListener('DOMContentLoaded', function (event) {
 hoveredCountry.registerListener(function (val) {
     if (hoveredCountry.data.name != '') {
         hoveredCountryTag.innerHTML = `${hoveredCountry.data.id} - ${hoveredCountry.data.name}`;
+        if (countriesOfTheWorld[hoveredCountry.data.id]) {
+            countryPopulationTag.innerHTML =
+                countriesOfTheWorld[hoveredCountry.data.id]['Population'];
+            countryDensityTag.innerHTML =
+                countriesOfTheWorld[hoveredCountry.data.id][
+                    'Pop. Density (per sq. mi.)'
+                ];
+            countryAreaTag.innerHTML =
+                countriesOfTheWorld[hoveredCountry.data.id]['Area (sq. mi.)'];
+            countyGDPTag.innerHTML =
+                countriesOfTheWorld[hoveredCountry.data.id][
+                    'GDP ($ per capita)'
+                ];
+        }
     } else {
         hoveredCountryTag.innerHTML = `${hoveredCountry.data.id}`;
+        countryPopulationTag.innerHTML = 'No data';
+        countryDensityTag.innerHTML = 'No data';
+        countryAreaTag.innerHTML = 'No data';
+        countyGDPTag.innerHTML = 'No data';
     }
 });
 
@@ -264,7 +290,7 @@ clickedCountry.registerListener(function (val) {
     if (clickedCountry.data) {
         // Put focus on selected country in scatter plot
         countryFocusOn(clickedCountry.data.name);
-        
+
         // Init bar chart
         initBarChart(worldHappiness, clickedCountry.data.id);
         barChartPanel.setHeaderTitle(
