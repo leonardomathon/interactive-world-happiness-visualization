@@ -189,17 +189,6 @@ const render = (data) => {
         .attr('class', 'line-path6')
         .attr('d', lineGenerator6(data));
 
-    // Define the div for the tooltip
-    let tooltip = g.append('div').attr('class', 'tooltip').style('opacity', 0);
-
-    // Define the div for the tooltip
-    var div = d3
-        .select('#lineChart')
-        .append('div')
-        .attr('class', 'tooltip')
-        .style('opacity', 0)
-        .style('position', 'absolute');
-
     // Drawing of dots for overall rating
     const xHappDots = (d) => xScale(d['Year']);
     const yHappDots = (d) => yScale(d['Happiness Score']);
@@ -313,13 +302,6 @@ const render = (data) => {
 
         // Set stroke of dot to steelblue to mimick zoom
         current.style('stroke', 'steelblue');
-
-        // Initialize tooltip
-        div.transition().duration(200);
-        div.style('opacity', 0.9)
-            .html(i['Year'] + '<br/>' + numberFormat(i['Happiness Score']))
-            .style('top', d.y + 5 + 'px')
-            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over economy dot
@@ -342,17 +324,6 @@ const render = (data) => {
 
         d3.selectAll('.rightAxis').style('color', 'rgba(255, 0, 0, 1');
         d3.selectAll('.line-path2').style('stroke', 'rgba(255, 0, 0, 1');
-
-        // Initialize tooltip
-        div.transition().duration(200);
-        div.style('opacity', 0.9)
-            .html(
-                i['Year'] +
-                    '<br/>' +
-                    numberFormat(i['Economy (GDP per Capita)'])
-            )
-            .style('top', d.y + 'px')
-            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over economy dot
@@ -381,17 +352,6 @@ const render = (data) => {
         // Determine location of text
         let xText = current.attr('cx');
         let yText = current.attr('cy') - 25;
-
-        // Initialize tooltip
-        div.transition().duration(200);
-        div.style('opacity', 0.9)
-            .html(
-                i['Year'] +
-                    '<br/>' +
-                    numberFormat(i['Freedom to make life choices'])
-            )
-            .style('top', d.y + 'px')
-            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over freedom dot
@@ -416,15 +376,6 @@ const render = (data) => {
 
         d3.selectAll('.rightAxis').style('color', 'rgba(238, 130, 238, 1)');
         d3.selectAll('.line-path4').style('stroke', 'rgba(238, 130, 238, 1)');
-
-        // Initialize tooltip
-        div.transition().duration(200);
-        div.style('opacity', 0.9)
-            .html(
-                i['Year'] + '<br/>' + numberFormat(i['Healthy life expectancy'])
-            )
-            .style('top', d.y + 'px')
-            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over health dot
@@ -449,13 +400,6 @@ const render = (data) => {
 
         d3.selectAll('.rightAxis').style('color', 'rgba(0, 128, 128, 1)');
         d3.selectAll('.line-path5').style('stroke', 'rgba(0, 128, 128, 1)');
-
-        // Initialize tooltip
-        div.transition().duration(200);
-        div.style('opacity', 0.9)
-            .html(i['Year'] + '<br/>' + numberFormat(i['Generosity']))
-            .style('top', d.y + 'px')
-            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over generosity dot
@@ -480,17 +424,6 @@ const render = (data) => {
 
         d3.selectAll('.rightAxis').style('color', 'rgba(64, 224, 208, 1)');
         d3.selectAll('.line-path6').style('stroke', 'rgba(64, 224, 208, 1)');
-
-        // Initialize tooltip
-        div.transition().duration(200);
-        div.style('opacity', 0.9)
-            .html(
-                i['Year'] +
-                    '<br/>' +
-                    numberFormat(i['Trust (Government Corruption)'])
-            )
-            .style('top', d.y + 'px')
-            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over trust dot
