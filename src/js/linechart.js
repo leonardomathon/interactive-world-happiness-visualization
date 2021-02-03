@@ -197,7 +197,9 @@ const render = (data) => {
         .select('body')
         .append('div')
         .attr('class', 'tooltip')
-        .style('opacity', 0);
+        .style('opacity', 0)
+        .style('z-index', '999999999')
+        .style('position', 'absolute');
 
     // Drawing of dots for overall rating
     const xHappDots = (d) => xScale(d['Year']);
@@ -313,17 +315,16 @@ const render = (data) => {
         // Set stroke of dot to steelblue to mimick zoom
         current.style('stroke', 'steelblue');
 
-        // Determine location of text
-        let xText = current.attr('cx');
-        let yText = current.attr('cy') - 25;
-
-        // Initialize transition for tooltip
-        div.transition().duration(200).style('opacity', 0.9);
-
-        // Determine text of tooltip
-        div.html(i['Year'] + '<br/>' + numberFormat(i['Happiness Score']))
-            .style('left', xText + 'px')
-            .style('top', yText + 'px');
+        // Initialize tooltip
+        div.
+            transition()
+            .duration(200);
+        div.style('opacity', 0.9)
+            .html(
+                i['Year'] + '<br/>' + numberFormat(i['Happiness Score'])
+            )
+            .style('top', d.y + 5 + 'px')
+            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over economy dot
@@ -347,19 +348,16 @@ const render = (data) => {
         d3.selectAll('.rightAxis').style('color', 'rgba(255, 0, 0, 1');
         d3.selectAll('.line-path2').style('stroke', 'rgba(255, 0, 0, 1');
 
-        // Determine location of text
-        let xText = current.attr('cx');
-        let yText = current.attr('cy') - 25;
-
-        // Initialize transition for tooltip
-        div.transition().duration(200).style('opacity', 0.9);
-
-        // Determine text of tooltip
-        div.html(
-            i['Year'] + '<br/>' + numberFormat(i['Economy (GDP per Capita)'])
-        )
-            .style('left', xText + 'px')
-            .style('top', yText + 'px');
+        // Initialize tooltip
+        div.
+            transition()
+            .duration(200);
+        div.style('opacity', 0.9)
+            .html(
+                i['Year'] + '<br/>' + numberFormat(i['Economy (GDP per Capita)'])
+            )
+            .style('top', d.y + 'px')
+            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over economy dot
@@ -389,17 +387,16 @@ const render = (data) => {
         let xText = current.attr('cx');
         let yText = current.attr('cy') - 25;
 
-        // Initialize transition for tooltip
-        div.transition().duration(200).style('opacity', 0.9);
-
-        // Determine text of tooltip
-        div.html(
-            i['Year'] +
-                '<br/>' +
-                numberFormat(i['Freedom to make life choices'])
-        )
-            .style('left', xText + 'px')
-            .style('top', yText + 'px');
+        // Initialize tooltip
+        div.
+            transition()
+            .duration(200);
+        div.style('opacity', 0.9)
+            .html(
+                i['Year'] + '<br/>' + numberFormat(i['Freedom to make life choices'])
+            )
+            .style('top', d.y + 'px')
+            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over freedom dot
@@ -425,19 +422,16 @@ const render = (data) => {
         d3.selectAll('.rightAxis').style('color', 'rgba(238, 130, 238, 1)');
         d3.selectAll('.line-path4').style('stroke', 'rgba(238, 130, 238, 1)');
 
-        // Determine location of text
-        let xText = current.attr('cx');
-        let yText = current.attr('cy') - 25;
-
-        // Initialize transition for tooltip
-        div.transition().duration(200).style('opacity', 0.9);
-
-        // Determine text of tooltip
-        div.html(
-            i['Year'] + '<br/>' + numberFormat(i['Healthy life expectancy'])
-        )
-            .style('left', xText + 'px')
-            .style('top', yText + 'px');
+        // Initialize tooltip
+        div.
+            transition()
+            .duration(200);
+        div.style('opacity', 0.9)
+            .html(
+                i['Year'] + '<br/>' + numberFormat(i['Health life expectancy'])
+            )
+            .style('top', d.y + 'px')
+            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over health dot
@@ -463,17 +457,16 @@ const render = (data) => {
         d3.selectAll('.rightAxis').style('color', 'rgba(0, 128, 128, 1)');
         d3.selectAll('.line-path5').style('stroke', 'rgba(0, 128, 128, 1)');
 
-        // Determine location of text
-        let xText = current.attr('cx');
-        let yText = current.attr('cy') - 25;
-
-        // Initialize transition for tooltip
-        div.transition().duration(200).style('opacity', 0.9);
-
-        // Determine text of tooltip
-        div.html(i['Year'] + '<br/>' + numberFormat(i['Generosity']))
-            .style('left', xText + 'px')
-            .style('top', yText + 'px');
+        // Initialize tooltip
+        div.
+            transition()
+            .duration(200);
+        div.style('opacity', 0.9)
+            .html(
+                i['Year'] + '<br/>' + numberFormat(i['Generosity'])
+            )
+            .style('top', d.y + 'px')
+            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over generosity dot
@@ -499,21 +492,16 @@ const render = (data) => {
         d3.selectAll('.rightAxis').style('color', 'rgba(64, 224, 208, 1)');
         d3.selectAll('.line-path6').style('stroke', 'rgba(64, 224, 208, 1)');
 
-        // Determine location of text
-        let xText = current.attr('cx');
-        let yText = current.attr('cy') - 25;
-
-        // Initialize transition for tooltip
-        div.transition().duration(200).style('opacity', 0.9);
-
-        // Determine text of tooltip
-        div.html(
-            i['Year'] +
-                '<br/>' +
-                numberFormat(i['Trust (Government Corruption)'])
-        )
-            .style('left', xText + 'px')
-            .style('top', yText + 'px');
+        // Initialize tooltip
+        div.
+            transition()
+            .duration(200);
+        div.style('opacity', 0.9)
+            .html(
+                i['Year'] + '<br/>' + numberFormat(i['Trust (Government Corruption)'])
+            )
+            .style('top', d.y + 'px')
+            .style('left', d.x - 20 + 'px');
     }
 
     // Stops interactivity when mouse is no longer over trust dot
