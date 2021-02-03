@@ -1,8 +1,8 @@
 {
-  "name": "2IMV20",
+  "name": "interactive-world-happiness-visualization",
   "version": "1.0.0",
-  "description": "The focus in this assignment lies on the design of effective visualizations, interaction, multiple\r views, and the exploratory analysis process. You should bring in elements from the lectures on\r perception and design principles to justify your work. Note that this assignment has an intermediate\r deadline and a peer-reviewing component. You can find more information about this on Canvas.",
-  "main": "index.js",
+  "description": "An interactive web application that aims to clearify the world happiness ranking among countries by combinding the world happiness data from the year 2015 up and including 2020, with easy to use and understandable charts and maps built with D3 and THREE.js.",
+  "main": "./src/js/main.js",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leonardomathon/2IMV20.git"
+    "url": "git+https://github.com/leonardomathon/interactive-world-happiness-visualization.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/leonardomathon/2IMV20/issues"
+    "url": "https://github.com/leonardomathon/interactive-world-happiness-visualization/issues"
   },
-  "homepage": "https://github.com/leonardomathon/2IMV20#readme",
+  "homepage": "https://github.com/leonardomathon/interactive-world-happiness-visualization",
   "dependencies": {
     "autoprefixer": "^10.2.1",
     "country-locale-map": "^1.4.12",
