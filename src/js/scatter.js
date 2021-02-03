@@ -585,6 +585,9 @@ export function countryFocusOn(country) {
 export function regionFocusOn(i, d) {
     if (d['Region'] === 'Select all regions') {
         regionFocusOff();
+        if (focusedCountry !== undefined) {
+            resetClickedCountry();
+        }
     } else {
         regionFocusOff();
         if (focusedCountry !== undefined) {
