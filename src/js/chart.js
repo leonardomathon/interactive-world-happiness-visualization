@@ -69,11 +69,26 @@ export function initBarChart(completeData, country) {
     const yAxis = d3.axisLeft(y);
 
     // Set the data to the country data
-    const data = completeData[yearSlider.value][country];
+    let data = completeData[yearSlider.value][country];
+
+    // If the data from a certain year does not exist
+    if (data === undefined) {
+        data = {
+            Country: country,
+            Region: '',
+            'Economy (GDP per Capita)': 0,
+            'Freedom to make life choices': 0,
+            Generosity: 0,
+            'Happiness Rank': 0,
+            'Happiness Score': 0,
+            'Healthy life expectancy': 0,
+            'Trust (Government Corruption)': 0,
+        };
+    }
     const graphData = {
         'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
         'Freedom to make life choices': data['Freedom to make life choices'],
-        'Generosity': data['Generosity'],
+        Generosity: data['Generosity'],
         'Healthy life expectancy': data['Healthy life expectancy'],
         'Trust (Government Corruption)': data['Trust (Government Corruption)'],
     };
@@ -169,11 +184,27 @@ export function initBarChart(completeData, country) {
 // Update the data according to the new category
 export function updateBarChartData(completeData, year, country) {
     // Set the data to the country data
-    const data = completeData[year][country];
+    let data = completeData[year][country];
+
+    // If the data from a certain year does not exist
+    if (data === undefined) {
+        data = {
+            Country: country,
+            Region: '',
+            'Economy (GDP per Capita)': 0,
+            'Freedom to make life choices': 0,
+            Generosity: 0,
+            'Happiness Rank': 0,
+            'Happiness Score': 0,
+            'Healthy life expectancy': 0,
+            'Trust (Government Corruption)': 0,
+        };
+    }
+
     const graphData = {
         'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
         'Freedom to make life choices': data['Freedom to make life choices'],
-        'Generosity': data['Generosity'],
+        Generosity: data['Generosity'],
         'Healthy life expectancy': data['Healthy life expectancy'],
         'Trust (Government Corruption)': data['Trust (Government Corruption)'],
     };
@@ -203,4 +234,11 @@ export function updateBarChartData(completeData, year, country) {
         .attr('height', (d) => {
             return graphHeight - y(d.value);
         });
+}
+
+export function removeBarChart() {
+    let chart = document.getElementById('chart').querySelector('svg');
+    if (chart) {
+        chart.remove();
+    }
 }

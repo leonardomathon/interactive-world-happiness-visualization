@@ -8,7 +8,7 @@ import {
     resetClickedCountry,
 } from './webgl/globe/globe.js';
 
-var graph
+var graph;
 var focusedCountry;
 
 export function initScatter(completeData, year) {
@@ -23,32 +23,32 @@ export function initScatter(completeData, year) {
         return selectedYear === '2015'
             ? 158
             : selectedYear === '2016'
-                ? 157
-                : selectedYear === '2017'
-                    ? 155
-                    : selectedYear === '2018'
-                        ? 156
-                        : selectedYear === '2019'
-                            ? 155
-                            : selectedYear === '2020'
-                                ? 153
-                                : 0;
+            ? 157
+            : selectedYear === '2017'
+            ? 155
+            : selectedYear === '2018'
+            ? 156
+            : selectedYear === '2019'
+            ? 155
+            : selectedYear === '2020'
+            ? 153
+            : 0;
     }
 
     numberOfCountries =
         year === 2015
             ? 158
             : year === 2016
-                ? 157
-                : year === 2017
-                    ? 155
-                    : year === 2018
-                        ? 156
-                        : year === 2019
-                            ? 155
-                            : year === 2020
-                                ? 153
-                                : 0;
+            ? 157
+            : year === 2017
+            ? 155
+            : year === 2018
+            ? 156
+            : year === 2019
+            ? 155
+            : year === 2020
+            ? 153
+            : 0;
 
     // Animations
     const animation_duration = 1000;
@@ -183,12 +183,15 @@ export function initScatter(completeData, year) {
             .style('visibility', 'visible')
             .html(
                 `
-            <strong>Country:</strong> ${i[1]['Country']} (${i[1]['Region']
+            <strong>Country:</strong> ${i[1]['Country']} (${
+                    i[1]['Region']
                 })<br/>
             <strong>Happiness Ranking:</strong> ${formatOrdinal(
-                    happinessRankTooltip
-                )}<br/>
-            <strong>${category}:</strong> ${i[1][category].toString().substring(0, 4)}
+                happinessRankTooltip
+            )}<br/>
+            <strong>${category}:</strong> ${i[1][category]
+                    .toString()
+                    .substring(0, 4)}
                 `
             )
             .style('top', d.y - 100 + 'px')
@@ -277,10 +280,9 @@ export function initScatter(completeData, year) {
             let happinessRankCircle = d[1]['Happiness Rank'];
             return y(
                 (numberOfCountries + 1 - happinessRankCircle) /
-                numberOfCountries
+                    numberOfCountries
             );
         });
-
 
     // Legenda
     const continents = {
@@ -341,7 +343,7 @@ export function initScatter(completeData, year) {
                 return '#ffffff';
             }
         })
-        .on('click', regionFocusOn)
+        .on('click', regionFocusOn);
 
     // Add regions to legenda
     legend
@@ -402,7 +404,9 @@ export function initScatter(completeData, year) {
                     return '#ff5b44';
                 } else if (d[1]['Region'] === 'Eastern Asia') {
                     return '#2fc5cc';
-                } else if (d[1]['Region'] === 'Middle East and Northern Africa') {
+                } else if (
+                    d[1]['Region'] === 'Middle East and Northern Africa'
+                ) {
                     return '#F7DC6F';
                 } else if (d[1]['Region'] === 'Sub-Saharan Africa') {
                     return '#BB8FCE';
@@ -459,7 +463,7 @@ export function initScatter(completeData, year) {
                 let happinessRankCircle = d[1]['Happiness Rank'];
                 return y(
                     (numberCountries(year) + 1 - happinessRankCircle) /
-                    numberCountries(year)
+                        numberCountries(year)
                 );
             });
         if (focusedCountry !== undefined) {
@@ -559,7 +563,6 @@ export function initScatter(completeData, year) {
     yearSlider.addEventListener('change', function (e) {
         // Get slider value, update data and UI
         // yearSliderValue = yearSlider.value;
-        console.log('Yearslidesvalue: ', yearSlider.value);
 
         updateYear(yearSlider.value, category);
     });
@@ -567,11 +570,7 @@ export function initScatter(completeData, year) {
 
 export function countryFocusOff() {
     focusedCountry = undefined;
-    graph
-        .selectAll(
-            `circle`
-        )
-        .attr('opacity', '0.7');
+    graph.selectAll(`circle`).attr('opacity', '0.7');
 }
 
 export function countryFocusOn(country) {
@@ -579,9 +578,7 @@ export function countryFocusOn(country) {
     focusedCountry = country;
 
     graph
-        .selectAll(
-            `circle:not(.country-${country.split(' ').join('-')})`
-        )
+        .selectAll(`circle:not(.country-${country.split(' ').join('-')})`)
         .attr('opacity', '0.05');
 }
 
@@ -603,9 +600,5 @@ export function regionFocusOn(i, d) {
 }
 
 export function regionFocusOff() {
-    graph
-        .selectAll(
-            `circle`
-        )
-        .attr('opacity', '0.7');
+    graph.selectAll(`circle`).attr('opacity', '0.7');
 }

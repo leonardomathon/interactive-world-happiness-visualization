@@ -9,11 +9,24 @@ export function initLineChart(data, countryId) {
         .append('svg')
         .attr('preserveAspectRatio', 'xMidYMid meet')
         .attr('viewBox', `0 0 ${totalGraphWidth} ${totalGraphHeight}`);
-    console.log(data);
 
     let dataFilter = [];
     for (let year = 2015; year <= 2020; year++) {
         let countryData = data[year][countryId];
+        // If a country does not exists in a certain year, give all properties 0
+        if (countryData === undefined) {
+            countryData = {
+                Country: '',
+                'Economy (GDP per Capita)': 0,
+                'Freedom to make life choices': 0,
+                Generosity: 0,
+                'Happiness Rank': 0,
+                'Happiness Score': 0,
+                'Healthy life expectancy': 0,
+                Region: '',
+                'Trust (Government Corruption)': 0,
+            };
+        }
         countryData.Year = year;
         countryData.ISO = countryId;
         dataFilter.push(countryData);
@@ -596,5 +609,8 @@ const render = (data) => {
 };
 
 export function removeLineChart() {
-    document.getElementById('lineChart').querySelector('svg').remove();
+    let chart = document.getElementById('lineChart').querySelector('svg');
+    if (chart) {
+        chart.remove();
+    }
 }
