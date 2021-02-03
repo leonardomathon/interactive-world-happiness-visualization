@@ -148,7 +148,7 @@ countryHoverCheckbox.onfocus = function () {
     this.blur();
 };
 
-//initGlobe(yearWorldHappiness);
+initGlobe(yearWorldHappiness);
 
 // Event listeners that listen to click events on the labels
 for (let i = 0; i < yearSliderLabels.length; i++) {
