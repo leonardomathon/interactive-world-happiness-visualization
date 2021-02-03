@@ -428,7 +428,7 @@ const render = (data) => {
             .duration(200);
         div.style('opacity', 0.9)
             .html(
-                i['Year'] + '<br/>' + numberFormat(i['Health life expectancy'])
+                i['Year'] + '<br/>' + numberFormat(i['Healthy life expectancy'])
             )
             .style('top', d.y + 'px')
             .style('left', d.x - 20 + 'px');
