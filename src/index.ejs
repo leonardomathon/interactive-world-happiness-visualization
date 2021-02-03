@@ -121,6 +121,19 @@
 
     </div>
 
+    <div class='my-legend' class="fixed w-full bottom-10 flex flex-col justify-center text-center z-10">
+        <div class='legend-title' class="flex justify-start mx-5 w-1/4 ">Happiness Score</div>
+        <div class='legend-scale w-full'>
+            <ul class='legend-labels'>
+                <li><span style='background:#F1EEF6;'></span>0 - 20%</li>
+                <li><span style='background:#BDC9E1;'></span>40%</li>
+                <li><span style='background:#74A9CF;'></span>60%</li>
+                <li><span style='background:#2B8CBE;'></span>80%</li>
+                <li><span style='background:#045A8D;'></span>100%</li>
+            </ul>
+        </div>
+    </div>
+
     <div id="infoBar" class="fixed bottom-0 w-full flex flex-col z-10">
         <div id="data-info" class="float-right flex flex-row justify-end px-1.5">
             <p>Selected year: <span id="yearText">2018</span> </span> - <span id="showDataset"
@@ -137,20 +150,19 @@
     <div class='scatter-menu z-20 scatterButtonsInvisible relative flex justify-between items-center'
         id='scatterButtons'>
         <div class='scatter-menu-buttons buttons'>
-            <a href='#' data-text='Economy (GDP per Capita)' 
-                class='button-graphGdp scatter-menu-button active'>Economy (GDP per Capita)
+            <a href='#' data-text='Economy (GDP per Capita)' class='button-graphGdp scatter-menu-button active'>Economy
+                (GDP per Capita)
             </a>
             &nbsp;&nbsp;
             <a href='#' data-text='Trust (Government Corruption)'
                 class='button-graphSocialSupport scatter-menu-button'>Trust (Government Corruption)
             </a>
             &nbsp;&nbsp;
-            <a href='#' data-text='Freedom to make life choices' 
-                class='button-graphFreedom scatter-menu-button'>Freedom to make life choices
+            <a href='#' data-text='Freedom to make life choices' class='button-graphFreedom scatter-menu-button'>Freedom
+                to make life choices
             </a>
             &nbsp;&nbsp;
-            <a href='#' data-text='Generosity' 
-                class='button-graphGenerosity scatter-menu-button'>Generosity
+            <a href='#' data-text='Generosity' class='button-graphGenerosity scatter-menu-button'>Generosity
             </a>
             &nbsp;&nbsp;
             <a href='#' data-text='Healthy life expectancy'
