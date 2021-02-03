@@ -611,5 +611,8 @@ const render = (data) => {
 };
 
 export function removeLineChart() {
-    document.getElementById('lineChart').querySelector('svg').remove();
+    let chart = document.getElementById('lineChart').querySelector('svg');
+    if (chart) {
+        chart.remove();
+    }
 }
