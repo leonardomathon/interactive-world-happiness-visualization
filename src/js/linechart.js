@@ -9,7 +9,6 @@ export function initLineChart(data, countryId) {
         .append('svg')
         .attr('preserveAspectRatio', 'xMidYMid meet')
         .attr('viewBox', `0 0 ${totalGraphWidth} ${totalGraphHeight}`);
-    console.log(data);
 
     let dataFilter = [];
     for (let year = 2015; year <= 2020; year++) {
@@ -28,7 +27,6 @@ export function initLineChart(data, countryId) {
                 'Trust (Government Corruption)': 0,
             };
         }
-        console.log(countryData);
         countryData.Year = year;
         countryData.ISO = countryId;
         dataFilter.push(countryData);

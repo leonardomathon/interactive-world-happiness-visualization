@@ -165,8 +165,6 @@ for (let i = 0; i < yearSliderLabels.length; i++) {
 
 // Event listener that listens to the range slider
 yearSlider.addEventListener('change', function (e) {
-    console.log('Yearslidervalue: ', yearSliderValue);
-
     if (hoveredCountry.data.id != 'No country selected') {
         updateBarChartData(
             worldHappiness,
@@ -215,7 +213,6 @@ searchInput.addEventListener('keydown', function (e) {
     if (searchInput.value != '') {
         fuzzySearch = clm.getCountryByName(searchInput.value, true);
     } else {
-        console.log('reset fuzzy');
         searchMatch.remove();
         fuzzySearch = undefined;
     }
@@ -234,7 +231,6 @@ searchMatch.addEventListener('click', function (e) {
     searchMatch.remove();
 
     // Check if country has alpha 3
-    console.log(fuzzySearch);
     if (fuzzySearch && isCountryDrawn(fuzzySearch.alpha3)) {
         searchedCountry.data = {
             id: fuzzySearch.alpha3,
