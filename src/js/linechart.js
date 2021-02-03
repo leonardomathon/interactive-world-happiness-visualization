@@ -14,6 +14,21 @@ export function initLineChart(data, countryId) {
     let dataFilter = [];
     for (let year = 2015; year <= 2020; year++) {
         let countryData = data[year][countryId];
+        // If a country does not exists in a certain year, give all properties 0
+        if (countryData === undefined) {
+            countryData = {
+                Country: '',
+                'Economy (GDP per Capita)': 0,
+                'Freedom to make life choices': 0,
+                Generosity: 0,
+                'Happiness Rank': 0,
+                'Happiness Score': 0,
+                'Healthy life expectancy': 0,
+                Region: '',
+                'Trust (Government Corruption)': 0,
+            };
+        }
+        console.log(countryData);
         countryData.Year = year;
         countryData.ISO = countryId;
         dataFilter.push(countryData);
