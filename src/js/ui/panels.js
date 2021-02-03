@@ -69,7 +69,7 @@ export function createBarChartPanel(panelTitle, contentHtml) {
             my: 'left-top',
             at: 'left-top',
             offsetX: 15,
-            offsetY: 100,
+            offsetY: 200,
         },
         headerControls: {
             minimize: 'remove',
@@ -100,7 +100,7 @@ export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
             my: 'left-top',
             at: 'left-top',
             offsetX: 15,
-            offsetY: 425,
+            offsetY: 525,
         },
         headerControls: {
             minimize: 'remove',

@@ -29,7 +29,7 @@ const countryProjection = d3
 
 const colorScale = d3
     .scaleThreshold()
-    .domain([5, 10, 25, 50, 75, 100, 125, 150, 200, 500])
+    .domain([5, 10, 25, 50, 75, 100, 125, 150, 200])
     .range(d3.schemeBlues[9]);
 
 export function createWorldTexture(yearWorldHappinessData) {
