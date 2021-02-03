@@ -23,7 +23,7 @@ export function initBarChart(completeData, country) {
         .attr('preserveAspectRatio', 'xMidYMid meet')
         .attr('viewBox', `0 0 ${totalGraphWidth} ${totalGraphHeight}`);
 
-    // Append the graph to the svg frame
+    // Append the bar chart to the svg frame
     graph = svg
         .append('g')
         .attr('width', graphWidth)

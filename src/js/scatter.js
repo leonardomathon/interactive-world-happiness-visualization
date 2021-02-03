@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import countriesOfTheWorld from '../../Datasets/countries-of-the-world.json';
 
+// Import the necessary globe functions
 import {
     hoveredCountry,
     clickedCountry,
@@ -8,61 +9,69 @@ import {
     resetClickedCountry,
 } from './webgl/globe/globe.js';
 
+// Variable that contains the svg frame
 var graph;
+// Variable the contains the selected country
 var focusedCountry;
 
 export function initScatter(completeData, year) {
+    // Initialze the data for the scatter plot, selecting the appropriate year
     var data = completeData[year];
+    // Variable containing the default category of the scatterplot
     var category = 'Economy (GDP per Capita)';
+    // Variable containing the number of countries of the displayed year
     var numberOfCountries;
 
-    // <input> tag used for year selection
+    // Retrieve the yearslider from the main file
     let yearSlider = document.getElementById('yearSlider');
 
+    // Determine the number of countries in the scatter plot based on the selected year
     function numberCountries(selectedYear) {
         return selectedYear === '2015'
             ? 158
             : selectedYear === '2016'
-            ? 157
-            : selectedYear === '2017'
-            ? 155
-            : selectedYear === '2018'
-            ? 156
-            : selectedYear === '2019'
-            ? 155
-            : selectedYear === '2020'
-            ? 153
-            : 0;
+                ? 157
+                : selectedYear === '2017'
+                    ? 155
+                    : selectedYear === '2018'
+                        ? 156
+                        : selectedYear === '2019'
+                            ? 155
+                            : selectedYear === '2020'
+                                ? 153
+                                : 0;
     }
 
+    // Set the default number of countries
     numberOfCountries =
         year === 2015
             ? 158
             : year === 2016
-            ? 157
-            : year === 2017
-            ? 155
-            : year === 2018
-            ? 156
-            : year === 2019
-            ? 155
-            : year === 2020
-            ? 153
-            : 0;
+                ? 157
+                : year === 2017
+                    ? 155
+                    : year === 2018
+                        ? 156
+                        : year === 2019
+                            ? 155
+                            : year === 2020
+                                ? 153
+                                : 0;
 
-    // Animations
+    // Animations while changing the year or category displayed in the scatter plot
     const animation_duration = 1000;
     const animation_delay = 0;
     const animation_easing = d3.easePoly;
 
-    // Height and Width of the graph
+    // Width of the scatter plot
     const graphWidth = window.innerWidth - 250;
+    // Height of the scatter plot
     const graphHeight = window.innerHeight - 300;
 
-    // create margins and dimensions
+    // Margins on all sides of the scatter plot
     const margin = 100;
 
-    // Formatting of rank in tooltip
+    // Formatting of the happiness rank displayed in the tooltip while hovering over a country in the scatterplot
     function formatOrdinal(num) {
         const int = parseInt(num),
             digits = [int % 10, int % 100],
@@ -75,7 +84,7 @@ export function initScatter(completeData, year) {
             : int + ordinals[3];
     }
 
-    // Add the svg frame
+    // Initialize the svg frame
     const svg = d3
         .select('#scatter')
         .append('svg')
@@ -84,36 +93,36 @@ export function initScatter(completeData, year) {
             `0 0 ${graphWidth + margin * 2} ${graphHeight + margin * 2}`
         );
 
-    // Append the graph
+    // Append the scatter plot to the svg frame
     graph = svg
         .append('g')
         .attr('position', 'relative')
         .attr('class', 'main__svg')
         .attr('transform', `translate(${margin}, ${margin})`);
 
-    // Scale the x - axis, select space between bars using padding
+    // Set the default domain of the x-axis
     const x = d3.scaleLinear().domain([0, 1.8]).range([0, graphWidth]);
 
-    // Load x axis
+    // Initialize the x-axis
     const xAxis = d3.axisBottom(x).ticks(20);
 
-    // Append the x - axis, set the position of the axis at 0
+    // Append the x-axis to the scatter plot, translate the x-axis to the origin
     const xAxisGroup = graph
         .append('g')
         .attr('transform', `translate(0, ${graphHeight})`)
         .call(xAxis)
         .attr('class', 'x-axis');
 
-    // Scale the y - axis, select space between bars using padding
+    // Set the domain and range of the y-axis
     const y = d3.scaleLinear().domain([1, 0]).range([0, graphHeight]);
 
-    // Load y axis
+    // Initialize the y-axis
     const yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.format('.0%'));
 
-    // Append the y - axis, set the position of the axis at 0
+    // Append the y-axis to the scatter plot
     const yAxisGroup = graph.append('g').call(yAxis);
 
-    // Labels
+    // Add title to the x-axis of the scatter plot
     var xLabel = graph
         .append('g')
         .append('text')
@@ -126,12 +135,12 @@ export function initScatter(completeData, year) {
         .style('fill', '#FFFFFF')
         .text('GDP Per Capita ($)');
 
+    // Add title to the y-axis of the scatter plot
     var yLabel = graph
         .append('g')
         .append('text')
         .attr('class', 'yAxisGroup')
         .attr('transform', 'rotate(-90)')
-        // .attr('position', 'relative')
         .attr('x', -(graphHeight / 2))
         .attr('y', -50)
         .attr('font-size', '18px')
@@ -140,7 +149,7 @@ export function initScatter(completeData, year) {
         .style('fill', '#FFFFFF')
         .text('Happiness Index (%)');
 
-    // Render tooltip
+    // Initialize the tooltip and its propertries displayed while hovering over a country in the scatter plot
     const tooltip = d3
         .select('body')
         .append('div')
@@ -154,6 +163,7 @@ export function initScatter(completeData, year) {
         .style('position', 'absolute')
         .style('display', 'block');
 
+    // Update the visualizations and hightlight the country appropriate circle on the selected country
     const setClickedCountryScatter = function (d, i) {
         focusedCountry = i[1]['Country'];
         let countryClicked = {
@@ -174,7 +184,7 @@ export function initScatter(completeData, year) {
         countryFocusOn(i[1]['Country']);
     };
 
-    // Render initial tooltip
+    // Initialize the tooltip when the user touches a country in the scatter plot
     const showTooltip = function (d, i) {
         let happinessRankTooltip = i[1]['Happiness Rank'];
 
@@ -183,12 +193,11 @@ export function initScatter(completeData, year) {
             .style('visibility', 'visible')
             .html(
                 `
-            <strong>Country:</strong> ${i[1]['Country']} (${
-                    i[1]['Region']
+            <strong>Country:</strong> ${i[1]['Country']} (${i[1]['Region']
                 })<br/>
             <strong>Happiness Ranking:</strong> ${formatOrdinal(
-                happinessRankTooltip
-            )}<br/>
+                    happinessRankTooltip
+                )}<br/>
             <strong>${category}:</strong> ${i[1][category]
                     .toString()
                     .substring(0, 4)}
@@ -198,20 +207,25 @@ export function initScatter(completeData, year) {
             .style('left', d.x - 160 + 'px');
     };
 
-    // Rendering tooltip on hovering
+    // Initialize the tooltip when the user hovers over a country in the scatter plot
     const moveTooltip = function (d, i) {
         showTooltip(d, i);
         tooltip.style('top', d.y - 100 + 'px').style('left', d.x - 160 + 'px');
     };
 
-    // Hide tooltip
+    // Deinitialize the tooltip when the user does not hover over a country in the scatter plot
     const hideTooltip = function (d, i) {
         tooltip.transition().duration(200).style('visibility', 'hidden');
     };
 
-    // Render circles
+    // Associate the data with the available circles
     const circles = graph.selectAll('circle').data(Object.entries(data));
 
+    /* 
+     *  Append the circles corresponding to the countries with predefined interactions and properties to the scatter plot.
+     *  Determine the color of a circle based on the region in which a country is located.
+     *  Determine the radius of a circle based on the population size of a country.
+     */
     circles
         .enter()
         .append('circle')
@@ -280,11 +294,11 @@ export function initScatter(completeData, year) {
             let happinessRankCircle = d[1]['Happiness Rank'];
             return y(
                 (numberOfCountries + 1 - happinessRankCircle) /
-                    numberOfCountries
+                numberOfCountries
             );
         });
 
-    // Legenda
+    // The regions displayed in the legenda
     const continents = {
         CEE: { Region: 'Central and Eastern Europe' },
         WE: { Region: 'Western Europe' },
@@ -299,7 +313,7 @@ export function initScatter(completeData, year) {
         ALR: { Region: 'Select all regions' }
     };
 
-    // Position of legenda
+    // Initialize the legenda of the scatter plot
     const legend = graph
         .selectAll('.legend')
         .data(Object.values(continents))
@@ -309,7 +323,8 @@ export function initScatter(completeData, year) {
         .attr('position', 'absolute')
         .attr('transform', `translate(${graphWidth - margin * 2}, ${0})`);
 
-    // Add colored squared to legenda
+    // Add colored squares to the legenda, based on the region in which a country is located
+    // and corresponding to the color of the circles in the scatter plot
     legend
         .append('rect')
         .attr('x', 0)
@@ -345,7 +360,7 @@ export function initScatter(completeData, year) {
         })
         .on('click', regionFocusOn);
 
-    // Add regions to legenda
+    // Add the different regions to the legenda
     legend
         .append('text')
         .attr('x', 25)
@@ -362,7 +377,7 @@ export function initScatter(completeData, year) {
         .style('fill', '#FFFFFF')
         .on('click', regionFocusOn);
 
-    // Add legenda title
+    // Add a title to the legenda
     legend
         .append('text')
         .attr('x', 25)
@@ -372,15 +387,16 @@ export function initScatter(completeData, year) {
         .attr('font-size', '12px')
         .style('fill', '#FFFFFF');
 
-    // Update the data according to the new category
+    // Update the scatter plot based on the selected year
     function updateYear(year, label) {
+
         // Render circles
         const countryCircles = graph.selectAll('.country-circle');
         countryCircles.remove();
 
         data = completeData[year];
 
-        // Render circles
+        // Associate the new data with the available circles and update the circles accordingly
         const circles = graph
             .selectAll('circle')
             .data(Object.entries(data))
@@ -463,7 +479,7 @@ export function initScatter(completeData, year) {
                 let happinessRankCircle = d[1]['Happiness Rank'];
                 return y(
                     (numberCountries(year) + 1 - happinessRankCircle) /
-                        numberCountries(year)
+                    numberCountries(year)
                 );
             });
         if (focusedCountry !== undefined) {
@@ -471,8 +487,10 @@ export function initScatter(completeData, year) {
         }
     }
 
-    // Update the data according to the new category
+    // Update the data based on the selected category
     function updateData(label) {
+
+        // Dynamically update the new domain of the x-axis based on the category
         let scale;
 
         if (label === 'graphSocialSupport') {
@@ -494,19 +512,20 @@ export function initScatter(completeData, year) {
 
         graph.selectAll('.x-axis').remove();
 
-        // Scale the x - axis, select space between bars using padding
+        // Set the default new domain of the x-axis
         const x = d3.scaleLinear().domain([0, scale]).range([0, graphWidth]);
 
-        // Load x axis
+        // Initialize the x-axis
         const xAxis = d3.axisBottom(x).ticks(20);
 
-        // Append the x - axis, set the position of the axis at 0
+        // Append the x-axis to the scatter plot, translate the x-axis to the origin
         const xAxisGroup = graph
             .append('g')
             .attr('transform', `translate(0, ${graphHeight})`)
             .call(xAxis)
             .attr('class', 'x-axis');
 
+        // Update the bar chart based on the new category
         graph
             .selectAll('.country-circle')
             .transition()
@@ -519,8 +538,8 @@ export function initScatter(completeData, year) {
         updateAxisLabel(category);
     }
 
+    // Update the title of the x-axis based on the new category
     function updateAxisLabel(label) {
-        // Update the category displayed on the x-axis
         if (label === 'graphSocialSupport') {
             category = 'Trust (Government Corruption)';
         } else if (label === 'graphFreedom') {
@@ -533,11 +552,11 @@ export function initScatter(completeData, year) {
             category = 'Economy (GDP per Capita)';
         }
 
-        // Update the category displayed on the x-axis
         graph.select('.x-axis-label').text(`${label}`);
     }
 
-    // Button group event listener, checks button group and updates if button is not currently selected
+    // An event listener associated to the buttons representing the different categories
+    // that allows for dynamically updating the scatterplot based on the selected category
     let btnGroup = document.querySelector('.buttons');
     btnGroup.addEventListener('mousedown', (e) => {
         e.preventDefault();
@@ -559,20 +578,20 @@ export function initScatter(completeData, year) {
         }
     });
 
-    // Event listener that listens to the range slider
+    // An event listener associated to year slider representing the different years
+    // that allows for dynamically updating the scatterplot based on the selected year
     yearSlider.addEventListener('change', function (e) {
-        // Get slider value, update data and UI
-        // yearSliderValue = yearSlider.value;
-
         updateYear(yearSlider.value, category);
     });
 }
 
+// Remove the focus from a selected country
 export function countryFocusOff() {
     focusedCountry = undefined;
     graph.selectAll(`circle`).attr('opacity', '0.7');
 }
 
+// Focus on a selected country
 export function countryFocusOn(country) {
     regionFocusOff();
     focusedCountry = country;
@@ -582,6 +601,7 @@ export function countryFocusOn(country) {
         .attr('opacity', '0.05');
 }
 
+// Focus on the countries of a selected region
 export function regionFocusOn(i, d) {
     if (d['Region'] === 'Select all regions') {
         regionFocusOff();
@@ -602,6 +622,7 @@ export function regionFocusOn(i, d) {
     }
 }
 
+// Remove the focus from the countries in a selected region
 export function regionFocusOff() {
     graph.selectAll(`circle`).attr('opacity', '0.7');
 }
