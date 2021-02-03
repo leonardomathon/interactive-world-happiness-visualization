@@ -30,7 +30,7 @@ import { initLineChart, removeLineChart } from './linechart';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
-import countriesOfTheWorld from '../../Datasets/countries-of-the-world.json';
+import countriesOfTheWorld from '../../datasets/countries-of-the-world.json';
 
 // <span> tag displaying selected year
 let yearText = document.getElementById('yearText');
