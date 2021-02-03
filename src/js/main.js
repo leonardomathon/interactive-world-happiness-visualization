@@ -24,7 +24,7 @@ import { isCountryDrawn } from './utils/geo.js';
 import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import charts
-import { initBarChart, updateBarChartData } from './chart.js';
+import { initBarChart, removeBarChart, updateBarChartData } from './chart.js';
 import { initScatter, countryFocusOff, countryFocusOn } from './scatter.js';
 import { initLineChart, removeLineChart } from './linechart';
 
@@ -288,7 +288,7 @@ clickedCountry.registerListener(function (val) {
         countryFocusOff();
 
         // Remove bar chart
-        document.getElementById('chart').querySelector('svg').remove();
+        removeBarChart();
         barChartPanel.setHeaderTitle('Bar chart');
 
         // Remove line chart
