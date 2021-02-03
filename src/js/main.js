@@ -239,11 +239,15 @@ searchMatch.addEventListener('click', function (e) {
 
     // Check if country has alpha 3
     if (fuzzySearch && isCountryDrawn(fuzzySearch.alpha3)) {
+        console.log('test');
+        console.log('Fuzzy: ', fuzzySearch.name)
         searchedCountry.data = {
             id: fuzzySearch.alpha3,
             name: fuzzySearch.name,
             index: null,
         };
+        barChartPanel.setHeaderTitle(`Bar chart of ${hoveredCountry.data.name}`);
+        lineChartPanel.setHeaderTitle(`Bar chart of ${hoveredCountry.data.name}`);
     } else {
         createErrorPanel(
             'Country not found',
