@@ -92,17 +92,17 @@ export function initScatter(completeData, year) {
         .attr('transform', `translate(${margin}, ${margin})`);
 
     // Scale the x - axis, select space between bars using padding
-    const x = d3.scaleLinear().domain([0, 1]).range([0, graphWidth]);
+    const x = d3.scaleLinear().domain([0, 1.8]).range([0, graphWidth]);
 
     // Load x axis
     const xAxis = d3.axisBottom(x).ticks(20);
-    //.tickFormat(d3.format('.00'));
 
     // Append the x - axis, set the position of the axis at 0
     const xAxisGroup = graph
         .append('g')
         .attr('transform', `translate(0, ${graphHeight})`)
-        .call(xAxis);
+        .call(xAxis)
+        .attr('class', 'x-axis');
 
     // Scale the y - axis, select space between bars using padding
     const y = d3.scaleLinear().domain([1, 0]).range([0, graphHeight]);
@@ -468,17 +468,39 @@ export function initScatter(completeData, year) {
 
     // Update the data according to the new category
     function updateData(label) {
+        let scale;
+
         if (label === 'graphSocialSupport') {
             category = 'Trust (Government Corruption)';
+            scale = 0.6;
         } else if (label === 'graphFreedom') {
             category = 'Freedom to make life choices';
+            scale = 0.8;
         } else if (label === 'graphGenerosity') {
             category = 'Generosity';
+            scale = 0.9;
         } else if (label === 'graphLifeExpectancy') {
             category = 'Healthy life expectancy';
+            scale = 1.2;
         } else if (label === 'graphGdp') {
             category = 'Economy (GDP per Capita)';
+            scale = 1.8;
         }
+
+       graph.selectAll('.x-axis').remove();
+
+        // Scale the x - axis, select space between bars using padding
+        const x = d3.scaleLinear().domain([0, scale]).range([0, graphWidth]);
+
+        // Load x axis
+        const xAxis = d3.axisBottom(x).ticks(20);
+
+        // Append the x - axis, set the position of the axis at 0
+        const xAxisGroup = graph
+            .append('g')
+            .attr('transform', `translate(0, ${graphHeight})`)
+            .call(xAxis)
+            .attr('class', 'x-axis');
 
         graph
             .selectAll('.country-circle')
