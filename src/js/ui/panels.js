@@ -69,7 +69,7 @@ export function createBarChartPanel(panelTitle, contentHtml) {
             my: 'left-top',
             at: 'left-top',
             offsetX: 15,
-            offsetY: 100,
+            offsetY: 200,
         },
         headerControls: {
             minimize: 'remove',
@@ -91,7 +91,7 @@ export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
         borderRadius: '.5rem',
         panelSize: {
             width: 550,
-            height: 400,
+            height: 360,
         },
         resizeit: {
             aspectRatio: 'content',
@@ -100,7 +100,7 @@ export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
             my: 'left-top',
             at: 'left-top',
             offsetX: 15,
-            offsetY: 425,
+            offsetY: 525,
         },
         headerControls: {
             minimize: 'remove',
@@ -113,6 +113,34 @@ export function createScatterPanel(panelTitle, contentHtml, footerHtml) {
         },
         content: contentHtml,
         footerToolbar: footerHtml,
+    });
+}
+
+// Creates a panel that shows a bar chart visualization
+export function createLineChartPanel(panelTitle, contentHtml) {
+    return jsPanel.create({
+        theme: panelTheme,
+        borderRadius: '.5rem',
+        panelSize: {
+            width: 500,
+            height: 300,
+        },
+        position: {
+            my: 'right-bottom',
+            at: 'right-bottom',
+            offsetX: -5,
+            offsetY: -69,
+        },
+        headerControls: {
+            minimize: 'remove',
+            close: 'remove',
+            size: 'md',
+        },
+        headerTitle: panelTitle,
+        dragit: {
+            cursor: 'default',
+        },
+        content: contentHtml,
     });
 }
 

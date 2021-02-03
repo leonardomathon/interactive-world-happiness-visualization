@@ -1,52 +1,54 @@
 import * as d3 from 'd3';
 
+// Variable that contains the svg frame
 var graph;
+// Variable that initializes the y-axis
+var y;
 
-// Height and Width of the graph
+// Total height and total widht of the bar chart
 const totalGraphWidth = 800;
 const totalGraphHeight = 400;
 
-// create margins and dimensions
+// Margins on all sides of the bar chart
 const margin = { top: 50, right: 20, bottom: 120, left: 80 };
 const graphWidth = totalGraphWidth - margin.left - margin.right;
 const graphHeight = totalGraphHeight - margin.top - margin.bottom;
 
-// Scale the y - axis
-var y;
-
+// Function to initialize the bar chart
 export function initBarChart(completeData, country) {
-    // Add the svg frame
+    // Initialize the svg frame
     const svg = d3
         .select('#chart')
         .append('svg')
         .attr('preserveAspectRatio', 'xMidYMid meet')
         .attr('viewBox', `0 0 ${totalGraphWidth} ${totalGraphHeight}`);
 
-    // Append the graph
+    // Append the bar chart to the svg frame
     graph = svg
         .append('g')
         .attr('width', graphWidth)
         .attr('height', graphHeight)
         .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-    // Append the x - axis, set the position of the axis at 0
+    // Append the x-axis to the bar chart, translate the x-axis to the origin
     const xAxisGroup = graph
         .append('g')
         .attr('transform', `translate(0, ${graphHeight})`);
-    // Append the y - axis
+
+    // Append the y-axis to the bar chart
     const yAxisGroup = graph.append('g');
 
-    // Scale the y - axis
+    // Set the domain of the y-axis
     y = d3.scaleLinear().range([graphHeight, 0]);
 
-    // Scale the x - axis, select space between bars using padding
+    // Set the domain of the x-axis, set the space between the bars using padding
     const x = d3
         .scaleBand()
         .range([0, graphWidth])
         .paddingInner(0.2)
         .paddingOuter(0.2);
 
-    // Add a title to the graph
+    // Add title to the x-axis of the bar chart 
     const xTitle = graph
         .append('text')
         .attr('text-anchor', 'end')
@@ -55,7 +57,7 @@ export function initBarChart(completeData, country) {
         .attr('fill', 'white')
         .text('Category');
 
-    // Add a title to the graph
+    // Add title to the y-axis of the bar chart 
     const yTitle = graph
         .append('text')
         .attr('text-anchor', 'end')
@@ -64,41 +66,60 @@ export function initBarChart(completeData, country) {
         .attr('fill', 'white')
         .text('Value');
 
-    // Load both axis
+    // Initialize the x-axis
     const xAxis = d3.axisBottom(x);
+    // Initialize the y-axis
     const yAxis = d3.axisLeft(y);
 
-    // Set the data to the country data
-    const data = completeData[yearSlider.value][country];
+    // Initialze the data for the bar chart, selecting the appropriate year and country
+    let data = completeData[yearSlider.value][country];
+
+    // Set the value of the bars to zero if the data of a particular year is not available in the dataset
+    if (data === undefined) {
+        data = {
+            Country: country,
+            Region: '',
+            'Economy (GDP per Capita)': 0,
+            'Freedom to make life choices': 0,
+            Generosity: 0,
+            'Happiness Rank': 0,
+            'Happiness Score': 0,
+            'Healthy life expectancy': 0,
+            'Trust (Government Corruption)': 0,
+        };
+    }
+
+    // Assign the data to seperate categories
     const graphData = {
         'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
         'Freedom to make life choices': data['Freedom to make life choices'],
-        'Generosity': data['Generosity'],
+        Generosity: data['Generosity'],
         'Healthy life expectancy': data['Healthy life expectancy'],
         'Trust (Government Corruption)': data['Trust (Government Corruption)'],
     };
 
-    // Name on the x-axis
+    // Set the name of a bar equal to the corresponding category
     const barsKeys = Object.keys(graphData);
-    // Value on the y-axis
+    // Set the value of a bar equal to the corresponding category
     const barsValues = Object.values(graphData);
 
-    // Create bar charts
+    // Initialize the bars in the bar chart
     const bars = [];
     barsKeys.forEach((key, idx) => {
         bars[idx] = { name: barsKeys[idx], value: barsValues[idx] };
     });
 
-    // Range of values
+    // Dynamically set the domain of the y-axis to category containing the maximum value
     y.domain([0, (Math.ceil(d3.max(barsValues) * 10) / 10).toFixed(1)]);
 
-    // Number of categories
+    // Dynamically set the domain of the x-axis to the categories in the dataset
     x.domain(barsKeys);
 
-    // Tie data to the rects available
+    // Associate the data with the available bars
     const rects = graph.selectAll('rect').data(bars);
     rects.exit().remove();
 
+    // Append the bars with predefined interactions and properties to the chart
     rects
         .enter()
         .append('rect')
@@ -120,11 +141,12 @@ export function initBarChart(completeData, country) {
             return graphHeight - y(d.value);
         });
 
-    // Call both axis
+    // Call the x-axis
     xAxisGroup.call(xAxis);
+    // Call the y-axis
     yAxisGroup.call(yAxis);
 
-    // Lay-out text below graph
+    // Styling properties of the category names on the x-axis
     xAxisGroup
         .selectAll('text')
         .attr('transform', `rotate(-40)`)
@@ -132,14 +154,15 @@ export function initBarChart(completeData, country) {
         .attr('fill', 'white')
         .style('font-size', '12px');
 
+    // Initialize the hover function 
     function handleMouseOver(d, i) {
-        // Add interactivity
-        // Use D3 to select element, change color and size
+
+        // Select the hovered bar and change its color
         d3.select(this).style('fill', '#B3B6B7');
 
         let valueCharacter = i.value.toString();
 
-        // Specify where to put label of text
+        // Display the value corresponding to the hovered category inside the associated bar
         const hover = graph
             .append('text')
             .transition()
@@ -152,7 +175,7 @@ export function initBarChart(completeData, country) {
             .attr(
                 'x',
                 parseInt(d3.select(this).attr('x')) +
-                    (parseInt(d3.select(this).attr('width')) / 2 - 12)
+                (parseInt(d3.select(this).attr('width')) / 2 - 12)
             )
             .attr('pointer-events', 'none')
             .attr('class', 'hover')
@@ -160,39 +183,59 @@ export function initBarChart(completeData, country) {
             .text(valueCharacter.substring(0, 4));
     }
 
+    // Deinitialize the hover function
     function handleMouseOut(d, i) {
         d3.select(this).attr('style', '#FFFFFF');
-        d3.selectAll('.hover').remove(); // Remove text location
+        d3.selectAll('.hover').remove();
     }
 }
 
-// Update the data according to the new category
+// Update the bar charts based on the selected country and year
 export function updateBarChartData(completeData, year, country) {
-    // Set the data to the country data
-    const data = completeData[year][country];
+
+    // Reinitialze the data for the bar chart, selecting the appropriate year and country
+    let data = completeData[year][country];
+
+    // Set the value of the bars to zero if the data of a particular year is not available in the dataset
+    if (data === undefined) {
+        data = {
+            Country: country,
+            Region: '',
+            'Economy (GDP per Capita)': 0,
+            'Freedom to make life choices': 0,
+            Generosity: 0,
+            'Happiness Rank': 0,
+            'Happiness Score': 0,
+            'Healthy life expectancy': 0,
+            'Trust (Government Corruption)': 0,
+        };
+    }
+
+    // Assign the data to seperate categories
     const graphData = {
         'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
         'Freedom to make life choices': data['Freedom to make life choices'],
-        'Generosity': data['Generosity'],
+        Generosity: data['Generosity'],
         'Healthy life expectancy': data['Healthy life expectancy'],
         'Trust (Government Corruption)': data['Trust (Government Corruption)'],
     };
 
-    // Name on the x-axis
+    // Set the name of a bar equal to the corresponding category
     const barsKeys = Object.keys(graphData);
-    // Value on the x-axis
+    // Set the value of a bar equal to the corresponding category
     const barsValues = Object.values(graphData);
 
-    // Create bar charts
+    // Initialize the bars in the bar chart
     const bars = [];
     barsKeys.forEach((key, idx) => {
         bars[idx] = { name: barsKeys[idx], value: barsValues[idx] };
     });
 
-    // Tie data to the rects available
+    // Associate the data with the available bars
     const rects = graph.selectAll('rect').data(bars);
     rects.exit().remove();
 
+    // Update the bar chart based on the new data
     graph
         .selectAll('rect')
         .transition()
@@ -203,4 +246,12 @@ export function updateBarChartData(completeData, year, country) {
         .attr('height', (d) => {
             return graphHeight - y(d.value);
         });
+}
+
+// Remove the bar chart when a country is deselected
+export function removeBarChart() {
+    let chart = document.getElementById('chart').querySelector('svg');
+    if (chart) {
+        chart.remove();
+    }
 }

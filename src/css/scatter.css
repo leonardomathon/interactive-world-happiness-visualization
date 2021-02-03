@@ -1,0 +1,38 @@
+/* Scatter plot */
+/* Location of categories */
+.scatterButtonsInvisible {
+    display: none !important;
+}
+
+/* Style of the categories */
+.scatter-menu-button {
+    color: #fff;
+    opacity: .3;
+    text-decoration: none;
+    transition: all 100ms ease-in;
+    border-bottom: 2px solid transparent;
+    position: relative;
+}
+
+/* Style of the categories on hover */
+.scatter-menu-button:hover {
+    text-decoration: none;
+    opacity: 1;
+    border-bottom: 2px solid #ffffff;
+}
+
+/* Style of the active category */
+.scatter-menu-button.active {
+    text-decoration: none;
+    opacity: 1;
+    text-shadow: 0 0 .65px #333, 0 0 .65px #333;
+    color: #ffffff;
+    background-color: transparent;
+    border-bottom: 2px solid #ffffff;
+    text-decoration: none;
+    transition: all 100ms ease-in;
+}
+
+.country-circle:hover {
+    stroke: #000000;
+}

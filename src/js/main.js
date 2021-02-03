@@ -6,6 +6,7 @@ import {
     createDatasetPanel,
     createBarChartPanel,
     createScatterPanel,
+    createLineChartPanel,
     createGPUHintPanel,
     createErrorPanel,
 } from './ui/panels.js';
@@ -21,6 +22,11 @@ import {
 } from './webgl/globe/globe.js';
 import { isCountryDrawn } from './utils/geo.js';
 import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
+
+// Import charts
+import { initBarChart, removeBarChart, updateBarChartData } from './chart.js';
+import { initScatter, countryFocusOff, countryFocusOn } from './scatter.js';
+import { initLineChart, removeLineChart } from './linechart';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
@@ -84,12 +90,12 @@ let countyGDPTag = document.getElementById('countyGDPTag');
 // Toggle buttons for all graphs
 let barChartToggle = document.getElementById('barChartToggle');
 let scatterPlotToggle = document.getElementById('scatterPlotToggle');
-let lineGraphToggle = document.getElementById('lineGraphToggle');
+let lineChartToggle = document.getElementById('lineChartToggle');
 
 // States for all toggle buttons
 let barChartState = false;
 let scatterPlotState = false;
-let lineGraphState = false;
+let lineChartState = false;
 
 // HTML code for the scatter panel
 let scatterButtons = document.getElementById('scatterButtons');
@@ -106,6 +112,12 @@ let scatterPanel = createScatterPanel(
     new XMLSerializer().serializeToString(scatterButtons)
 );
 scatterPanel.classList.add('panelInvisible');
+
+let lineChartPanel = createLineChartPanel(
+    'Line chart',
+    '<div id="lineChart"></div>'
+);
+lineChartPanel.classList.add('panelInvisible');
 
 // Config object that holds value of preprocessing effects
 let preprocessingOptions = {
@@ -163,8 +175,6 @@ for (let i = 0; i < yearSliderLabels.length; i++) {
 
 // Event listener that listens to the range slider
 yearSlider.addEventListener('change', function (e) {
-    console.log('Yearslidervalue: ', yearSliderValue);
-
     if (hoveredCountry.data.id != 'No country selected') {
         updateBarChartData(
             worldHappiness,
@@ -213,7 +223,6 @@ searchInput.addEventListener('keydown', function (e) {
     if (searchInput.value != '') {
         fuzzySearch = clm.getCountryByName(searchInput.value, true);
     } else {
-        console.log('reset fuzzy');
         searchMatch.remove();
         fuzzySearch = undefined;
     }
@@ -232,7 +241,6 @@ searchMatch.addEventListener('click', function (e) {
     searchMatch.remove();
 
     // Check if country has alpha 3
-    console.log(fuzzySearch);
     if (fuzzySearch && isCountryDrawn(fuzzySearch.alpha3)) {
         searchedCountry.data = {
             id: fuzzySearch.alpha3,
@@ -296,13 +304,22 @@ clickedCountry.registerListener(function (val) {
         barChartPanel.setHeaderTitle(
             `Bar chart of ${hoveredCountry.data.name}`
         );
+
+        // Init line chart
+        initLineChart(worldHappiness, clickedCountry.data.id);
+        lineChartPanel.setHeaderTitle(
+            `Line chart of ${hoveredCountry.data.name}`
+        );
     } else {
         // Remove focus from selected country in scatter plot
         countryFocusOff();
 
         // Remove bar chart
-        document.getElementById('chart').querySelector('svg').remove();
+        removeBarChart();
         barChartPanel.setHeaderTitle('Bar chart');
+
+        // Remove line chart
+        removeLineChart();
     }
 });
 
@@ -351,15 +368,17 @@ scatterPlotToggle.addEventListener('click', function (e) {
 });
 
 // Event listerer that listens to line graph toggle button click
-lineGraphToggle.addEventListener('click', function (e) {
+lineChartToggle.addEventListener('click', function (e) {
     // switch state
-    lineGraphState = !lineGraphState;
-    if (scatterPlotState) {
+    lineChartState = !lineChartState;
+    if (lineChartState) {
         // Make the toggle white
-        lineGraphToggle.classList.add('active');
+        lineChartToggle.classList.add('active');
+        lineChartPanel.classList.remove('panelInvisible');
     } else {
         // Remove white toggle
-        lineGraphToggle.classList.remove('active');
+        lineChartToggle.classList.remove('active');
+        lineChartPanel.classList.add('panelInvisible');
     }
 });
 

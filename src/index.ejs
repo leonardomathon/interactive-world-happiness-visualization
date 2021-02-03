@@ -48,7 +48,7 @@
                 class='flex items-center mx-2 py-2 px-6 bg-black bg-opacity-30 rounded-b-lg text-gray-600 bg-gray-200 hover:bg-white hover:bg-opacity-10 transition-all'>
                 <i class="ri-bubble-chart-fill"></i>
             </li>
-            <li id="lineGraphToggle"
+            <li id="lineChartToggle"
                 class='mx-2 py-2 px-6 bg-black bg-opacity-30 rounded-b-lg text-gray-600 bg-gray-200 hover:bg-white hover:bg-opacity-10 transition-all'>
                 <i class="ri-line-chart-fill"></i>
             </li>
@@ -134,6 +134,28 @@
 
     </div>
 
+    <div id='legendBar' class="absolute top-16 z-10 m-5">
+        <div class='legend-title' class="flex justify-start  ">
+            <p>Happiness score</p>
+        </div>
+        <div class='legend-scale w-full'>
+            <ul class='legend-labels'>
+                <li><span style='background:#083A96;'></span></li>
+                <li><span style='background:#0861DA;'></span></li>
+                <li><span style='background:#2288FE;'></span></li>
+                <li><span style='background:#43B0FF;'></span></li>
+                <li><span style='background:#6ED4FF;'></span></li>
+                <li><span style='background:#6DD2FF;'></span></li>
+                <li><span style='background:#A1F4FF;'></span></li>
+                <li><span style='background:#C8FFFF;'></span></li>
+                <li><span style='background: #E2FFFF;'></span></li>
+            </ul>
+        </div>
+        <div class='legend-subtitle' class="flex justify-start  ">
+            <p class="relative -top-2 text-xs">Lighter means higher happiness score</p>
+        </div>
+    </div>
+
     <div id="infoBar" class="fixed bottom-0 w-full flex flex-col z-10">
         <div id="data-info" class="float-right flex flex-row justify-end px-1.5">
             <p>Selected year: <span id="yearText">2018</span> </span> - <span id="showDataset"
@@ -151,36 +173,22 @@
         id='scatterButtons'>
         <div class='scatter-menu-buttons buttons'>
             <a href='#' data-text='Economy (GDP per Capita)' class='button-graphGdp scatter-menu-button active'>Economy
-                (GDP
-                per Capita)
-                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Economy (GDP per Capita)</strong>
-                </p>
+                (GDP per Capita)
             </a>
             &nbsp;&nbsp;
             <a href='#' data-text='Trust (Government Corruption)'
-                class='button-graphSocialSupport scatter-menu-button'>Trust
-                (Government Corruption)
-                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Trust (Government
-                        Corruption)</strong></p>
+                class='button-graphSocialSupport scatter-menu-button'>Trust (Government Corruption)
             </a>
             &nbsp;&nbsp;
             <a href='#' data-text='Freedom to make life choices' class='button-graphFreedom scatter-menu-button'>Freedom
-                to
-                make life choices
-                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Freedom to make life
-                        choices</strong>
-                </p>
+                to make life choices
             </a>
             &nbsp;&nbsp;
             <a href='#' data-text='Generosity' class='button-graphGenerosity scatter-menu-button'>Generosity
-                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Generosity</strong></p>
             </a>
             &nbsp;&nbsp;
             <a href='#' data-text='Healthy life expectancy'
-                class='button-graphLifeExpectancy scatter-menu-button'>Healthy
-                life expectancy
-                <p class="category-tooltip"><strong>Happiness</strong> x<br /><strong>Healthy life expectancy</strong>
-                </p>
+                class='button-graphLifeExpectancy scatter-menu-button'>Healthy life expectancy
             </a>
             &nbsp;&nbsp;
         </div>

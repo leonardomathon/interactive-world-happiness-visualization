@@ -1,0 +1,94 @@
+#lineChart .tooltip {
+    position: relative;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 3px;
+    font: 12px sans-serif;
+    background: rgba(0, 0, 0, 0.7);
+    border: 0px;
+    pointer-events: none;
+}
+
+#lineChart .leftAxis {
+    color: steelblue;
+    font-size: 0.7em;
+    stroke-width: 1.5;
+}
+
+#lineChart .bottomAxis {
+    color: steelblue;
+    font-size: 0.7em;
+    stroke-width: 1.5;
+}
+
+#lineChart .rightAxis {
+    color: rgba(0, 0, 0, 0.2);
+    stroke-width: 1.5;
+}
+
+#lineChart circle {
+    stroke: white;
+    stroke-width: 2;
+    fill: steelblue;
+}
+
+#lineChart .circle2 {
+    fill: rgba(255, 0, 0, 0.3);
+}
+
+#lineChart .circle3 {
+    fill: rgba(255, 165, 0, 0.3);
+}
+
+#lineChart .circle4 {
+    fill: rgba(238, 130, 238, 0.3);
+}
+
+#lineChart .circle5 {
+    fill: rgba(0, 128, 128, 0.3);
+}
+
+#lineChart .circle6 {
+    fill: rgba(64, 224, 208, 0.3);
+}
+
+#lineChart .line-path {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 3;
+}
+
+#lineChart .line-path2 {
+    fill: none;
+    stroke: rgba(255, 0, 0, 0.3);
+    stroke-width: 2;
+}
+
+#lineChart .line-path3 {
+    fill: none;
+    stroke: rgba(255, 165, 0, 0.3);
+    stroke-width: 2;
+}
+
+#lineChart .line-path4 {
+    fill: none;
+    stroke: rgba(238, 130, 238, 0.3);
+    stroke-width: 2;
+}
+
+#lineChart .line-path5 {
+    fill: none;
+    stroke: rgba(0, 128, 128, 0.3);
+    stroke-width: 2;
+}
+
+#lineChart .line-path6 {
+    fill: none;
+    stroke: rgba(64, 224, 208, 0.3);
+    stroke-width: 2;
+}
+
+#lineChart text {
+    font-size: 1.4em;
+}
