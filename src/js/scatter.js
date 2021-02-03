@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import countriesOfTheWorld from '../../Datasets/countries-of-the-world.json';
+import countriesOfTheWorld from '../../datasets/countries-of-the-world.json';
 
 // Import the necessary globe functions
 import {
