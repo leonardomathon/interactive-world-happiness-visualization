@@ -297,7 +297,6 @@ export function initScatter(completeData, year) {
     };
 
     function regionFocusOn(i, d) {
-        console.log('Test2: ', `circle:not(.continent-${d['Region'].split(' ').join('-')})`)
         graph
             .selectAll(
                 `circle:not(.continent-${d['Region'].split(' ').join('-')})`
@@ -382,11 +381,10 @@ export function initScatter(completeData, year) {
     legend
         .append('text')
         .attr('x', 25)
-        //.attr('dy', '-.2em')
         .attr('y', -25)
         .text('Continent')
-        .attr('font-size', '17px')
         .style('text-align', 'left')
+        .attr('font-size', '12px')
         .style('fill', '#FFFFFF');
 
     // Update the data according to the new category
@@ -573,6 +571,7 @@ export function countryFocusOff() {
 
 export function countryFocusOn(country) {
     focusedCountry = country;
+
     graph
         .selectAll(
             `circle:not(.country-${country.split(' ').join('-')})`
