@@ -296,22 +296,6 @@ export function initScatter(completeData, year) {
         ANZ: { Region: 'Australia and New Zealand' }
     };
 
-    function regionFocusOn(i, d) {
-        graph
-            .selectAll(
-                `circle:not(.continent-${d['Region'].split(' ').join('-')})`
-            )
-            .attr('opacity', '0.05');
-    }
-
-    function regionFocusOff(i, d) {
-        graph
-            .selectAll(
-                `circle:not(.continent-${d['Region'].split(' ').join('-')})`
-            )
-            .attr('opacity', '0.7');
-    }
-
     // Position of legenda
     const legend = graph
         .selectAll('.legend')
@@ -356,8 +340,7 @@ export function initScatter(completeData, year) {
                 return 'red';
             }
         })
-        .on('mouseover', regionFocusOn)
-        .on('mouseleave', regionFocusOff);
+        .on('click', regionFocusOn)
 
     // Add regions to legenda
     legend
@@ -374,8 +357,7 @@ export function initScatter(completeData, year) {
         })
         .attr('font-size', '12px')
         .style('fill', '#FFFFFF')
-        .on('mouseover', regionFocusOn)
-        .on('mouseleave', regionFocusOff);
+        .on('click', regionFocusOn);
 
     // Add legenda title
     legend
@@ -570,6 +552,7 @@ export function countryFocusOff() {
 }
 
 export function countryFocusOn(country) {
+    regionFocusOff();
     focusedCountry = country;
 
     graph
@@ -577,4 +560,25 @@ export function countryFocusOn(country) {
             `circle:not(.country-${country.split(' ').join('-')})`
         )
         .attr('opacity', '0.05');
+}
+
+export function regionFocusOn(i, d) {
+    regionFocusOff();
+    if (focusedCountry !== undefined) {
+        countryFocusOff();
+        resetClickedCountry();
+    }
+    graph
+        .selectAll(
+            `circle:not(.continent-${d['Region'].split(' ').join('-')})`
+        )
+        .attr('opacity', '0.05');
+}
+
+export function regionFocusOff() {
+    graph
+        .selectAll(
+            `circle`
+        )
+        .attr('opacity', '0.7');
 }
