@@ -36,3 +36,25 @@
 .country-circle:hover {
     stroke: #000000;
 }
+
+#scatter rect {
+    cursor: pointer;
+}
+
+#scatter rect {
+    cursor: pointer;
+    transition: 125ms all ease-in-out;
+}
+
+#scatter rect:hover {
+    opacity: .5;
+}
+
+#scatter .legend text {
+    cursor: pointer;
+    transition: 125ms all ease-in-out;
+}
+
+#scatter .legend text:hover {
+    opacity: .5;
+}

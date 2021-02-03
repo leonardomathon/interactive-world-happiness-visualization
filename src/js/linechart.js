@@ -194,11 +194,10 @@ const render = (data) => {
 
     // Define the div for the tooltip
     var div = d3
-        .select('body')
+        .select('#lineChart')
         .append('div')
         .attr('class', 'tooltip')
         .style('opacity', 0)
-        .style('z-index', '999999999')
         .style('position', 'absolute');
 
     // Drawing of dots for overall rating
@@ -316,13 +315,9 @@ const render = (data) => {
         current.style('stroke', 'steelblue');
 
         // Initialize tooltip
-        div.
-            transition()
-            .duration(200);
+        div.transition().duration(200);
         div.style('opacity', 0.9)
-            .html(
-                i['Year'] + '<br/>' + numberFormat(i['Happiness Score'])
-            )
+            .html(i['Year'] + '<br/>' + numberFormat(i['Happiness Score']))
             .style('top', d.y + 5 + 'px')
             .style('left', d.x - 20 + 'px');
     }
@@ -334,7 +329,7 @@ const render = (data) => {
         // Reset stroke of dot to white
         current.style('stroke', 'white');
 
-        div.transition().duration(500).style('opacity', 0);
+        div.transition().duration(125).style('opacity', 0);
     }
 
     // Adds interactivity when mouse is over economy dot
@@ -349,12 +344,12 @@ const render = (data) => {
         d3.selectAll('.line-path2').style('stroke', 'rgba(255, 0, 0, 1');
 
         // Initialize tooltip
-        div.
-            transition()
-            .duration(200);
+        div.transition().duration(200);
         div.style('opacity', 0.9)
             .html(
-                i['Year'] + '<br/>' + numberFormat(i['Economy (GDP per Capita)'])
+                i['Year'] +
+                    '<br/>' +
+                    numberFormat(i['Economy (GDP per Capita)'])
             )
             .style('top', d.y + 'px')
             .style('left', d.x - 20 + 'px');
@@ -388,12 +383,12 @@ const render = (data) => {
         let yText = current.attr('cy') - 25;
 
         // Initialize tooltip
-        div.
-            transition()
-            .duration(200);
+        div.transition().duration(200);
         div.style('opacity', 0.9)
             .html(
-                i['Year'] + '<br/>' + numberFormat(i['Freedom to make life choices'])
+                i['Year'] +
+                    '<br/>' +
+                    numberFormat(i['Freedom to make life choices'])
             )
             .style('top', d.y + 'px')
             .style('left', d.x - 20 + 'px');
@@ -423,9 +418,7 @@ const render = (data) => {
         d3.selectAll('.line-path4').style('stroke', 'rgba(238, 130, 238, 1)');
 
         // Initialize tooltip
-        div.
-            transition()
-            .duration(200);
+        div.transition().duration(200);
         div.style('opacity', 0.9)
             .html(
                 i['Year'] + '<br/>' + numberFormat(i['Healthy life expectancy'])
@@ -458,13 +451,9 @@ const render = (data) => {
         d3.selectAll('.line-path5').style('stroke', 'rgba(0, 128, 128, 1)');
 
         // Initialize tooltip
-        div.
-            transition()
-            .duration(200);
+        div.transition().duration(200);
         div.style('opacity', 0.9)
-            .html(
-                i['Year'] + '<br/>' + numberFormat(i['Generosity'])
-            )
+            .html(i['Year'] + '<br/>' + numberFormat(i['Generosity']))
             .style('top', d.y + 'px')
             .style('left', d.x - 20 + 'px');
     }
@@ -493,12 +482,12 @@ const render = (data) => {
         d3.selectAll('.line-path6').style('stroke', 'rgba(64, 224, 208, 1)');
 
         // Initialize tooltip
-        div.
-            transition()
-            .duration(200);
+        div.transition().duration(200);
         div.style('opacity', 0.9)
             .html(
-                i['Year'] + '<br/>' + numberFormat(i['Trust (Government Corruption)'])
+                i['Year'] +
+                    '<br/>' +
+                    numberFormat(i['Trust (Government Corruption)'])
             )
             .style('top', d.y + 'px')
             .style('left', d.x - 20 + 'px');

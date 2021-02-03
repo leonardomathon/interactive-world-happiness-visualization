@@ -1,13 +1,12 @@
 #lineChart .tooltip {
-    position: relative;
+    display: flex;
     text-align: center;
-    width: 60px;
-    height: 28px;
-    padding: 3px;
+    padding: 20px;
     font: 12px sans-serif;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.3);
     border: 0px;
     pointer-events: none;
+    border-radius: 5px;
 }
 
 #lineChart .leftAxis {
@@ -28,9 +27,15 @@
 }
 
 #lineChart circle {
+    cursor: pointer;
     stroke: white;
-    stroke-width: 2;
+    stroke-width: 3;
     fill: steelblue;
+    z-index: 400;
+}
+
+#lineChart path {
+    z-index: 5;
 }
 
 #lineChart .circle2 {
