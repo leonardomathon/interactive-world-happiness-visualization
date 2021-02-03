@@ -247,7 +247,7 @@ searchMatch.addEventListener('click', function (e) {
             index: null,
         };
         barChartPanel.setHeaderTitle(`Bar chart of ${hoveredCountry.data.name}`);
-        lineChartPanel.setHeaderTitle(`Bar chart of ${hoveredCountry.data.name}`);
+        lineChartPanel.setHeaderTitle(`Line chart of ${hoveredCountry.data.name}`);
     } else {
         createErrorPanel(
             'Country not found',
