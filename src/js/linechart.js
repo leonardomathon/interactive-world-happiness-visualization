@@ -569,42 +569,42 @@ const render = (data) => {
         .attr('y', 130)
         .text(scores.happiness.type)
         .style('font-size', legendFontSize)
-        .style('color', '#fff')
+        .style('fill', '#ffffff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 160)
         .text(scores.economy.type)
         .style('font-size', legendFontSize)
-        .style('color', '#fff')
+        .style('fill', '#ffffff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 190)
         .text(scores.freedom.type)
         .style('font-size', legendFontSize)
-        .style('color', '#fff')
+        .style('fill', '#ffffff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 220)
         .text(scores.health.type)
         .style('font-size', legendFontSize)
-        .style('color', '#fff')
+        .style('fill', '#ffffff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 250)
         .text(scores.generosity.type)
         .style('font-size', legendFontSize)
-        .style('color', '#fff')
+        .style('fill', '#ffffff')
         .attr('alignment-baseline', 'middle');
     g.append('text')
         .attr('x', innerWidth - legendOffset + 25)
         .attr('y', 280)
         .text(scores.trust.type)
         .style('font-size', legendFontSize)
-        .style('color', '#fff')
+        .style('fill', '#ffffff')
         .attr('alignment-baseline', 'middle');
 };
 
