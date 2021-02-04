@@ -7,10 +7,10 @@ This interactive web application aims to clearify the world happiness ranking am
 [Live link](https://world-happiness.leonardomathon.nl)
 
 # Table of contents
-1. [ Installation ](https://github.com/leonardomathon/interactive-world-happiness-visualization#wrench-installation)
-	1.1. [Install system dependencies](https://github.com/leonardomathon/interactive-world-happiness-visualization#installing-system-dependecies)
-	1.2. [Install dependencies](https://github.com/leonardomathon/interactive-world-happiness-visualization#installing-dependencies)
-	1.3. [Run project](https://github.com/leonardomathon/interactive-world-happiness-visualization#running-the-project)
+1. [ Installation ](https://github.com/leonardomathon/interactive-world-happiness-visualization#wrench-installation)<br/>
+&ensp;[Install system dependencies](https://github.com/leonardomathon/interactive-world-happiness-visualization#installing-system-dependecies)
+&ensp;[Install dependencies](https://github.com/leonardomathon/interactive-world-happiness-visualization#installing-dependencies)
+&ensp;[Run project](https://github.com/leonardomathon/interactive-world-happiness-visualization#running-the-project)
 2.  [Usage](https://github.com/leonardomathon/interactive-world-happiness-visualization#arrow_right-usage)
 3. [Technologies used](https://github.com/leonardomathon/interactive-world-happiness-visualization#technologies)
 4. [Acknowledgments](https://github.com/leonardomathon/interactive-world-happiness-visualization#acknowledgments)
