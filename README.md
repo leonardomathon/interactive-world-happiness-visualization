@@ -19,7 +19,12 @@ This interactive web application aims to clearify the world happiness ranking am
 # :wrench: Installation
 The following instructions walks you through the installation process. For this installation process, it is assumed you have basic experience with a terminal or the windows command prompt. 
 
+## Install via releases
+Installing the application is as simple as downloading the [latest release](https://github.com/leonardomathon/interactive-world-happiness-visualization/releases) and unzipping the files in a directory of choice. You can now run the `index.html` in your preferred browser. 
+
 ## Installing system dependecies
+You can also build the project yourself. The following steps will walk you through this process.
+
 ### Node.js
 In order to run this project, you must have [Node.js](https://github.com/nodejs/node) installed.  We recommend installing the long time support version of Node, v14.15.x, since previous Node versions might not work.
 > You can check your if Node is succesfully installed by running the command `node -v` inside a terminal window or command prompt.
