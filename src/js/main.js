@@ -301,7 +301,7 @@ clickedCountry.registerListener(function (val) {
         countryFocusOn(clickedCountry.data.name);
 
         // Init bar chart
-        initBarChart(worldHappiness, clickedCountry.data.id);
+        initBarChart(worldHappiness, clickedCountry.data.id, yearSliderValue);
         barChartPanel.setHeaderTitle(
             `Bar chart of ${hoveredCountry.data.name}`
         );

@@ -15,7 +15,7 @@ const graphWidth = totalGraphWidth - margin.left - margin.right;
 const graphHeight = totalGraphHeight - margin.top - margin.bottom;
 
 // Function to initialize the bar chart
-export function initBarChart(completeData, country) {
+export function initBarChart(completeData, country, year) {
     // Initialize the svg frame
     const svg = d3
         .select('#chart')
@@ -72,7 +72,7 @@ export function initBarChart(completeData, country) {
     const yAxis = d3.axisLeft(y);
 
     // Initialze the data for the bar chart, selecting the appropriate year and country
-    let data = completeData[yearSlider.value][country];
+    let data = completeData[year][country];
 
     // Set the value of the bars to zero if the data of a particular year is not available in the dataset
     if (data === undefined) {
@@ -195,7 +195,6 @@ export function updateBarChartData(completeData, year, country) {
 
     // Reinitialze the data for the bar chart, selecting the appropriate year and country
     let data = completeData[year][country];
-    console.log('Data: ', data);
 
     // Set the value of the bars to zero if the data of a particular year is not available in the dataset
     if (data === undefined) {
@@ -221,7 +220,6 @@ export function updateBarChartData(completeData, year, country) {
         'Trust (Government Corruption)': data['Trust (Government Corruption)'],
     };
 
-    console.log('Graphdata: ', graphData);
     // Set the name of a bar equal to the corresponding category
     const barsKeys = Object.keys(graphData);
     // Set the value of a bar equal to the corresponding category
