@@ -129,7 +129,7 @@ let renderingOptions = {
 // Object that holds the world happiness data from the selected year as yearWorldHappiness.data
 let yearWorldHappiness = {
     dataInteral: worldHappiness[yearSliderValue],
-    dataListener: function (val) {},
+    dataListener: function (val) { },
     set data(val) {
         this.dataInteral = val;
         this.dataListener(val);
@@ -172,6 +172,11 @@ for (let i = 0; i < yearSliderLabels.length; i++) {
 
 // Event listener that listens to the range slider
 yearSlider.addEventListener('change', function (e) {
+    // Get slider value, update data and UI
+    yearSliderValue = yearSlider.value;
+    yearWorldHappiness.data = worldHappiness[yearSliderValue];
+    yearText.innerHTML = yearSliderValue;
+
     if (hoveredCountry.data.id != 'No country selected') {
         updateBarChartData(
             worldHappiness,
@@ -179,11 +184,6 @@ yearSlider.addEventListener('change', function (e) {
             hoveredCountry.data.id
         );
     }
-
-    // Get slider value, update data and UI
-    yearSliderValue = yearSlider.value;
-    yearWorldHappiness.data = worldHappiness[yearSliderValue];
-    yearText.innerHTML = yearSliderValue;
 });
 
 // Event listener that listens to the year data
@@ -276,13 +276,13 @@ hoveredCountry.registerListener(function (val) {
                 countriesOfTheWorld[hoveredCountry.data.id]['Population'];
             countryDensityTag.innerHTML =
                 countriesOfTheWorld[hoveredCountry.data.id][
-                    'Pop. Density (per sq. mi.)'
+                'Pop. Density (per sq. mi.)'
                 ];
             countryAreaTag.innerHTML =
                 countriesOfTheWorld[hoveredCountry.data.id]['Area (sq. mi.)'];
             countyGDPTag.innerHTML =
                 countriesOfTheWorld[hoveredCountry.data.id][
-                    'GDP ($ per capita)'
+                'GDP ($ per capita)'
                 ];
         }
     } else {

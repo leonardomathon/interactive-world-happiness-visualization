@@ -195,6 +195,7 @@ export function updateBarChartData(completeData, year, country) {
 
     // Reinitialze the data for the bar chart, selecting the appropriate year and country
     let data = completeData[year][country];
+    console.log('Data: ', data);
 
     // Set the value of the bars to zero if the data of a particular year is not available in the dataset
     if (data === undefined) {
@@ -220,6 +221,7 @@ export function updateBarChartData(completeData, year, country) {
         'Trust (Government Corruption)': data['Trust (Government Corruption)'],
     };
 
+    console.log('Graphdata: ', graphData);
     // Set the name of a bar equal to the corresponding category
     const barsKeys = Object.keys(graphData);
     // Set the value of a bar equal to the corresponding category
