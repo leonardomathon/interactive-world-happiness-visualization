@@ -24,9 +24,17 @@ import { isCountryDrawn } from './utils/geo.js';
 import { toggleSoblePass, toggleFilmPass } from './fx/postprocessing.js';
 
 // Import charts
-import { initBarChart, removeBarChart, updateBarChartData } from './chart.js';
-import { initScatter, countryFocusOff, countryFocusOn } from './scatter.js';
-import { initLineChart, removeLineChart } from './linechart';
+import {
+    initBarChart,
+    removeBarChart,
+    updateBarChartData,
+} from './graphs/chart.js';
+import {
+    initScatter,
+    countryFocusOff,
+    countryFocusOn,
+} from './graphs/scatter.js';
+import { initLineChart, removeLineChart } from './graphs/linechart';
 
 // Import data sets
 import worldHappiness from '../../datasets/world-happiness.json';
@@ -129,7 +137,7 @@ let renderingOptions = {
 // Object that holds the world happiness data from the selected year as yearWorldHappiness.data
 let yearWorldHappiness = {
     dataInteral: worldHappiness[yearSliderValue],
-    dataListener: function (val) { },
+    dataListener: function (val) {},
     set data(val) {
         this.dataInteral = val;
         this.dataListener(val);
@@ -240,14 +248,18 @@ searchMatch.addEventListener('click', function (e) {
     // Check if country has alpha 3
     if (fuzzySearch && isCountryDrawn(fuzzySearch.alpha3)) {
         console.log('test');
-        console.log('Fuzzy: ', fuzzySearch.name)
+        console.log('Fuzzy: ', fuzzySearch.name);
         searchedCountry.data = {
             id: fuzzySearch.alpha3,
             name: fuzzySearch.name,
             index: null,
         };
-        barChartPanel.setHeaderTitle(`Bar chart of ${hoveredCountry.data.name}`);
-        lineChartPanel.setHeaderTitle(`Line chart of ${hoveredCountry.data.name}`);
+        barChartPanel.setHeaderTitle(
+            `Bar chart of ${hoveredCountry.data.name}`
+        );
+        lineChartPanel.setHeaderTitle(
+            `Line chart of ${hoveredCountry.data.name}`
+        );
     } else {
         createErrorPanel(
             'Country not found',
@@ -276,13 +288,13 @@ hoveredCountry.registerListener(function (val) {
                 countriesOfTheWorld[hoveredCountry.data.id]['Population'];
             countryDensityTag.innerHTML =
                 countriesOfTheWorld[hoveredCountry.data.id][
-                'Pop. Density (per sq. mi.)'
+                    'Pop. Density (per sq. mi.)'
                 ];
             countryAreaTag.innerHTML =
                 countriesOfTheWorld[hoveredCountry.data.id]['Area (sq. mi.)'];
             countyGDPTag.innerHTML =
                 countriesOfTheWorld[hoveredCountry.data.id][
-                'GDP ($ per capita)'
+                    'GDP ($ per capita)'
                 ];
         }
     } else {

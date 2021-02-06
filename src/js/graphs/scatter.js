@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import countriesOfTheWorld from '../../datasets/countries-of-the-world.json';
+import countriesOfTheWorld from '../../../datasets/countries-of-the-world.json';
 
 // Import the necessary globe functions
 import {
@@ -7,7 +7,7 @@ import {
     clickedCountry,
     setClickedCountry,
     resetClickedCountry,
-} from './webgl/globe/globe.js';
+} from '../webgl/globe/globe.js';
 
 // Variable that contains the svg frame
 var graph;

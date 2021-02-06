@@ -1,7 +1,6 @@
 import { jsPanel } from 'jspanel4/es6module/jspanel.js';
 import 'jspanel4/es6module/extensions/hint/jspanel.hint.js';
 import 'jspanel4/es6module/extensions/modal/jspanel.modal.js';
-import { initChart } from '../chart.js';
 
 const panelTheme = {
     bgPanel: '#10224D',
