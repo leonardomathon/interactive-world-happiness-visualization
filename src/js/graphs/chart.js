@@ -36,7 +36,7 @@ export function initBarChart(completeData, country, year) {
         .attr('transform', `translate(0, ${graphHeight})`);
 
     // Append the y-axis to the bar chart
-    const yAxisGroup = graph.append('g');
+    const yAxisGroup = graph.append('g').attr('class', 'y-axis');
 
     // Set the domain of the y-axis
     y = d3.scaleLinear().range([graphHeight, 0]);
@@ -73,30 +73,27 @@ export function initBarChart(completeData, country, year) {
 
     // Initialze the data for the bar chart, selecting the appropriate year and country
     let data = completeData[year][country];
+    let graphData;
 
     // Set the value of the bars to zero if the data of a particular year is not available in the dataset
     if (data === undefined) {
-        data = {
-            Country: country,
-            Region: '',
+        graphData = {
             'Economy (GDP per Capita)': 0,
             'Freedom to make life choices': 0,
             Generosity: 0,
-            'Happiness Rank': 0,
-            'Happiness Score': 0,
             'Healthy life expectancy': 0,
             'Trust (Government Corruption)': 0,
         };
+    } else {
+        // Assign the data to seperate categories
+        graphData = {
+            'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
+            'Freedom to make life choices': data['Freedom to make life choices'],
+            Generosity: data['Generosity'],
+            'Healthy life expectancy': data['Healthy life expectancy'],
+            'Trust (Government Corruption)': data['Trust (Government Corruption)'],
+        };
     }
-
-    // Assign the data to seperate categories
-    const graphData = {
-        'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
-        'Freedom to make life choices': data['Freedom to make life choices'],
-        Generosity: data['Generosity'],
-        'Healthy life expectancy': data['Healthy life expectancy'],
-        'Trust (Government Corruption)': data['Trust (Government Corruption)'],
-    };
 
     // Set the name of a bar equal to the corresponding category
     const barsKeys = Object.keys(graphData);
@@ -192,33 +189,58 @@ export function initBarChart(completeData, country, year) {
 
 // Update the bar charts based on the selected country and year
 export function updateBarChartData(completeData, year, country) {
+    console.log('Y-axis: ', graph.selectAll('.x-axis'));
+    graph.selectAll('.y-axis').remove();
+
+    // Append the x-axis to the bar chart, translate the x-axis to the origin
+    const xAxisGroup = graph
+        .append('g')
+        .attr('transform', `translate(0, ${graphHeight})`);
+
+    // Append the y-axis to the bar chart
+    const yAxisGroup = graph.append('g').attr('class', 'y-axis');
+
+    // Set the domain of the y-axis
+    y = d3.scaleLinear().range([graphHeight, 0]);
+
+    // Set the domain of the x-axis, set the space between the bars using padding
+    const x = d3
+        .scaleBand()
+        .range([0, graphWidth])
+        .paddingInner(0.2)
+        .paddingOuter(0.2);
+
+    // Initialize the x-axis
+    const xAxis = d3.axisBottom(x);
+    // Initialize the y-axis
+    const yAxis = d3.axisLeft(y);
+
 
     // Reinitialze the data for the bar chart, selecting the appropriate year and country
     let data = completeData[year][country];
 
+    // Variable containing the formatted data
+    let graphData;
+
     // Set the value of the bars to zero if the data of a particular year is not available in the dataset
     if (data === undefined) {
-        data = {
-            Country: country,
-            Region: '',
+        graphData = {
             'Economy (GDP per Capita)': 0,
             'Freedom to make life choices': 0,
             Generosity: 0,
-            'Happiness Rank': 0,
-            'Happiness Score': 0,
             'Healthy life expectancy': 0,
             'Trust (Government Corruption)': 0,
         };
+    } else {
+        // Assign the data to seperate categories
+        graphData = {
+            'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
+            'Freedom to make life choices': data['Freedom to make life choices'],
+            Generosity: data['Generosity'],
+            'Healthy life expectancy': data['Healthy life expectancy'],
+            'Trust (Government Corruption)': data['Trust (Government Corruption)'],
+        };
     }
-
-    // Assign the data to seperate categories
-    const graphData = {
-        'Economy (GDP per Capita)': data['Economy (GDP per Capita)'],
-        'Freedom to make life choices': data['Freedom to make life choices'],
-        Generosity: data['Generosity'],
-        'Healthy life expectancy': data['Healthy life expectancy'],
-        'Trust (Government Corruption)': data['Trust (Government Corruption)'],
-    };
 
     // Set the name of a bar equal to the corresponding category
     const barsKeys = Object.keys(graphData);
@@ -230,6 +252,12 @@ export function updateBarChartData(completeData, year, country) {
     barsKeys.forEach((key, idx) => {
         bars[idx] = { name: barsKeys[idx], value: barsValues[idx] };
     });
+
+    // Dynamically set the domain of the y-axis to category containing the maximum value
+    y.domain([0, (Math.ceil(d3.max(barsValues) * 10) / 10).toFixed(1)]);
+
+    // Dynamically set the domain of the x-axis to the categories in the dataset
+    x.domain(barsKeys);
 
     // Associate the data with the available bars
     const rects = graph.selectAll('rect').data(bars);
@@ -246,6 +274,19 @@ export function updateBarChartData(completeData, year, country) {
         .attr('height', (d) => {
             return graphHeight - y(d.value);
         });
+
+    // Call the x-axis
+    xAxisGroup.call(xAxis);
+    // Call the y-axis
+    yAxisGroup.call(yAxis);
+
+    // Styling properties of the category names on the x-axis
+    xAxisGroup
+        .selectAll('text')
+        .attr('transform', `rotate(-40)`)
+        .attr('text-anchor', 'end')
+        .attr('fill', 'white')
+        .style('font-size', '12px');
 }
 
 // Remove the bar chart when a country is deselected

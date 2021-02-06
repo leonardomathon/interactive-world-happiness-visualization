@@ -510,7 +510,7 @@ export function initScatter(completeData, year) {
             scale = 1.8;
         }
 
-        graph.selectAll('.x-axis').remove();
+fx
 
         // Set the default new domain of the x-axis
         const x = d3.scaleLinear().domain([0, scale]).range([0, graphWidth]);
