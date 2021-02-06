@@ -19,7 +19,6 @@ import { composer } from '../../fx/postprocessing.js';
 
 // Import texture file
 import { createWorldTexture, createCountryTexture } from '../texture.js';
-import { initChart } from '../../chart.js';
 
 let worldContainer = document.getElementById('worldContainer');
 worldContainer.addEventListener('dblclick', clickedOnCountry);
