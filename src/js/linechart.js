@@ -310,8 +310,6 @@ const render = (data) => {
 
         // Reset stroke of dot to white
         current.style('stroke', 'white');
-
-        div.transition().duration(125).style('opacity', 0);
     }
 
     // Adds interactivity when mouse is over economy dot
@@ -334,8 +332,6 @@ const render = (data) => {
         current.style('fill', 'rgba(255, 0, 0, 0.3');
         d3.selectAll('.line-path2').style('stroke', 'rgba(255, 0, 0, 0.3');
         current.style('stroke', 'white');
-
-        div.transition().duration(500).style('opacity', 0);
     }
 
     // Adds interactivity when mouse is over freedom dot
@@ -362,8 +358,6 @@ const render = (data) => {
         current.style('fill', 'rgba(255, 165, 0, 0.3)');
         d3.selectAll('.line-path3').style('stroke', 'rgba(255, 165, 0, 0.3)');
         current.style('stroke', 'white');
-
-        div.transition().duration(500).style('opacity', 0);
     }
 
     // Adds interactivity when mouse is over health dot
@@ -386,8 +380,6 @@ const render = (data) => {
         current.style('fill', 'rgba(238, 130, 238, 0.3)');
         d3.selectAll('.line-path4').style('stroke', 'rgba(238, 130, 238, 0.3)');
         current.style('stroke', 'white');
-
-        div.transition().duration(500).style('opacity', 0);
     }
 
     // Adds interactivity when mouse is over generosity dot
@@ -410,8 +402,6 @@ const render = (data) => {
         current.style('fill', 'rgba(0, 128, 128, 0.3)');
         d3.selectAll('.line-path5').style('stroke', 'rgba(0, 128, 128, 0.3)');
         current.style('stroke', 'white');
-
-        div.transition().duration(500).style('opacity', 0);
     }
 
     // Adds interactivity when mouse is over trust dot
@@ -434,8 +424,6 @@ const render = (data) => {
         current.style('fill', 'rgba(64, 224, 208, 0.3)');
         d3.selectAll('.line-path6').style('stroke', 'rgba(64, 224, 208, 0.3)');
         current.style('stroke', 'white');
-
-        div.transition().duration(500).style('opacity', 0);
     }
 
     const legendOffset = 200;
