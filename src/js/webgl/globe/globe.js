@@ -40,8 +40,8 @@ const worldYSegments = 500;
 // Root globe, containing worldGlobe and countryGlobe
 let globe;
 
-// Globe geometry and globe object
-let worldMaterial, worldSphere, worldGlobe;
+// Globe material, geometry, geometry vertices and globe object
+let worldMaterial, worldSphere, worldVertices, worldGlobe;
 
 // Geometry and material for country overlay
 let countryMaterial, countrySphere, countryGlobe;
@@ -112,6 +112,9 @@ export function initGlobe(yearWorldHappiness) {
         worldXSegments,
         worldYSegments
     );
+
+    // World sphere vertices
+    worldVertices = worldSphere.getAttribute('position');
 
     // Generate the world map texture in texture.js
     worldMaterial = new THREE.MeshPhongMaterial({
@@ -186,13 +189,21 @@ function raycastToGlobe() {
 
     // Find the country
     if (intersect) {
-        // Find the country using the ray intersect
-        countryIntersect = countryCache(
-            worldSphere.vertices[intersect.face.a],
-            worldSphere.vertices[intersect.face.b],
-            worldSphere.vertices[intersect.face.c],
-            worldSize
+        // Get the faces
+        const a = new THREE.Vector3().fromBufferAttribute(
+            worldVertices,
+            intersect.face.a
         );
+        const b = new THREE.Vector3().fromBufferAttribute(
+            worldVertices,
+            intersect.face.b
+        );
+        const c = new THREE.Vector3().fromBufferAttribute(
+            worldVertices,
+            intersect.face.c
+        );
+        // Find the country using the ray intersect
+        countryIntersect = countryCache(a, b, c, worldSize);
     } else {
         countryIntersect = null;
     }
